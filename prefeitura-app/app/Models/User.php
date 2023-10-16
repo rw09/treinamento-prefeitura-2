@@ -46,6 +46,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'cpf_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 

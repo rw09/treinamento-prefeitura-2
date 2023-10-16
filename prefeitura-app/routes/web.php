@@ -28,6 +28,7 @@ Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     
+    //Teste pra ver os departamentos de cada usuário na home, depois colocar na pagina do perfil?
     Route::get('/', function () {
         return Inertia::render('Home', [
             'departamentos' => Auth::user()->perfil === 0 ?
