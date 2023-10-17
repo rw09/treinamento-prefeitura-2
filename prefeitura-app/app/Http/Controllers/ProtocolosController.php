@@ -130,4 +130,11 @@ class ProtocolosController extends Controller
 
         return to_route('protocolos-index');
     }
+
+    public function destroy($id)
+    {
+        Protocolo::where('id', $id)->delete();
+
+        return to_route('protocolos-index');
+    }
 }

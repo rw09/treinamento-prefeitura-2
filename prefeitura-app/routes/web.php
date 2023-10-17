@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [DepartamentosController::class, 'update'])->where('id', '[0-9]+')->name('departamentos-update');
         Route::delete('/{id}', [DepartamentosController::class, 'destroy'])->where('id', '[0-9]+')->name('departamentos-destroy');
         Route::post('/add-user', [DepartamentosController::class, 'addUser'])->name('departamentos-add-user');
+        Route::post('/remove-user/{id}', [DepartamentosController::class, 'removeUser'])->where('id', '[0-9]+')->name('departamentos-remove-user');
     });
 
     Route::prefix('auditoria')->group(function () {

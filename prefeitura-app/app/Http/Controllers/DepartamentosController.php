@@ -141,5 +141,23 @@ class DepartamentosController extends Controller
 
         $departamento->users()->syncWithoutDetaching($user);
         //return Inertia::dialog('Departamentos/AddUser');
+
+        //return to_route('departamentos-show', $departamento->id);
+        //return redirect()->back();
+    }
+
+    public function removeUser(Request $request, $id)
+    {
+        //dd($request);
+        //dd($id);
+
+        //return 'USER ID' . $id . ' Depto ID ' . $request->departamento_id;
+        $departamento = Departamento::where('id', $request->departamento_id)->firstOrFail();
+        
+        $user = User::where('id', $id)->firstOrFail();
+        //dd($user);
+        $departamento->users()->detach($user);
+        //return redirect()->back();
+        //return to_route('departamentos-show', $departamento->id);
     }
 }

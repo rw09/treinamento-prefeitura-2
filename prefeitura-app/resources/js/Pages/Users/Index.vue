@@ -21,6 +21,7 @@
                 <th>E-mail</th>
                 <th>CPF</th>
                 <th>Perfil de Acesso</th>
+                <th>Nº Departamentos</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,6 +32,7 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.cpf }}</td>
                 <td>{{ user.perfil }} - {{ user.perfil === 0 ? "Administrador da TI" : (user.perfil === 1 ? "Administrador do Sistema" : "Operador") }}</td>
+                <td>{{ user.perfil === 2 ? user.departamentos_count : 'Acesso à todos'}}</td>
                 <td class="flex justify-center space-x-1">
                     <Link v-bind:href="(route('users-show', user.id))">
                         <div class="p-1 text-white rounded bg-yellow-500/90 hover:bg-amber-300">
