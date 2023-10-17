@@ -6,13 +6,13 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="contribuinte">Contribuinte:</label>
-                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" required>
+                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
                                 <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
                         </select>
                     </div>
                     <div>
                         <label for="departamento">Departamento:</label>
-                            <select name="departamento" id="departamento" v-model="form.departamento_id" required>
+                            <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
                                 <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
                     </div>
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="flex justify-end gap-4 pt-4">
-                <Link v-bind:href="(route('contribuintes-index'))" class="mt-8 px-4 py-2 rounded font-medium bg-rose-600/80 text-white hover:bg-red-400">Cancelar</Link>
+                <Link v-bind:href="(route('protocolos-index'))" class="mt-8 px-4 py-2 rounded font-medium bg-rose-600/80 text-white hover:bg-red-400">Cancelar</Link>
                 <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400">Cadastrar</button>
             </div>
         </form>

@@ -51,7 +51,7 @@ class DepartamentosController extends Controller
             $users = User::whereNotIn('id', User::select('users.id')
                 ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
                 ->where('departamento_user.departamento_id', $departamento->id)
-            )->where('users.perfil', 2)->get();
+            )->having('users.perfil', 2)->get();
 
             //dd($users);
         

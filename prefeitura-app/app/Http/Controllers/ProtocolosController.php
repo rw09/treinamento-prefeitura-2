@@ -13,7 +13,6 @@ class ProtocolosController extends Controller
 {
     public function index()
     {
-        
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
         {
             $protocolos = Protocolo::all();
@@ -39,16 +38,18 @@ class ProtocolosController extends Controller
 
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
-            $departamentos = Departamento::all();    
+            //$departamentos = Departamento::all();    
+            $departamentos = Departamento::orderBy('nome')->get();
         }
         else
         {
             $user = Auth::user();
-            $departamentos = $user->departamentos()->get();
+            $departamentos = $user->departamentos()->orderBy('nome')->get();
         }
 
         
-        $contribuintes = Contribuinte::all();
+        //$contribuintes = Contribuinte::all();
+        $contribuintes = Contribuinte::orderBy('nome')->get();
 
         return Inertia::render('Protocolos/Create', [
             'departamentos' => $departamentos,
@@ -78,6 +79,55 @@ class ProtocolosController extends Controller
         Protocolo::create($attributes);
 
         //return redirect('/');
+        return to_route('protocolos-index');
+    }
+
+    public function edit($id)
+    {
+        $protocolo = Protocolo::where('id', $id)->firstOrFail();
+
+        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
+        {
+            $departamentos = Departamento::orderBy('nome')->get();
+        }
+        else
+        {
+            $user = Auth::user();
+            $departamentos_id = $user->departamentos()->pluck('departamento_id')->toArray();
+
+            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, 
+            //nao deixa editar
+            if(in_array($protocolo->departamento_id, $departamentos_id))
+            {
+                $departamentos = $user->departamentos()->orderBy('nome')->get();
+            }
+            else
+            {
+                return to_route('home');
+            }
+        }        
+
+        $contribuintes = Contribuinte::orderBy('nome')->get();
+
+        return Inertia::render('Protocolos/Edit', [
+            'protocolo' => $protocolo,
+            'departamentos' => $departamentos,
+            'contribuintes' => $contribuintes,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $request->validate([
+            'contribuinte_id' => 'required|exists:contribuintes,id',
+            'departamento_id' => 'required|exists:departamentos,id',
+            'descricao' => 'required|string|max:255',
+            'situacao' => 'required|integer|in:0,1',
+            'prazo' => 'required|integer',
+        ]);
+
+        Protocolo::where('id', $id)->update($data);
+
         return to_route('protocolos-index');
     }
 }
