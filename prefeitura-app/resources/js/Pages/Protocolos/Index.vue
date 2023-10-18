@@ -63,10 +63,14 @@
             </tbody>
         </table>
     </section>
-    <section class="container mx-auto">
+    <!-- <section v-if="protocolos.data.length" class="container mx-auto"> -->
+    <section v-if="protocolos.last_page > 1" class="container mx-auto">
         <!-- <Pagination v-bind:links="protocolos.links" class="px-8 py-2 bg-gray-200 shadow-md w-fit mx-auto text-xs"/> -->
         <Pagination v-bind:links="protocolos.links" class="text-xs"/>
     </section>
+    <div v-if="protocolos.data.length === 0" class="container mx-auto flex justify-center">
+        <h2 class="text-sm">Nenhum Protocolo</h2>
+    </div>
 </template>
 
 <script setup>

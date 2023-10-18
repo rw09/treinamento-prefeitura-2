@@ -66,9 +66,12 @@
             </tbody>
         </table>
     </section>
-    <section class="container mx-auto">
+    <section class="container mx-auto" v-if="contribuintes.last_page > 1">
         <Pagination v-bind:links="contribuintes.links" class="text-xs"/>
     </section>
+    <div v-if="contribuintes.data.length === 0" class="container mx-auto flex justify-center">
+        <h2 class="text-sm">Nenhum Contribuinte</h2>
+    </div>
 </template>
 
 <script setup>

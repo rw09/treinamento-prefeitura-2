@@ -59,9 +59,12 @@
             </tbody>
         </table>
     </section>
-    <section class="container mx-auto">
+    <section class="container mx-auto" v-if="users.last_page > 1">
         <Pagination v-bind:links="users.links" class="text-xs"/>
     </section>
+    <div v-if="users.data.length === 0" class="container mx-auto flex justify-center">
+        <h2 class="text-sm">Nenhum Usuário</h2>
+    </div>
 </template>
 
 <script setup>

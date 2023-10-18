@@ -55,9 +55,12 @@
             </tbody>
         </table>
     </section>
-    <section class="container mx-auto">
+    <section class="container mx-auto" v-if="departamentos.last_page > 1">
         <Pagination v-bind:links="departamentos.links" class="text-xs"/>
     </section>
+    <div v-if="departamentos.data.length === 0" class="container mx-auto flex justify-center">
+        <h2 class="text-sm">Nenhum Departamento</h2>
+    </div>
 </template>
 
 <script setup>
