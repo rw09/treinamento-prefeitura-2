@@ -8,4 +8,6 @@ Adicionei uns dados pra dar seed
   
 -Add exclusão protocolos  
   
-  -Add remoção de acesso de usuários aos departamentos 
+  -Add remoção de acesso de usuários aos departamentos  
+    
+-Add paginação

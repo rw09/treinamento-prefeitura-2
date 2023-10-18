@@ -19,7 +19,8 @@ class DepartamentosController extends Controller
         //     ]);
         
         //$departamentos = Departamento::all();
-        $departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
+        //$departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
+        $departamentos = Departamento::withCount('users')->withCount('protocolos')->paginate(15);
 
         //$departamentos->load(['users']);
 
@@ -144,6 +145,8 @@ class DepartamentosController extends Controller
 
         //return to_route('departamentos-show', $departamento->id);
         //return redirect()->back();
+
+        //return to_route('departamentos-index');
     }
 
     public function removeUser(Request $request, $id)

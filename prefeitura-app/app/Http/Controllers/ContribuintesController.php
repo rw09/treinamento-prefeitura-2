@@ -10,7 +10,8 @@ class ContribuintesController extends Controller
 {
     public function index()
     {
-        $contribuintes = Contribuinte::all();
+        //$contribuintes = Contribuinte::all();
+        $contribuintes = Contribuinte::paginate(15);
 
         return Inertia::render('Contribuintes/Index', ['contribuintes' => $contribuintes]);
     }

@@ -28,7 +28,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-                <tr v-for="protocolo in protocolos" v-bind="protocolo.id" class="hover:bg-slate-200">
+                <tr v-for="protocolo in protocolos.data" v-bind="protocolo.id" class="hover:bg-slate-200">
                     <td>{{ protocolo.id }}</td>
                     <td>{{ protocolo.descricao }}</td>
                     <td>{{ protocolo.contribuinte.id }} - {{ protocolo.contribuinte.nome }}</td>
@@ -62,14 +62,27 @@
                 </tr>
             </tbody>
         </table>
-
+    </section>
+    <section class="container mx-auto">
+        <!-- <Pagination v-bind:links="protocolos.links" class="px-8 py-2 bg-gray-200 shadow-md w-fit mx-auto text-xs"/> -->
+        <Pagination v-bind:links="protocolos.links" class="text-xs"/>
     </section>
 </template>
 
 <script setup>
 import { router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import Pagination from '../../Shared/Pagination.vue';
+
 
     const props = defineProps({protocolos: Object});
+
+    let pesquisa = ref('');
+
+    watch(pesquisa, value => {
+        router.get('/protocolos', { pesquisa: value },
+        { preserveState: true })
+    });
 
 
     let destroy = (id) => { //depois trocar por um modal!

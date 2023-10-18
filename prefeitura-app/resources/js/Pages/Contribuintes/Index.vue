@@ -28,7 +28,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-                <tr v-for="contribuinte in contribuintes" v-bind="contribuinte.id" class="hover:bg-slate-200">
+                <tr v-for="contribuinte in contribuintes.data" v-bind="contribuinte.id" class="hover:bg-slate-200">
                     <td>{{ contribuinte.id }}</td>
                     <td>{{ contribuinte.nome }}</td>
                     <td class="text-center">{{ new Date(contribuinte.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) }}</td>
@@ -65,12 +65,15 @@
                 </tr>
             </tbody>
         </table>
-
+    </section>
+    <section class="container mx-auto">
+        <Pagination v-bind:links="contribuintes.links" class="text-xs"/>
     </section>
 </template>
 
 <script setup>
 import { router } from '@inertiajs/vue3';
+import Pagination from '../../Shared/Pagination.vue';
 
     const props = defineProps({contribuintes: Object});
 

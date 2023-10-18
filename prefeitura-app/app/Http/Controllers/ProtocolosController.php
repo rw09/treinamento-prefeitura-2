@@ -15,20 +15,27 @@ class ProtocolosController extends Controller
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
         {
-            $protocolos = Protocolo::all();
-            $protocolos->load(['contribuinte']);
-            $protocolos->load(['departamento']);
+            //$protocolos = Protocolo::all();
+
+            //$protocolos = Protocolo::paginate(15);
+            //$protocolos->load(['contribuinte']);
+            //$protocolos->load(['departamento']);
+
+            $protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
         }
         else
         {
             $user = Auth::user();
             $departamentos = $user->departamentos()->pluck('departamento_id');
-            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
-            ->with(['contribuinte'])
-            ->with(['departamento'])
-            ->get();
-        }
+            // $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
+            // ->with(['contribuinte'])
+            // ->with(['departamento'])
+            // ->get();
 
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
+            ->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
+        }
+        //dd($protocolos);
         return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
     }
 

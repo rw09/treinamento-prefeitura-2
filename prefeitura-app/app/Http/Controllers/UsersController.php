@@ -13,7 +13,8 @@ class UsersController extends Controller
     public function index()
     {
         //$users = User::all();
-        $users = User::withCount('departamentos')->get();
+        //$users = User::withCount('departamentos')->get();
+        $users = User::withCount('departamentos')->paginate(15);
         //$users = User::with('departamentos')->get();
         //dd($users);
 

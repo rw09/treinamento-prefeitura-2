@@ -47,7 +47,7 @@ import { useForm } from '@inertiajs/vue3';
 
     let remove = (id) => {
         form.user_id = null,
-        form.post(route('departamentos-remove-user', id));
+        form.delete(route('departamentos-remove-user', id));
     }
 
 </script>
