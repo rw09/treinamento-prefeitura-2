@@ -84,7 +84,7 @@ import Pagination from '../../Shared/Pagination.vue';
     let pesquisa = ref('');
 
     watch(pesquisa, value => {
-        router.get('/protocolos', { pesquisa: value },
+        router.get(route('protocolos-index'), { pesquisa: value },
         { preserveState: true })
     });
 

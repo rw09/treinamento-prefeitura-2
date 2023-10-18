@@ -66,7 +66,8 @@ class DatabaseSeeder extends Seeder
             'rua' => 'Av. Henrique Bier',
             'numero' => '298',
             'bairro' => 'Campina',
-            'cidade' => 'São Leopoldo'
+            'cidade' => 'São Leopoldo',
+            'created_at' => now(),
         ]);
 
         DB::table('contribuintes')->insert([
@@ -77,7 +78,8 @@ class DatabaseSeeder extends Seeder
             'rua' => 'Av. Marcílio dias',
             'numero' => '145',
             'bairro' => 'Campina',
-            'cidade' => 'São Leopoldo'
+            'cidade' => 'São Leopoldo',
+            'created_at' => now(),
         ]);
 
         DB::table('protocolos')->insert([

@@ -10,8 +10,18 @@ use Inertia\Inertia;
 
 class DepartamentosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $pesquisa = $request->get('pesquisa');
+
+        $query = Departamento::query();
+
+        if ($pesquisa) {
+            $query->where('nome', 'like', "%{$pesquisa}%");
+        }
+
+        $departamentos = $query->withCount('users')->withCount('protocolos')->paginate(15)->withQueryString();
+
         // return Inertia::render('Departamentos/Index',
         //     ['can' => [
         //         Auth::user()->cpf === '318.387.580-20'
@@ -20,7 +30,7 @@ class DepartamentosController extends Controller
         
         //$departamentos = Departamento::all();
         //$departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
-        $departamentos = Departamento::withCount('users')->withCount('protocolos')->paginate(15);
+        //$departamentos = Departamento::withCount('users')->withCount('protocolos')->paginate(15);
 
         //$departamentos->load(['users']);
 

@@ -69,10 +69,17 @@
 
 <script setup>
 import { router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 import Pagination from '../../Shared/Pagination.vue';
 
     const props = defineProps({users: Object});
 
+    let pesquisa = ref('');
+
+    watch(pesquisa, value => {
+        router.get(route('users-index'), { pesquisa: value },
+        { preserveState: true })
+    });
 
     let destroy = (id) => { //depois trocar por um modal!
         if (confirm('Are you sure?')){

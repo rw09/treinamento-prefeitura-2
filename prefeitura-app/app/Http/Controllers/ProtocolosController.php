@@ -11,31 +11,42 @@ use Inertia\Inertia;
 
 class ProtocolosController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
         {
-            //$protocolos = Protocolo::all();
+            $pesquisa = $request->get('pesquisa');
 
-            //$protocolos = Protocolo::paginate(15);
-            //$protocolos->load(['contribuinte']);
-            //$protocolos->load(['departamento']);
+            $query = Protocolo::query();
 
-            $protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
+            if ($pesquisa) {
+                $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
+                ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
+            }
+
+            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15)->withQueryString();
+            
+            //$protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
         }
         else
         {
             $user = Auth::user();
             $departamentos = $user->departamentos()->pluck('departamento_id');
-            // $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
-            // ->with(['contribuinte'])
-            // ->with(['departamento'])
-            // ->get();
 
-            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
-            ->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
+            $pesquisa = $request->get('pesquisa');
+
+            $query = Protocolo::query()->whereIn('departamento_id', $departamentos)
+            ->with(['contribuinte:id,nome', 'departamento:id,nome']);
+
+            if ($pesquisa) {
+                $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
+                ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
+                ->whereIn('departamento_id', $departamentos);
         }
-        //dd($protocolos);
+
+            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15)->withQueryString();
+        }
+
         return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
     }
 

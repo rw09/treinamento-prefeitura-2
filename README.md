@@ -10,4 +10,6 @@ Adicionei uns dados pra dar seed
   
   -Add remoção de acesso de usuários aos departamentos  
     
--Add paginação
+-Add paginação  
+  
+-Add busca por filtro
