@@ -59,12 +59,16 @@ class DepartamentosController extends Controller
 
             $departamento->load(['protocolos']);
 
-            $users = User::whereNotIn('id', User::select('users.id')
-                ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
-                ->where('departamento_user.departamento_id', $departamento->id)
-            )->having('users.perfil', 2)->get();
+            // $users = User::whereNotIn('id', User::select('users.id')
+            //     ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
+            //     ->where('departamento_user.departamento_id', $departamento->id)
+            // )->having('users.perfil', 2)->get();
+
+            $users = User::where('perfil', 2)->get(['id', 'name']);
+            $users = $users->diff($departamento['users']);
 
             //dd($users);
+
         
             return Inertia::render('Departamentos/Show', [
                 'departamento' => $departamento,

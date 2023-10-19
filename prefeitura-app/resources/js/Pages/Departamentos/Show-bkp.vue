@@ -4,7 +4,7 @@
     <section class="container mt-8 mx-auto px-80">
         <div class="mx-20 pt-4 px-10 pb-12 rounded shadow-md bg-gray-100">
             <h1 class="text-center mt-2 mb-8 underline underline-offset-4 decoration-slate-400 text-slate-800"><strong>Departamento: </strong>{{ departamento.nome }}</h1>
-            <h2 class="mt-8 mb-2 font-semibold">Criado em: {{ new Date(departamento.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}</h2>
+            <h2 class="mt-8 mb-2 font-semibold">Criado em: {{ departamento.created_at }}</h2>
             <!-- <Link :href="route('departamentos-add-user')" class="bg-cyan-500 px-3 py-2 rounded shadow-md">Conceder Acesso</Link> -->
             <form @submit.prevent="add" class="grid gap-x-8 gap-y-4 items-center bg-white mx-2 px-2 pt-4 pb-12 rounded shadow-md">
                 <div>

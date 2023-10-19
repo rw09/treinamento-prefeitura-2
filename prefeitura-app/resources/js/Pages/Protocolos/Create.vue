@@ -6,8 +6,8 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="contribuinte">Contribuinte:</label>
-                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
-                                <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
+                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required>
+                                <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
                         </select>
                     </div>
                     <div>

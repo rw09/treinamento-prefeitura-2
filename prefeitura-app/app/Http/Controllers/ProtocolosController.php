@@ -67,7 +67,9 @@ class ProtocolosController extends Controller
 
         
         //$contribuintes = Contribuinte::all();
-        $contribuintes = Contribuinte::orderBy('nome')->get();
+        //$contribuintes = Contribuinte::orderBy('nome')->get();
+        $contribuintes = Contribuinte::orderBy('nome')->select('id', 'cpf', 'nome')->get();
+        //dd($contribuintes);
 
         return Inertia::render('Protocolos/Create', [
             'departamentos' => $departamentos,

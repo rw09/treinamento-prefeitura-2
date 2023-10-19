@@ -4,6 +4,10 @@ import Layout from './Shared/Layout.vue';
 
 
 createInertiaApp({
+  progress: false, //depois colocar de novo
+  // progress: {
+  //   delay: 300,
+  // },
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
     

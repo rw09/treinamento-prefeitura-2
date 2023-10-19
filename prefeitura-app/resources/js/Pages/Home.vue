@@ -14,7 +14,7 @@
             <strong>Perfil de Acesso:</strong> {{ perfil_acesso }} - Operador
         </p>
 
-        <h2 v-if="perfil_acesso === 0" class="mt-4 font-bold">Possui acesso à todos os Departamentos:</h2>
+        <h2 v-if="perfil_acesso === 0 || perfil_acesso === 1" class="mt-4 font-bold">Possui acesso à todos os Departamentos:</h2>
         <h2 v-else class="mt-4 font-bold">Departamentos em que possui acesso:</h2>
         <ul class="list-disc ml-8" v-if="departamentos.length">
             <li v-for="departamento in departamentos">{{ departamento.nome }}</li>

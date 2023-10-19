@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     //Teste pra ver os departamentos de cada usuário na home, depois colocar na pagina do perfil?
     Route::get('/', function () {
         return Inertia::render('Home', [
-            'departamentos' => Auth::user()->perfil === 0 ?
+            'departamentos' => Auth::user()->perfil === 0 || Auth::user()->perfil === 1 ?
             Departamento::all() : Auth::user()->departamentos()->get()
         ]);
     })->name('home');
