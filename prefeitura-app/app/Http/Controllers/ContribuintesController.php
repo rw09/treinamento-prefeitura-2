@@ -10,7 +10,6 @@ class ContribuintesController extends Controller
 {
     public function index(Request $request)
     {
-        //$contribuintes = Contribuinte::all();
         //$contribuintes = Contribuinte::paginate(15);
 
         $pesquisa = $request->get('pesquisa');
@@ -33,7 +32,6 @@ class ContribuintesController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
         $attributes = $request->validate([
             'nome' => 'required|string|max:100',
             'data_nascimento' => 'required|date',
@@ -49,8 +47,6 @@ class ContribuintesController extends Controller
         Contribuinte::create($attributes);
 
         //return to_route('contribuintes-index')->with('message', 'Contribuinte Cadastrado com Sucesso!');
-        //return to_route('contribuintes-index');
-        //return redirect('/');
         return redirect(route('contribuintes-index')); //with message
     }
     
@@ -61,9 +57,8 @@ class ContribuintesController extends Controller
         return Inertia::render('Contribuintes/Edit', ['contribuinte' => $contribuinte]);
     }
 
-    public function update(Request $request, $id) //validar dados no update
+    public function update(Request $request, $id)
     {
-        //dd($request);
         $data = $request->validate([
             'nome' => 'required|string|max:100',
             'data_nascimento' => 'required|date',
@@ -76,10 +71,8 @@ class ContribuintesController extends Controller
             'complemento' => 'nullable|string|max:100',
         ]);
 
-        //dd($data);
         Contribuinte::where('id', $id)->update($data);
 
-        //return redirect(route('contribuintes-index'));
         return to_route('contribuintes-index');
     }
 

@@ -21,10 +21,11 @@ class ProtocolosController extends Controller
 
             if ($pesquisa) {
                 $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-                ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
+                    ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
             }
 
-            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15)->withQueryString();
+            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
+                ->paginate(15)->withQueryString();
             
             //$protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
         }
@@ -36,15 +37,16 @@ class ProtocolosController extends Controller
             $pesquisa = $request->get('pesquisa');
 
             $query = Protocolo::query()->whereIn('departamento_id', $departamentos)
-            ->with(['contribuinte:id,nome', 'departamento:id,nome']);
+                ->with(['contribuinte:id,nome', 'departamento:id,nome']);
 
             if ($pesquisa) {
                 $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-                ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
-                ->whereIn('departamento_id', $departamentos);
+                    ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
+                    ->whereIn('departamento_id', $departamentos);
         }
 
-            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15)->withQueryString();
+            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
+                ->paginate(15)->withQueryString();
         }
 
         return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
@@ -65,8 +67,6 @@ class ProtocolosController extends Controller
             $departamentos = $user->departamentos()->orderBy('nome')->get();
         }
 
-        
-        //$contribuintes = Contribuinte::all();
         //$contribuintes = Contribuinte::orderBy('nome')->get();
         $contribuintes = Contribuinte::orderBy('nome')->select('id', 'cpf', 'nome')->get();
         //dd($contribuintes);
@@ -79,7 +79,6 @@ class ProtocolosController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
         $attributes = $request->validate([
             'contribuinte_id' => 'required|exists:contribuintes,id',
             'departamento_id' => 'required|exists:departamentos,id',
@@ -87,18 +86,8 @@ class ProtocolosController extends Controller
             'prazo' => 'required|integer',
         ]);
 
-        //dd($attributes);
-
-        // Protocolo::create([
-        //     'descricao' => $request->descricao,
-        //     'departamento_id' => $request->departamento,
-        //     'prazo' => $request->prazo,
-        //     'contribuinte_id' => $request->contribuinte
-        // ]);
-
         Protocolo::create($attributes);
 
-        //return redirect('/');
         return to_route('protocolos-index');
     }
 

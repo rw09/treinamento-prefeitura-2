@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Departamento;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -48,7 +49,6 @@ class UsersController extends Controller
 
         User::create($attributes);
 
-        //return redirect('/');
         return to_route('users-index');
     }
 
@@ -58,13 +58,21 @@ class UsersController extends Controller
 
         if(Auth::user()->can('view', $user)) 
         {
-            return Inertia::render('Users/Show', ['user' => $user]); 
+            $user->load(['departamentos']);
+
+            $departamentos = Departamento::get(['id', 'nome'])->diff($user['departamentos']);
+
+            return Inertia::render('Users/Show', [
+                'user' => $user,
+                'departamentos'=> $departamentos
+            ]); 
         }
         else
         {
             return redirect('/');
         }
     }
+    
 
     public function edit($id)
     {
@@ -78,8 +86,6 @@ class UsersController extends Controller
         {
             return redirect('/');
         }
-
-        //return Inertia::render('Users/Edit', ['user' => $user]);
     }
 
     public function update(Request $request, $id)
@@ -110,8 +116,27 @@ class UsersController extends Controller
         {
             return redirect('/');
         }
+    }
+
+    public function addDepartamento(Request $request)
+    {
+        $user = User::where('id', $request->user_id)->firstOrFail();
+
+        $departamento = Departamento::where('id', $request->departamento_id)->firstOrFail();
+
+        $user->departamentos()->syncWithoutDetaching($departamento);
+
+        //depois retornar?
+    }
+
+    public function removeDepartamento(Request $request, $id)
+    {
+        $user = User::where('id', $request->user_id)->firstOrFail();
+
+        $departamento = Departamento::where('id', $id)->firstOrFail();
         
-        //User::where('id', $id)->delete();
-        //return to_route('users-index');
+        $user->departamentos()->detach($departamento);
+        
+        return redirect()->back();
     }
 }

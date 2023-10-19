@@ -15,13 +15,32 @@
                     <button type="submit" class="mt-8 bg-blue-500 px-4 py-2 rounded font-medium text-white hover:bg-blue-300 hover:ring-2">Adicionar</button>
                 </div>
             </form>
-            <h2 class="mt-8 mb-2 font-semibold">Operadores com Acesso:</h2>
-            <ul>
-                <li v-for="user in departamento.users">{{ user.id }} - {{ user.name }} 
-                    <button @click="remove(user.id)" type="submit" class="ml-2 px-2 bg-red-400" v-bind="user.id"> Remover </button> 
-                    <!-- <Link method="post" v-bind:href="(route('departamentos-remove-user', user.id))">Remover</Link> -->
-                </li>
-            </ul>
+            <section class="container mt-4 mb-10 mx-auto shadow-sm text-xs">
+                <h2 class="mt-8 mb-2 font-semibold">Operadores com Acesso:</h2>
+            <table class="table-auto w-full">
+                <thead class="text-left border-b-2 bordar-gray-300 shadow-sm bg-gray-200">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>CPF</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr v-for="user in departamento.users" v-bind="user.id" class="hover:bg-slate-200">
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.cpf }}</td>
+                        <td>
+                            <button @click="remove(user.id)" type="submit" class="ml-2 px-2 bg-red-400" v-bind="user.id"> Remover </button>         
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+            
         </div>
     </section>
     <!-- {{ departamento }} -->

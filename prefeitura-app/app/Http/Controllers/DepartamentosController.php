@@ -22,21 +22,6 @@ class DepartamentosController extends Controller
 
         $departamentos = $query->withCount('users')->withCount('protocolos')->paginate(15)->withQueryString();
 
-        // return Inertia::render('Departamentos/Index',
-        //     ['can' => [
-        //         Auth::user()->cpf === '318.387.580-20'
-        //         ]
-        //     ]);
-        
-        //$departamentos = Departamento::all();
-        //$departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
-        //$departamentos = Departamento::withCount('users')->withCount('protocolos')->paginate(15);
-
-        //$departamentos->load(['users']);
-
-        //$departamentos->load(['protocolos']);
-        //dd($departamentos);
-
         return Inertia::render('Departamentos/Index', [
             'departamentos' => $departamentos,
             'can' => [
@@ -64,11 +49,8 @@ class DepartamentosController extends Controller
             //     ->where('departamento_user.departamento_id', $departamento->id)
             // )->having('users.perfil', 2)->get();
 
-            $users = User::where('perfil', 2)->get(['id', 'name']);
-            $users = $users->diff($departamento['users']);
-
-            //dd($users);
-
+            $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
+            //$users = $users->diff($departamento['users']);
         
             return Inertia::render('Departamentos/Show', [
                 'departamento' => $departamento,
@@ -79,10 +61,6 @@ class DepartamentosController extends Controller
         {
             return redirect('/');
         }
-        //dd($departamento);
-        //return Inertia::render('Departamentos/Show', ['departamento' => $departamento]);
-
-
     }
 
     public function create()
@@ -92,7 +70,6 @@ class DepartamentosController extends Controller
 
     public function store(Request $request)
     {
-        //dd($request);
         $attributes = $request->validate([
             'nome' => 'required|string|max:100',
         ]);
@@ -114,8 +91,6 @@ class DepartamentosController extends Controller
         {
             return redirect('/');
         }
-
-        //return Inertia::render('Departamentos/Edit', ['departamento' => $departamento]);
     }
 
     public function update(Request $request, $id)
@@ -142,38 +117,30 @@ class DepartamentosController extends Controller
         {
             return redirect('/');
         }
-        
-        //Departamento::where('id', $id)->delete();
-        //return to_route('departamentos-index');
     }
 
     public function addUser(Request $request)
     {
-        //dd($request);
-
         $departamento = Departamento::where('id', $request->departamento_id)->firstOrFail();
+
         $user = User::where('id', $request->user_id)->firstOrFail();
 
         $departamento->users()->syncWithoutDetaching($user);
-        //return Inertia::dialog('Departamentos/AddUser');
 
+        //return Inertia::dialog('Departamentos/AddUser');
         //return to_route('departamentos-show', $departamento->id);
         //return redirect()->back();
-
         //return to_route('departamentos-index');
     }
 
     public function removeUser(Request $request, $id)
     {
-        //dd($request);
-        //dd($id);
-
-        //return 'USER ID' . $id . ' Depto ID ' . $request->departamento_id;
         $departamento = Departamento::where('id', $request->departamento_id)->firstOrFail();
         
         $user = User::where('id', $id)->firstOrFail();
-        //dd($user);
+
         $departamento->users()->detach($user);
+
         //return redirect()->back();
         //return to_route('departamentos-show', $departamento->id);
     }

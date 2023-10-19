@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [UsersController::class, 'edit'])->where('id', '[0-9]+')->name('users-edit');
         Route::put('/{id}', [UsersController::class, 'update'])->where('id', '[0-9]+')->name('users-update');
         Route::delete('/{user}', [UsersController::class, 'destroy'])->where('id', '[0-9]+')->name('users-destroy');
+        Route::post('/add-departamento', [UsersController::class, 'addDepartamento'])->name('users-add-departamento');
+        Route::delete('/remove-departamento/{id}', [UsersController::class, 'removeDepartamento'])->where('id', '[0-9]+')->name('users-remove-departamento');
     });
 
 
