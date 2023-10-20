@@ -43,7 +43,7 @@
             </div>
             <div class="flex justify-end gap-4 pt-4">
                 <Link v-bind:href="(route('users-index'))" class="mt-8 px-4 py-2 rounded font-medium bg-rose-600/80 text-white hover:bg-red-400">Cancelar</Link>
-                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400">Salvar Alterações</button>
+                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400" :disabled="form.processing">Salvar Alterações</button>
             </div>
         </form>
     </section>

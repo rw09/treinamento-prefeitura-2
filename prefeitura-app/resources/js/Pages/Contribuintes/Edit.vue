@@ -9,17 +9,17 @@
                     <div>
                         <label for="nome" class="block text-xs">Nome:</label>
                         <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required>
-                        <div v-if="errors.nome" v-text="errors.nome" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
                         <label for="cpf" class="block text-xs">CPF:</label>
                         <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required>
-                        <div v-if="errors.cpf" v-text="errors.cpf" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
                         <label for="data_nascimento" class="block text-xs">Data de Nascimento:</label>
                         <input v-model="form.data_nascimento" type="date" name="data_nascimento" id="data_nascimento" class="px-3 mt-1 py-1 w-full border rounded" required>
-                        <div v-if="errors.data_nascimento" v-text="errors.data_nascimento" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.data_nascimento" v-text="form.errors.data_nascimento" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4 text-xs">
                         <p>Sexo:</p>
@@ -63,7 +63,7 @@
             </div>
             <div class="flex justify-end gap-4 pt-4">
                 <Link v-bind:href="(route('contribuintes-index'))" class="mt-8 px-4 py-2 rounded font-medium bg-rose-600/80 text-white hover:bg-red-400">Cancelar</Link>
-                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400">Salvar Alterações</button>
+                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400" :disabled="form.processing">Salvar Alterações</button>
             </div>
         </form>
     </section>  
@@ -73,8 +73,7 @@
 import { useForm } from '@inertiajs/vue3';
 
     const props = defineProps({
-        contribuinte: Object,
-        errors: Object
+        contribuinte: Object
     });
     
     let form = useForm({

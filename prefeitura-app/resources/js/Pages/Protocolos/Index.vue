@@ -76,6 +76,7 @@
 <script setup>
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+import { debounce } from "lodash";
 import Pagination from '../../Shared/Pagination.vue';
 
 
@@ -86,12 +87,12 @@ import Pagination from '../../Shared/Pagination.vue';
 
     let pesquisa = ref(props.filters.pesquisa);
 
-    watch(pesquisa, (value) => {
+    watch(pesquisa, debounce(function (value) {
         router.get(route('protocolos-index'), { pesquisa: value }, { 
             preserveState: true, 
             replace: true 
         })
-    });
+    }, 300));
 
 
     let destroy = (id) => { //depois trocar por um modal!

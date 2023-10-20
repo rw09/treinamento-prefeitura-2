@@ -17,24 +17,24 @@
                         <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
                             <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
                         </select>
-                        <div v-if="errors.contribuinte_id" v-text="errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.contribuinte_id" v-text="form.errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="departamento" class="text-xs">Departamento:</label>
                         <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
                             <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
-                        <div v-if="errors.departamento_id" v-text="errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.departamento_id" v-text="form.errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
                         <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required>
-                        <div v-if="errors.descricao" v-text="errors.descricao" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.descricao" v-text="form.errors.descricao" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="prazo" class="block text-xs">Prazo:</label>
                         <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required>
-                        <div v-if="errors.prazo" v-text="errors.prazo" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="form.errors.prazo" v-text="form.errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="text-xs">
                         <p>Situação:</p>
@@ -48,13 +48,13 @@
                                 <label class="align-bottom" for="concluido">Concluído</label>
                             </div>  
                         </div>
-                        <div v-if="errors.situacao" v-text="errors.situacao" class="text-red-400 text-xs mt-1.5"></div>
+                        <div v-if="form.errors.situacao" v-text="form.errors.situacao" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                 </div>
             </div>
             <div class="flex justify-end gap-4 pt-4">
                 <Link v-bind:href="(route('protocolos-index'))" class="mt-8 px-4 py-2 rounded font-medium bg-rose-600/80 text-white hover:bg-red-400">Cancelar</Link>
-                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400">Salvar Alterações</button>
+                <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400" :disabled="form.processing">Salvar Alterações</button>
             </div>
         </form>
     </section>  
@@ -66,8 +66,7 @@ import { useForm } from '@inertiajs/vue3';
     const props = defineProps({
         protocolo: Object,
         departamentos: Object,
-        contribuintes: Object,
-        errors: Object
+        contribuintes: Object
     });
 
     let form = useForm({
