@@ -49,7 +49,10 @@ class ProtocolosController extends Controller
                 ->paginate(15)->withQueryString();
         }
 
-        return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
+        return Inertia::render('Protocolos/Index', [
+            'protocolos' => $protocolos,
+            'filters' => $request->only(['pesquisa'])
+        ]);
     }
 
     public function create()

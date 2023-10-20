@@ -24,6 +24,7 @@ class DepartamentosController extends Controller
 
         return Inertia::render('Departamentos/Index', [
             'departamentos' => $departamentos,
+            'filters' => $request->only(['pesquisa']),
             'can' => [
                 'viewAny' => Auth::user()->can('viewAny', Departamento::class),
                 // 'view' => Auth::user()->can('view', Departamento::class),

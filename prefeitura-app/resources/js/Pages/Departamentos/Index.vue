@@ -68,13 +68,18 @@ import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import Pagination from '../../Shared/Pagination.vue';
 
-    const props = defineProps({departamentos: Object});
+    const props = defineProps({
+        departamentos: Object,
+        filters: Object
+    });
 
-    let pesquisa = ref('');
+    let pesquisa = ref(props.filters.pesquisa);
 
     watch(pesquisa, value => {
-        router.get(route('departamentos-index'), { pesquisa: value },
-        { preserveState: true })
+        router.get(route('departamentos-index'), { pesquisa: value }, {
+            preserveState: true,
+            replace: true
+        })
     });
 
 

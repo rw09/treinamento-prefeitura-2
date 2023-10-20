@@ -29,7 +29,10 @@ class UsersController extends Controller
         //$users = User::with('departamentos')->get();
         //dd($users);
 
-        return Inertia::render('Users/Index', ['users' => $users]);
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+            'filters' => $request->only(['pesquisa'])
+        ]);
     }
 
     public function create()

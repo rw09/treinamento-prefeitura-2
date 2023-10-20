@@ -79,14 +79,18 @@ import { ref, watch } from 'vue';
 import Pagination from '../../Shared/Pagination.vue';
 
 
-    const props = defineProps({protocolos: Object});
+    const props = defineProps({
+        protocolos: Object,
+        filters: Object
+    });
 
-    let pesquisa = ref('');
+    let pesquisa = ref(props.filters.pesquisa);
 
     watch(pesquisa, (value) => {
-        router.get(route('protocolos-index'), { pesquisa: value },
-        { preserveState: true },
-        { replace: true })
+        router.get(route('protocolos-index'), { pesquisa: value }, { 
+            preserveState: true, 
+            replace: true 
+        })
     });
 
 

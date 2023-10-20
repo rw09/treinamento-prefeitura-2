@@ -22,7 +22,10 @@ class ContribuintesController extends Controller
 
         $contribuintes = $query->paginate(15)->withQueryString();
 
-        return Inertia::render('Contribuintes/Index', ['contribuintes' => $contribuintes]);
+        return Inertia::render('Contribuintes/Index', [
+            'contribuintes' => $contribuintes,
+            'filters' => $request->only(['pesquisa'])
+        ]);
     }
 
     public function create()
