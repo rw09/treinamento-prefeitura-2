@@ -6,23 +6,27 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="contribuinte">Contribuinte:</label>
-                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required>
-                                <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
+                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required>
+                            <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
                         </select>
+                        <div v-if="errors.contribuinte_id" v-text="errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="departamento">Departamento:</label>
-                            <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
-                                <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
+                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                            <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
+                        <div v-if="errors.departamento_id" v-text="errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
                         <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.descricao" v-text="errors.descricao" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="prazo" class="block text-xs">Prazo:</label>
                         <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.prazo" v-text="errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
                 </div>
             </div>
@@ -40,6 +44,7 @@ import { useForm } from '@inertiajs/vue3';
     const props = defineProps({
         departamentos: Object,
         contribuintes: Object,
+        errors: Object
     });
 
     let form = useForm({

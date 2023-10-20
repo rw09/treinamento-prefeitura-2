@@ -8,28 +8,32 @@
                 <div class="w-full">
                     <div>
                         <label for="nome" class="block text-xs">Nome:</label>
-                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.nome" v-text="errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
                         <label for="cpf" class="block text-xs">CPF:</label>
-                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.cpf" v-text="errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
                         <label for="data_nascimento" class="block text-xs">Data de Nascimento:</label>
-                        <input v-model="form.data_nascimento" type="date" name="data_nascimento" id="data_nascimento" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.data_nascimento" type="date" name="data_nascimento" id="data_nascimento" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.data_nascimento" v-text="errors.data_nascimento" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4 text-xs">
                         <p>Sexo:</p>
                         <div class="flex gap-4 mt-2">
                             <div>
-                                <input v-model="form.sexo" class="align-middle mr-1" type="radio" id="feminino" name="feminino" value="F">
+                                <input v-model="form.sexo" class="align-middle mr-1" type="radio" id="feminino" name="sexo" value="F" required>
                                 <label class="align-bottom" for="feminino">Feminino</label>
                             </div>
                             <div>
-                                <input v-model="form.sexo" class="align-middle mr-1" type="radio" id="masculino" name="masculino" value="M">
+                                <input v-model="form.sexo" class="align-middle mr-1" type="radio" id="masculino" name="sexo" value="M" required>
                                 <label class="align-bottom" for="masculino">Masculino</label>
                             </div>  
                         </div>
+                        <div v-if="errors.sexo" v-text="errors.sexo" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                 </div>
                 <div class="w-full">
@@ -68,7 +72,10 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 
-    const props = defineProps({contribuinte: Object});
+    const props = defineProps({
+        contribuinte: Object,
+        errors: Object
+    });
     
     let form = useForm({
         id: props.contribuinte.id,

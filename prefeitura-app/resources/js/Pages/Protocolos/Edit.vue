@@ -14,36 +14,41 @@
                     </div>
                     <div>
                         <label for="contribuinte" class="text-xs">Contribuinte:</label>
-                            <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
-                                <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
+                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                            <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
                         </select>
+                        <div v-if="errors.contribuinte_id" v-text="errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="departamento" class="text-xs">Departamento:</label>
-                            <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
-                                <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
+                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                            <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
+                        <div v-if="errors.departamento_id" v-text="errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
                         <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.descricao" v-text="errors.descricao" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="prazo" class="block text-xs">Prazo:</label>
                         <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <div v-if="errors.prazo" v-text="errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="text-xs">
                         <p>Situação:</p>
                         <div class="flex gap-4 mt-2">
                             <div>
-                                <input v-model="form.situacao" class="align-middle mr-1" type="radio" id="pendente" name="pendente" value="0">
+                                <input v-model="form.situacao" class="align-middle mr-1" type="radio" id="pendente" name="situacao" value="0" required>
                                 <label class="align-bottom" for="pendente">Pendente</label>
                             </div>
                             <div>
-                                <input v-model="form.situacao" class="align-middle mr-1" type="radio" id="concluido" name="concluido" value="1">
+                                <input v-model="form.situacao" class="align-middle mr-1" type="radio" id="concluido" name="situacao" value="1" required>
                                 <label class="align-bottom" for="concluido">Concluído</label>
                             </div>  
                         </div>
+                        <div v-if="errors.situacao" v-text="errors.situacao" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                 </div>
             </div>
@@ -62,6 +67,7 @@ import { useForm } from '@inertiajs/vue3';
         protocolo: Object,
         departamentos: Object,
         contribuintes: Object,
+        errors: Object
     });
 
     let form = useForm({

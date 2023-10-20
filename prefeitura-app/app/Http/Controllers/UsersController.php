@@ -44,7 +44,7 @@ class UsersController extends Controller
     {
         $attributes = $request->validate([
             'name' => 'required|string|max:255',
-            'cpf' => 'required|cpf',
+            'cpf' => 'required|cpf|unique:users',
             'email' => 'required', 'email',
             'password' => 'required|min:6|max:15',
             'perfil' => 'required|in:0,1,2',
