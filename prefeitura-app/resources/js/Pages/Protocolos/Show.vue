@@ -17,8 +17,16 @@
         <div>
             <h2>Acompanhamentos:</h2>
             <ul>
-                <li v-for="acompanhamento in protocolo.acompanhamentos">
-                    {{ acompanhamento.observacao }} {{ acompanhamento.created_at }} {{ acompanhamento.user_id }}
+                <li class="bg-yellow-500/50 p-4 mb-2" v-for="acompanhamento in acompanhamentos">
+                    <div>
+                        {{ acompanhamento.observacao }}
+                    </div>
+                    <div class="text-sm">
+                        {{ new Date(acompanhamento.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}
+                    </div>
+                    <div>
+                      {{ acompanhamento.user_id }} - {{ acompanhamento.user.name }}
+                    </div>
                 </li>
             </ul>
         </div>
@@ -43,12 +51,14 @@ import { usePage } from '@inertiajs/vue3';
     });
 
     let add = () => {
-        form.post(route('protocolos-add-acompanhamento'));
+        form.post(route('protocolos-add-acompanhamento'), {
+            preserveState: false,
+        });
     }
 
     // let add = () => {
-    //     form.post(route('protocolos-add-acompanhamento'), {
-    //         onSuccess: form.reset('observacao'),
+    //     form.post('/protocolos/add-acompanhamento', {
+    //         onSuccess: form.reset(),
     //     });
     // }
 </script>

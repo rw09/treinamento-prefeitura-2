@@ -13,3 +13,5 @@ Adicionei uns dados pra dar seed
 -Add paginação  
   
 -Add busca por filtro
+
+-Add acompanhamentos

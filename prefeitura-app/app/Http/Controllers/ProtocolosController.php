@@ -97,8 +97,9 @@ class ProtocolosController extends Controller
 
     public function show($id)
     {
-        $protocolo = Protocolo::where('id', $id)->with('departamento', 'contribuinte','acompanhamentos')->firstOrFail();
-
+        //$protocolo = Protocolo::where('id', $id)->with('departamento', 'contribuinte','acompanhamentos')->firstOrFail();
+        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
+        
         if(Auth::user()->perfil === 2)
         {
             $user = Auth::user();
@@ -112,8 +113,16 @@ class ProtocolosController extends Controller
             }
         }
 
+        $acompanhamentos = $protocolo->acompanhamentos()->orderBy('id', 'desc')->get();
+
+        $acompanhamentos->load(['user:id,name']);
+        //$contribuinte
+
+        //dd($acompanhamentos);
+
         return Inertia::render('Protocolos/Show', [
-            'protocolo' => $protocolo
+            'protocolo' => $protocolo,
+            'acompanhamentos' => $acompanhamentos
         ]);
     }
 
