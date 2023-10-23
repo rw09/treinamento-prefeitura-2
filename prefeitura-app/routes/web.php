@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [ProtocolosController::class, 'edit'])->where('id', '[0-9]+')->name('protocolos-edit');
         Route::put('/{id}', [ProtocolosController::class, 'update'])->where('id', '[0-9]+')->name('protocolos-update');
         Route::delete('/{id}', [ProtocolosController::class, 'destroy'])->where('id', '[0-9]+')->name('protocolos-destroy');
+        Route::post('/add-acompanhamento', [ProtocolosController::class,'addAcompanhamento'])->name('protocolos-add-acompanhamento');
     });
     
     

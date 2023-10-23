@@ -18,7 +18,7 @@ class Acompanhamento extends Model
 
     public function protocolo()
     {
-        return $this->belongsTo(Protocolo::class);
+        return $this->belongsTo(Protocolo::class)->withTimestamps();
     }
 
     public function user()

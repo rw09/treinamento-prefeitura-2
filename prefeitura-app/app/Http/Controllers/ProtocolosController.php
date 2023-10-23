@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Acompanhamento;
 use App\Models\Contribuinte;
 use App\Models\Departamento;
 use App\Models\Protocolo;
@@ -94,11 +95,33 @@ class ProtocolosController extends Controller
         return to_route('protocolos-index');
     }
 
+    public function show($id)
+    {
+        $protocolo = Protocolo::where('id', $id)->with('departamento', 'contribuinte','acompanhamentos')->firstOrFail();
+
+        if(Auth::user()->perfil === 2)
+        {
+            $user = Auth::user();
+            $departamentos_id = $user->departamentos()->pluck('departamento_id')->toArray();
+
+            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, 
+            //nao deixa visualizar
+            if(in_array($protocolo->departamento_id, $departamentos_id) === false)
+            {
+                return to_route('home');
+            }
+        }
+
+        return Inertia::render('Protocolos/Show', [
+            'protocolo' => $protocolo
+        ]);
+    }
+
     public function edit($id)
     {
         $protocolo = Protocolo::where('id', $id)->firstOrFail();
 
-        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
+        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //Se for Admin TI ou Sistema, tem acesso a todos os departamentos
         {
             $departamentos = Departamento::orderBy('nome')->get();
         }
@@ -148,5 +171,20 @@ class ProtocolosController extends Controller
         Protocolo::where('id', $id)->delete();
 
         return to_route('protocolos-index');
+    }
+
+    public function addAcompanhamento(Request $request)
+    {
+        $attributes = $request->validate([
+            'observacao' => 'required|string|max:255',
+            'protocolo_id' => 'required|exists:protocolos,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+        
+       //dd($attributes);
+
+        Acompanhamento::create($attributes);
+
+        return redirect()->back()->with('success','DEU');
     }
 }
