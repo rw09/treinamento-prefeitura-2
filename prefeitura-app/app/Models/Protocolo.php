@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Protocolo extends Model
 {
@@ -28,6 +29,11 @@ class Protocolo extends Model
     public function departamento(): BelongsTo
     {
         return $this->belongsTo(Departamento::class);
+    }
+
+    public function acompanhamentos(): HasMany
+    {
+        return $this->hasMany(Acompanhamento::class);
     }
 
 }
