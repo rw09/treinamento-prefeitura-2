@@ -35,26 +35,79 @@ class DepartamentosController extends Controller
     
     }
 
+    // public function show($id)
+    // {
+    //     $departamento = Departamento::where('id', $id)->firstOrFail();
+
+    //     if(Auth::user()->can('view', $departamento)) 
+    //     {
+    //         $departamento->load(['users']);
+
+    //         $departamento->load(['protocolos']);
+
+    //         // $users = User::whereNotIn('id', User::select('users.id')
+    //         //     ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
+    //         //     ->where('departamento_user.departamento_id', $departamento->id)
+    //         // )->having('users.perfil', 2)->get();
+
+    //         $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
+    //         //$users = $users->diff($departamento['users']);
+        
+    //         return Inertia::render('Departamentos/Show', [
+    //             'departamento' => $departamento,
+    //             'users' => $users,
+    //         ]);  
+    //     }
+    //     else
+    //     {
+    //         return redirect('/');
+    //     }
+    // }
+
+    // public function show($id) //paginação
+    // {
+    //     $departamento = Departamento::where('id', $id)->firstOrFail();
+
+    //     if(Auth::user()->can('view', $departamento)) 
+    //     {
+    //         $departamento->load(['users']);
+
+    //         $protocolos = $departamento->protocolos()->with('contribuinte:id,nome')->paginate(10);
+            
+    //         $departamento_users = $departamento->users()->select('name')->paginate(5);
+
+    //         $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
+        
+    //         return Inertia::render('Departamentos/Show-2', [
+    //             'departamento' => $departamento,
+    //             'protocolos' => $protocolos,
+    //             'departamento_users' => $departamento_users,
+    //             'users' => $users,
+    //         ]);  
+    //     }
+    //     else
+    //     {
+    //         return redirect('/');
+    //     }
+    // }
+
     public function show($id)
     {
-        $departamento = Departamento::where('id', $id)->firstOrFail();
+        //$departamento = Departamento::where('id', $id)->firstOrFail();
+        $departamento = Departamento::where('id', $id)->with('users:id,name,email,cpf')->firstOrFail();
 
         if(Auth::user()->can('view', $departamento)) 
         {
-            $departamento->load(['users']);
+            //$departamento->load(['users']);
+            // $departamento->load(['protocolos']);
 
-            $departamento->load(['protocolos']);
-
-            // $users = User::whereNotIn('id', User::select('users.id')
-            //     ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
-            //     ->where('departamento_user.departamento_id', $departamento->id)
-            // )->having('users.perfil', 2)->get();
-
+            $protocolos = $departamento->protocolos()->with('contribuinte:id,nome')->get();
+            
             $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
-            //$users = $users->diff($departamento['users']);
-        
-            return Inertia::render('Departamentos/Show', [
+
+            return Inertia::render('Departamentos/Show-2', [
                 'departamento' => $departamento,
+                'protocolos' => $protocolos,
                 'users' => $users,
             ]);  
         }

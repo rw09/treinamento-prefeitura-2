@@ -179,7 +179,8 @@ class ProtocolosController extends Controller
     {
         Protocolo::where('id', $id)->delete();
 
-        return to_route('protocolos-index');
+        //return to_route('protocolos-index');
+        return redirect()->back();
     }
 
     public function addAcompanhamento(Request $request)

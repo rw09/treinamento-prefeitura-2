@@ -36,7 +36,7 @@
                         <label class="align-bottom" for="admin-sistema">Administrador Sistema</label>
                     </div>
                     <div>
-                        <input v-model="form.perfil" v-bind:checked="perfil_acesso === 1" class="align-middle mr-1" type="radio" id="operador" name="perfil" value="2" required>
+                        <input v-model="form.perfil" checked class="align-middle mr-1" type="radio" id="operador" name="perfil" value="2" required>
                         <label class="align-bottom" for="operador">Operador</label>
                     </div>  
                 </div>
@@ -60,7 +60,7 @@ import { computed } from 'vue';
         email: '',
         cpf: '',
         password: '',
-        perfil: '',
+        perfil: 2,
     });
 
     let submit = () => {

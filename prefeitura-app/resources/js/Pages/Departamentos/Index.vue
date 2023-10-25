@@ -16,7 +16,7 @@
         <table class="table-auto w-full">
             <thead class="text-left border-b-2 bordar-gray-300 shadow-sm bg-gray-200">
                 <tr>
-                    <th>ID</th>
+                    <th class="py-1">ID</th>
                     <th>Nome</th>
                     <th>Qtde Usuários</th>
                     <th>Qtde Protocolos</th>

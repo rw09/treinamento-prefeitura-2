@@ -15,9 +15,9 @@
 
     <section class="container mt-4 mb-10 mx-auto shadow-sm text-xs">
         <table class="table-auto w-full">
-            <thead class="text-left border-b-2 bordar-gray-300 shadow-sm bg-gray-200">
-                <tr class="border-b-2 border-b-gray-300">
-                    <th class="py-1.5">Nº</th>
+            <thead class="text-left border-b-2 border-gray-300 shadow-sm bg-gray-200">
+                <tr>
+                    <th class="py-1">Nº</th>
                     <th>Descrição</th>
                     <th>Solicitante</th>
                     <th>Departamento</th>
@@ -39,13 +39,13 @@
                     <td v-else class="text-center text-green-600 font-bold">Concluído</td>
                     <td class="flex justify-center items-center space-x-1 py-0.5">
                         <Link v-bind:href="(route('protocolos-show', protocolo.id))">
-                        <div class="p-1 text-white rounded bg-yellow-500/90 hover:bg-amber-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
-                                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                                <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                    </Link>
+                            <div class="p-1 text-white rounded bg-yellow-500/90 hover:bg-amber-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">
+                                    <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                                    <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </Link>
                         <Link v-bind:href="(route('protocolos-edit', protocolo.id))">
                             <div class="p-1 text-white rounded bg-sky-600/90 hover:bg-blue-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5">

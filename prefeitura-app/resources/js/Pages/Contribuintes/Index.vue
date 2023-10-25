@@ -14,9 +14,9 @@
 
     <section class="container mt-4 mb-10 mx-auto shadow-sm text-xs">
         <table class="table-auto w-full">
-            <thead class="text-left border-b-2 bordar-gray-300 shadow-sm bg-gray-200">
-                <tr class="border-b-2 border-b-gray-300">
-                    <th class="py-1.5">ID</th>
+            <thead class="text-left shadow-sm bg-gray-200">
+                <tr>
+                    <th class="py-1">ID</th>
                     <th>Nome</th>
                     <th class="text-center">Data Nascimento</th>
                     <th class="text-center">CPF</th>
