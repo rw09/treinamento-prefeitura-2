@@ -12,49 +12,70 @@ use Inertia\Inertia;
 
 class ProtocolosController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
         {
-            $pesquisa = $request->get('pesquisa');
+            $protocolos = Protocolo::all();
 
-            $query = Protocolo::query();
-
-            if ($pesquisa) {
-                $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-                    ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
-            }
-
-            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
-                ->paginate(15)->withQueryString();
-            
-            //$protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
+            $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
         else
         {
             $user = Auth::user();
             $departamentos = $user->departamentos()->pluck('departamento_id');
 
-            $pesquisa = $request->get('pesquisa');
-
-            $query = Protocolo::query()->whereIn('departamento_id', $departamentos)
-                ->with(['contribuinte:id,nome', 'departamento:id,nome']);
-
-            if ($pesquisa) {
-                $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-                    ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
-                    ->whereIn('departamento_id', $departamentos);
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->get();
+            
+            $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
 
-            $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
-                ->paginate(15)->withQueryString();
-        }
-
-        return Inertia::render('Protocolos/Index', [
-            'protocolos' => $protocolos,
-            'filters' => $request->only(['pesquisa'])
-        ]);
+        return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
     }
+
+    // public function index(Request $request)
+    // {
+    //     if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
+    //     {
+    //         $pesquisa = $request->get('pesquisa');
+
+    //         $query = Protocolo::query();
+
+    //         if ($pesquisa) {
+    //             $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
+    //                 ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
+    //         }
+
+    //         $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
+    //             ->paginate(15)->withQueryString();
+            
+    //         //$protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
+    //     }
+    //     else
+    //     {
+    //         $user = Auth::user();
+    //         $departamentos = $user->departamentos()->pluck('departamento_id');
+
+    //         $pesquisa = $request->get('pesquisa');
+
+    //         $query = Protocolo::query()->whereIn('departamento_id', $departamentos)
+    //             ->with(['contribuinte:id,nome', 'departamento:id,nome']);
+
+    //         if ($pesquisa) {
+    //             $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
+    //                 ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
+    //                 ->whereIn('departamento_id', $departamentos);
+    //     }
+
+    //         $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
+    //             ->paginate(15)->withQueryString();
+    //     }
+
+    //     return Inertia::render('Protocolos/Index', [
+    //         'protocolos' => $protocolos,
+    //         'filters' => $request->only(['pesquisa'])
+    //     ]);
+    // }
 
     public function create()
     {

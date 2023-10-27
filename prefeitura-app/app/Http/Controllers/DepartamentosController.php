@@ -10,21 +10,37 @@ use Inertia\Inertia;
 
 class DepartamentosController extends Controller
 {
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     $pesquisa = $request->get('pesquisa');
+
+    //     $query = Departamento::query();
+
+    //     if ($pesquisa) {
+    //         $query->where('nome', 'like', "%{$pesquisa}%");
+    //     }
+
+    //     $departamentos = $query->withCount('users')->withCount('protocolos')->paginate(15)->withQueryString();
+
+    //     return Inertia::render('Departamentos/Index', [
+    //         'departamentos' => $departamentos,
+    //         'filters' => $request->only(['pesquisa']),
+    //         'can' => [
+    //             'viewAny' => Auth::user()->can('viewAny', Departamento::class),
+    //             // 'view' => Auth::user()->can('view', Departamento::class),
+    //             //'update' => Auth::user()->can('update', Departamento::class),
+    //             //'delete' => Auth::user()->can('delete', Departamento::class),
+    //         ]
+    //     ]);
+    
+    // }
+
+    public function index()
     {
-        $pesquisa = $request->get('pesquisa');
-
-        $query = Departamento::query();
-
-        if ($pesquisa) {
-            $query->where('nome', 'like', "%{$pesquisa}%");
-        }
-
-        $departamentos = $query->withCount('users')->withCount('protocolos')->paginate(15)->withQueryString();
+        $departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
 
         return Inertia::render('Departamentos/Index', [
             'departamentos' => $departamentos,
-            'filters' => $request->only(['pesquisa']),
             'can' => [
                 'viewAny' => Auth::user()->can('viewAny', Departamento::class),
                 // 'view' => Auth::user()->can('view', Departamento::class),
@@ -32,7 +48,6 @@ class DepartamentosController extends Controller
                 //'delete' => Auth::user()->can('delete', Departamento::class),
             ]
         ]);
-    
     }
 
     // public function show($id)

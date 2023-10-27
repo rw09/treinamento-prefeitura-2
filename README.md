@@ -14,4 +14,6 @@ Adicionei uns dados pra dar seed
   
 -Add busca por filtro
 
--Add acompanhamentos
+-Add acompanhamentos  
+  
+-Troquei as tabelas por datatables

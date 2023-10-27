@@ -11,28 +11,35 @@ use Inertia\Inertia;
 
 class UsersController extends Controller
 {
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     $pesquisa = $request->get('pesquisa');
+
+    //     $query = User::query();
+
+    //     if ($pesquisa) {
+    //         $query->where('name', 'like', "%{$pesquisa}%");
+    //     }
+
+    //     $users = $query->withCount('departamentos')->paginate(15)->withQueryString();
+
+    //     //$users = User::all();
+    //     //$users = User::withCount('departamentos')->get();
+    //     //$users = User::withCount('departamentos')->paginate(15);
+    //     //$users = User::with('departamentos')->get();
+    //     //dd($users);
+
+    //     return Inertia::render('Users/Index', [
+    //         'users' => $users,
+    //         'filters' => $request->only(['pesquisa'])
+    //     ]);
+    // }
+
+    public function index()
     {
-        $pesquisa = $request->get('pesquisa');
+        $users = User::withCount('departamentos')->get();
 
-        $query = User::query();
-
-        if ($pesquisa) {
-            $query->where('name', 'like', "%{$pesquisa}%");
-        }
-
-        $users = $query->withCount('departamentos')->paginate(15)->withQueryString();
-
-        //$users = User::all();
-        //$users = User::withCount('departamentos')->get();
-        //$users = User::withCount('departamentos')->paginate(15);
-        //$users = User::with('departamentos')->get();
-        //dd($users);
-
-        return Inertia::render('Users/Index', [
-            'users' => $users,
-            'filters' => $request->only(['pesquisa'])
-        ]);
+        return Inertia::render('Users/Index', ['users' => $users]);
     }
 
     public function create()

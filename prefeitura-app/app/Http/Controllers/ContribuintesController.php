@@ -8,24 +8,11 @@ use Inertia\Inertia;
 
 class ContribuintesController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        //$contribuintes = Contribuinte::paginate(15);
+        $contribuintes = Contribuinte::all();
 
-        $pesquisa = $request->get('pesquisa');
-
-        $query = Contribuinte::query();
-
-        if ($pesquisa) {
-            $query->where('nome', 'like', "%{$pesquisa}%");
-        }
-
-        $contribuintes = $query->paginate(15)->withQueryString();
-
-        return Inertia::render('Contribuintes/Index', [
-            'contribuintes' => $contribuintes,
-            'filters' => $request->only(['pesquisa'])
-        ]);
+        return Inertia::render("Contribuintes/Index", ['contribuintes' => $contribuintes,]);
     }
 
     public function create()
