@@ -44,6 +44,8 @@ class ContribuintesController extends Controller
     {
         $contribuinte = Contribuinte::where('id', $id)->firstOrFail();
 
+        //dd($contribuinte);
+
         return Inertia::render('Contribuintes/Edit', ['contribuinte' => $contribuinte]);
     }
 

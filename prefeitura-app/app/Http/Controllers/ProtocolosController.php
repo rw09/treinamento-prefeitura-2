@@ -16,7 +16,8 @@ class ProtocolosController extends Controller
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
         {
-            $protocolos = Protocolo::all();
+            //$protocolos = Protocolo::all();
+            $protocolos = Protocolo::withCount('acompanhamentos')->get();
 
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
@@ -25,7 +26,8 @@ class ProtocolosController extends Controller
             $user = Auth::user();
             $departamentos = $user->departamentos()->pluck('departamento_id');
 
-            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->get();
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
+            ->withCount('acompanhamentos')->get();
             
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }

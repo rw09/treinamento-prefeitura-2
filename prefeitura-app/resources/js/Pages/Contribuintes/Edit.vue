@@ -33,7 +33,7 @@
                                 <label class="align-bottom" for="masculino">Masculino</label>
                             </div>  
                         </div>
-                        <div v-if="errors.sexo" v-text="errors.sexo" class="text-red-400 text-xs mt-1.5"></div>
+                        <!-- <div v-if="errors.sexo" v-text="errors.sexo" class="text-red-400 text-xs mt-1.5"></div> -->
                     </div>
                 </div>
                 <div class="w-full">
