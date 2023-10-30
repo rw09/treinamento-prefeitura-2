@@ -1,6 +1,6 @@
 <template>
     <Head title="Usuários - Listagem" />
-    
+
     <section class="container my-6 mx-auto text-xs">
         <section class="flex justify-between mb-1">
             <div class="flex items-center">
@@ -35,8 +35,9 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2';
 
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
@@ -45,11 +46,23 @@ import 'datatables.net-select';
 
 DataTable.use(DataTablesCore);
 
+    let page = usePage();
+
     let dt;
     const table = ref();
 
     onMounted(function () {
         dt = table.value.dt;
+
+        if(page.props.flash.message) {
+            Swal.fire({
+                title: 'Sucesso!',
+                html: page.props.flash.message,
+                timer: 2500,
+                icon: 'success',
+            })  
+            page.props.flash.message = null
+        } 
     });
 
     const columns = [
@@ -93,7 +106,7 @@ DataTable.use(DataTablesCore);
         });        
     }
 
-    const remove = () => {
+    const remove1 = () => {
         dt.rows({ selected: true }).every(function () {
             let row = this.data();
             if(confirm('Deseja realmente deletar esse Usuário?\n\n' + "ID: " + row.id + "\nNome: " + row.name + "\nE-mail: " + row.email + "\nCPF: " + row.cpf + 
@@ -101,6 +114,32 @@ DataTable.use(DataTablesCore);
             {
                 router.delete(route('users-destroy', row.id));
             };
+        });
+    }
+
+    const remove = () => {
+        dt.rows({ selected: true }).every(function () {
+            let row = this.data();
+            Swal.fire({
+                title: 'Confirma exclusão desse Usuário?',
+                html: "<b>ID:</b> " + row.id + '<br>' + '<b>Nome:</b> ' + row.name + '<br>' + "<b>E-mail:</b> " + row.email + '<br><b>CPF:</b> ' + row.cpf + "<br><b>Perfil de Acesso:</b> " + (row.perfil === 0 ? "Administrador da TI" : (row.perfil === 1 ? "Administrador do Sistema" : "Operador")),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, deletar!',
+                cancelButtonText: 'Cancelar!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.delete(route('users-destroy', row.id));
+                        Swal.fire({
+                        timer: 2500,
+                        title: 'Deletado!',
+                        text: 'Usuário excluído com sucesso.',
+                        icon: 'success',
+                    })
+                }
+            })
         });
     }
 

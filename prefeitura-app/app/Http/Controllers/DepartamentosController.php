@@ -145,7 +145,7 @@ class DepartamentosController extends Controller
 
         Departamento::create($attributes);
 
-        return to_route('departamentos-index');
+        return to_route('departamentos-index')->with('message', 'Departamento Cadastrado com Sucesso!');
     }
 
     public function edit($id)
@@ -170,7 +170,7 @@ class DepartamentosController extends Controller
 
         Departamento::where('id', $id)->update($data);
 
-        return to_route('departamentos-index');
+        return to_route('departamentos-index')->with('message', 'Departamento Editado com Sucesso!');
     }
 
     public function destroy($id)
@@ -197,8 +197,9 @@ class DepartamentosController extends Controller
         $departamento->users()->syncWithoutDetaching($user);
 
         //return Inertia::dialog('Departamentos/AddUser');
-        //return to_route('departamentos-show', $departamento->id);
-        //return redirect()->back();
+        //return to_route('departamentos-show', $departamento->id)->with('message', 'Acesso Concedido com Sucesso! ' . $user->name);
+        //return to_route('departamentos-index')->with('message', 'Acesso Concedido com Sucesso! ' . $user->name);
+        return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
         //return to_route('departamentos-index');
     }
 
@@ -210,7 +211,9 @@ class DepartamentosController extends Controller
 
         $departamento->users()->detach($user);
 
-        //return redirect()->back();
-        //return to_route('departamentos-show', $departamento->id);
+        
+        //return to_route('departamentos-show', $departamento->id)->with('message', 'Acesso Removido com Sucesso!');
+        return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
+        //return to_route('departamentos-index')->with('message', 'Acesso Removido com Sucesso! ' . $user->name);
     }
 }

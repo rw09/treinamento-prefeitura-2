@@ -16,4 +16,6 @@ Adicionei uns dados pra dar seed
 
 -Add acompanhamentos  
   
--Troquei as tabelas por datatables
+-Troquei as tabelas por datatables  
+  
+-Add notificações

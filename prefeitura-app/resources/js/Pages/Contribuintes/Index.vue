@@ -36,8 +36,9 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2';
 
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
@@ -46,11 +47,23 @@ import 'datatables.net-select';
 
 DataTable.use(DataTablesCore);
 
+    let page = usePage();
+
     let dt;
     const table = ref();
 
     onMounted(function () {
         dt = table.value.dt;
+
+        if(page.props.flash.message) {
+            Swal.fire({
+                title: 'Sucesso!',
+                html: page.props.flash.message,
+                timer: 2500,
+                icon: 'success',
+            })  
+            page.props.flash.message = null
+        } 
     });
 
     const columns = [
@@ -95,15 +108,41 @@ DataTable.use(DataTablesCore);
         });        
     }
 
+    // const remove = () => {
+    //     dt.rows({ selected: true }).every(function () {
+    //         let row = this.data();
+    //         if(confirm('Deseja realmente deletar esse Contribuinte?\n\n' + "ID: " + row.id + "\nNome: " + row.nome + "\nData de Nascimento: " + new Date(row.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) + "\nCPF: " + row.cpf
+    //         + "\nEndereço: " + (row.rua ? (row.rua + ", " + (row.numero ? row.numero : "s/nº") + (row.complemento ? " - " + row.complemento : "")) : "") 
+    //         + "\nBairro: " + row.bairro + "\nCidade: " + row.cidade))
+    //         {
+    //             router.delete(route('contribuintes-destroy', row.id));
+    //         };
+    //     });
+    // }
+
     const remove = () => {
         dt.rows({ selected: true }).every(function () {
             let row = this.data();
-            if(confirm('Deseja realmente deletar esse Contribuinte?\n\n' + "ID: " + row.id + "\nNome: " + row.nome + "\nData de Nascimento: " + new Date(row.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) + "\nCPF: " + row.cpf
-            + "\nEndereço: " + (row.rua ? (row.rua + ", " + (row.numero ? row.numero : "s/nº") + (row.complemento ? " - " + row.complemento : "")) : "") 
-            + "\nBairro: " + row.bairro + "\nCidade: " + row.cidade))
-            {
-                router.delete(route('contribuintes-destroy', row.id));
-            };
+            Swal.fire({
+                title: 'Confirma exclusão desse Contribuinte?',
+                html: "<b>ID:</b> " + row.id + '<br>' + '<b>Nome:</b> ' + row.nome + '<br>' + '<b>CPF:</b> ' + row.cpf,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, deletar!',
+                cancelButtonText: 'Cancelar!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.delete(route('contribuintes-destroy', row.id));
+                        Swal.fire({
+                        timer: 2500,
+                        title: 'Deletado!',
+                        text: 'Contribuinte excluído com sucesso.',
+                        icon: 'success',
+                    })
+                }
+            })
         });
     }
 

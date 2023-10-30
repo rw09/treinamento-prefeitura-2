@@ -95,10 +95,14 @@
 
 <script setup>
 import { useForm, router } from '@inertiajs/vue3';
-import Pagination from '../../Shared/Pagination.vue';
 import { ref } from 'vue';
+import Swal from 'sweetalert2';
+import { usePage } from '@inertiajs/vue3';
 
-const opcao = ref('usuarios');
+    const opcao = ref('usuarios');
+
+    let page = usePage();
+
 
     const props = defineProps({
         departamento: Object,
@@ -112,12 +116,30 @@ const opcao = ref('usuarios');
     });
 
     let add = () => {
-        form.post(route('departamentos-add-user'));
+        form.post(route('departamentos-add-user'), {
+            onSuccess: () => {
+                Swal.fire({
+                    title: 'Acesso Concedido com Sucesso!',
+                    html: page.props.flash.message,
+                    timer: 2500,
+                    icon: 'success',
+                })  
+            }
+        });
     };
 
     let remove = (id) => {
         form.user_id = null,
-        form.delete(route('departamentos-remove-user', id));
+        form.delete(route('departamentos-remove-user', id), {
+            onSuccess: () => {
+                Swal.fire({
+                    title: 'Acesso Removido com Sucesso!',
+                    html: page.props.flash.message,
+                    timer: 4000,
+                    icon: 'success',
+                })  
+            }
+        });
     };
 
     let excluirProtocolo = (id) => { //depois trocar por um modal!

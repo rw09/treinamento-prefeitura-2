@@ -36,8 +36,8 @@ class ContribuintesController extends Controller
     
         Contribuinte::create($attributes);
 
-        //return to_route('contribuintes-index')->with('message', 'Contribuinte Cadastrado com Sucesso!');
-        return redirect(route('contribuintes-index')); //with message
+        return to_route('contribuintes-index')->with('message', 'Contribuinte Cadastrado com Sucesso!');
+        //return redirect(route('contribuintes-index')); //with message
     }
     
     public function edit($id)
@@ -65,7 +65,7 @@ class ContribuintesController extends Controller
 
         Contribuinte::where('id', $id)->update($data);
 
-        return to_route('contribuintes-index');
+        return to_route('contribuintes-index')->with('message', 'Contribuinte Editado com Sucesso!');
     }
 
     public function destroy($id)

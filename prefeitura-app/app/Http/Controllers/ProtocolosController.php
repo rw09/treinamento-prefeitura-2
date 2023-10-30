@@ -115,7 +115,7 @@ class ProtocolosController extends Controller
 
         Protocolo::create($attributes);
 
-        return to_route('protocolos-index');
+        return to_route('protocolos-index')->with('message', 'Protocolo Cadastrado com Sucesso!');
     }
 
     public function show($id)
@@ -195,7 +195,7 @@ class ProtocolosController extends Controller
 
         Protocolo::where('id', $id)->update($data);
 
-        return to_route('protocolos-index');
+        return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
     }
 
     public function destroy($id)
@@ -206,7 +206,7 @@ class ProtocolosController extends Controller
         return redirect()->back();
     }
 
-    public function addAcompanhamento(Request $request)
+    public function addAcompanhamento(Request $request) //usar notificação depois
     {
         $attributes = $request->validate([
             'observacao' => 'required|string|max:255',

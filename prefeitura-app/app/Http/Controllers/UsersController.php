@@ -59,7 +59,7 @@ class UsersController extends Controller
 
         User::create($attributes);
 
-        return to_route('users-index');
+        return to_route('users-index')->with('message', 'Usuário Cadastrado com Sucesso!');
     }
 
     public function show($id)
@@ -110,7 +110,7 @@ class UsersController extends Controller
 
         User::where('id', $id)->update($data);
 
-        return to_route('users-index');
+        return to_route('users-index')->with('message', 'Usuário Editado com Sucesso!');
     }
 
     public function destroy($id)
@@ -139,7 +139,7 @@ class UsersController extends Controller
         //depois retornar?
     }
 
-    public function removeDepartamento(Request $request, $id)
+    public function removeDepartamento(Request $request, $id) //fazer a notificaçao de remover
     {
         $user = User::where('id', $request->user_id)->firstOrFail();
 

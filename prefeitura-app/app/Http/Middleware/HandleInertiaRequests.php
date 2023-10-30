@@ -44,7 +44,10 @@ class HandleInertiaRequests extends Middleware
                     'nome' => Auth::user()->name ?? '',
                     'perfil_acesso' => Auth::user()->perfil ?? '',
                 ]
-            ]
+            ],
+            'flash' => [
+                'message' => fn () => $request->session()->get('message')
+            ],
         ]);
     }
 }
