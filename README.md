@@ -18,4 +18,6 @@ Adicionei uns dados pra dar seed
   
 -Troquei as tabelas por datatables  
   
--Add notificações
+-Add notificações  
+  
+-Troquei as validações para classes Request

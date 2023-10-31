@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\UserRequest;
 use App\Models\Departamento;
 use App\Models\User;
 use Auth;
@@ -11,30 +12,6 @@ use Inertia\Inertia;
 
 class UsersController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $pesquisa = $request->get('pesquisa');
-
-    //     $query = User::query();
-
-    //     if ($pesquisa) {
-    //         $query->where('name', 'like', "%{$pesquisa}%");
-    //     }
-
-    //     $users = $query->withCount('departamentos')->paginate(15)->withQueryString();
-
-    //     //$users = User::all();
-    //     //$users = User::withCount('departamentos')->get();
-    //     //$users = User::withCount('departamentos')->paginate(15);
-    //     //$users = User::with('departamentos')->get();
-    //     //dd($users);
-
-    //     return Inertia::render('Users/Index', [
-    //         'users' => $users,
-    //         'filters' => $request->only(['pesquisa'])
-    //     ]);
-    // }
-
     public function index()
     {
         $users = User::withCount('departamentos')->get();
@@ -47,17 +24,11 @@ class UsersController extends Controller
         return Inertia::render('Users/Create');
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $attributes = $request->validate([
-            'name' => 'required|string|max:255',
-            'cpf' => 'required|cpf|unique:users',
-            'email' => 'required', 'email',
-            'password' => 'required|min:6|max:15',
-            'perfil' => 'required|in:0,1,2',
-        ]);
+        $validated = $request->validated();
 
-        User::create($attributes);
+        User::create($validated);
 
         return to_route('users-index')->with('message', 'Usuário Cadastrado com Sucesso!');
     }
@@ -98,17 +69,11 @@ class UsersController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'cpf' => 'required|cpf',
-            'email' => 'required', 'email',
-            // 'password' => 'required|min:6|max:15',
-            'perfil' => 'required|in:0,1,2',
-        ]);
+        $validated = $request->validated();
 
-        User::where('id', $id)->update($data);
+        User::where('id', $id)->update($validated);
 
         return to_route('users-index')->with('message', 'Usuário Editado com Sucesso!');
     }
@@ -120,6 +85,7 @@ class UsersController extends Controller
         if(Auth::user()->can('delete', $user))
         {
             $user->delete();
+
             return to_route('users-index');
         }
         else
@@ -136,7 +102,8 @@ class UsersController extends Controller
 
         $user->departamentos()->syncWithoutDetaching($departamento);
 
-        //depois retornar?
+        //fazer a notificação
+        //return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
     }
 
     public function removeDepartamento(Request $request, $id) //fazer a notificaçao de remover

@@ -29,7 +29,8 @@ class DepartamentoPolicy
      */
     public function create(User $user): bool
     {
-        return $user->perfil === 0;// || $user->perfil === 1;
+        //return $user->perfil === 0;
+        return $user->perfil === 0 || $user->perfil === 1;
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContribuinteRequest;
 use App\Models\Contribuinte;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ContribuintesController extends Controller
@@ -20,50 +20,27 @@ class ContribuintesController extends Controller
         return Inertia::render('Contribuintes/Create');
     }
 
-    public function store(Request $request)
+    public function store(ContribuinteRequest $request)
     {
-        $attributes = $request->validate([
-            'nome' => 'required|string|max:100',
-            'data_nascimento' => 'required|date',
-            'cpf' => 'required|cpf|unique:contribuintes',
-            'sexo' => 'required|in:F,M',
-            'cidade' => 'nullable|string|max:100',
-            'bairro' => 'nullable|string|max:100',
-            'rua' => 'nullable|string|max:100',
-            'numero' => 'nullable|integer',
-            'complemento' => 'nullable|string|max:100',
-        ]);
+        $validated = $request->validated();
     
-        Contribuinte::create($attributes);
+        Contribuinte::create($validated);
 
         return to_route('contribuintes-index')->with('message', 'Contribuinte Cadastrado com Sucesso!');
-        //return redirect(route('contribuintes-index')); //with message
     }
     
     public function edit($id)
     {
         $contribuinte = Contribuinte::where('id', $id)->firstOrFail();
 
-        //dd($contribuinte);
-
         return Inertia::render('Contribuintes/Edit', ['contribuinte' => $contribuinte]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ContribuinteRequest $request, $id)
     {
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-            'data_nascimento' => 'required|date',
-            'cpf' => 'required|cpf|',
-            'sexo' => 'required|in:F,M',
-            'cidade' => 'nullable|string|max:100',
-            'bairro' => 'nullable|string|max:100',
-            'rua' => 'nullable|string|max:100',
-            'numero' => 'nullable|integer',
-            'complemento' => 'nullable|string|max:100',
-        ]);
+        $validated = $request->validated();
 
-        Contribuinte::where('id', $id)->update($data);
+        Contribuinte::where('id', $id)->update($validated);
 
         return to_route('contribuintes-index')->with('message', 'Contribuinte Editado com Sucesso!');
     }

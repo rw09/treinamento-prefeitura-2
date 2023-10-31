@@ -7,15 +7,13 @@
             <div class="flex flex-col justify-center gap-x-4">
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
-                        <!-- <div class="flex"> -->
                         <label for="nome" class="block text-xs">Nome:</label>
-                        <!-- <span v-if="errors.nome" v-text="errors.nome" class="text-red-400 text-xs ml-4"></span></div> -->
-                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" maxlength="100" required>
                         <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="cpf" class="block text-xs">CPF:</label>
-                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" maxlength="11" required>
                         <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>

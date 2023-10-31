@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DepartamentoRequest;
 use App\Models\Departamento;
 use App\Models\User;
 use Auth;
@@ -10,31 +11,6 @@ use Inertia\Inertia;
 
 class DepartamentosController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $pesquisa = $request->get('pesquisa');
-
-    //     $query = Departamento::query();
-
-    //     if ($pesquisa) {
-    //         $query->where('nome', 'like', "%{$pesquisa}%");
-    //     }
-
-    //     $departamentos = $query->withCount('users')->withCount('protocolos')->paginate(15)->withQueryString();
-
-    //     return Inertia::render('Departamentos/Index', [
-    //         'departamentos' => $departamentos,
-    //         'filters' => $request->only(['pesquisa']),
-    //         'can' => [
-    //             'viewAny' => Auth::user()->can('viewAny', Departamento::class),
-    //             // 'view' => Auth::user()->can('view', Departamento::class),
-    //             //'update' => Auth::user()->can('update', Departamento::class),
-    //             //'delete' => Auth::user()->can('delete', Departamento::class),
-    //         ]
-    //     ]);
-    
-    // }
-
     public function index()
     {
         $departamentos = Departamento::withCount('users')->withCount('protocolos')->get();
@@ -50,77 +26,17 @@ class DepartamentosController extends Controller
         ]);
     }
 
-    // public function show($id)
-    // {
-    //     $departamento = Departamento::where('id', $id)->firstOrFail();
-
-    //     if(Auth::user()->can('view', $departamento)) 
-    //     {
-    //         $departamento->load(['users']);
-
-    //         $departamento->load(['protocolos']);
-
-    //         // $users = User::whereNotIn('id', User::select('users.id')
-    //         //     ->join('departamento_user', 'users.id', '=', 'departamento_user.user_id')
-    //         //     ->where('departamento_user.departamento_id', $departamento->id)
-    //         // )->having('users.perfil', 2)->get();
-
-    //         $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
-    //         //$users = $users->diff($departamento['users']);
-        
-    //         return Inertia::render('Departamentos/Show', [
-    //             'departamento' => $departamento,
-    //             'users' => $users,
-    //         ]);  
-    //     }
-    //     else
-    //     {
-    //         return redirect('/');
-    //     }
-    // }
-
-    // public function show($id) //paginação
-    // {
-    //     $departamento = Departamento::where('id', $id)->firstOrFail();
-
-    //     if(Auth::user()->can('view', $departamento)) 
-    //     {
-    //         $departamento->load(['users']);
-
-    //         $protocolos = $departamento->protocolos()->with('contribuinte:id,nome')->paginate(10);
-            
-    //         $departamento_users = $departamento->users()->select('name')->paginate(5);
-
-    //         $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
-        
-    //         return Inertia::render('Departamentos/Show-2', [
-    //             'departamento' => $departamento,
-    //             'protocolos' => $protocolos,
-    //             'departamento_users' => $departamento_users,
-    //             'users' => $users,
-    //         ]);  
-    //     }
-    //     else
-    //     {
-    //         return redirect('/');
-    //     }
-    // }
-
     public function show($id)
     {
-        //$departamento = Departamento::where('id', $id)->firstOrFail();
         $departamento = Departamento::where('id', $id)->with('users:id,name,email,cpf')->firstOrFail();
 
         if(Auth::user()->can('view', $departamento)) 
         {
-            //$departamento->load(['users']);
-            // $departamento->load(['protocolos']);
-
             $protocolos = $departamento->protocolos()->with('contribuinte:id,nome')->get();
             
             $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
 
-            return Inertia::render('Departamentos/Show-2', [
+            return Inertia::render('Departamentos/Show', [
                 'departamento' => $departamento,
                 'protocolos' => $protocolos,
                 'users' => $users,
@@ -137,13 +53,11 @@ class DepartamentosController extends Controller
         return Inertia::render('Departamentos/Create');
     }
 
-    public function store(Request $request)
+    public function store(DepartamentoRequest $request)
     {
-        $attributes = $request->validate([
-            'nome' => 'required|string|max:100',
-        ]);
+        $validated = $request->validated();
 
-        Departamento::create($attributes);
+        Departamento::create($validated);
 
         return to_route('departamentos-index')->with('message', 'Departamento Cadastrado com Sucesso!');
     }
@@ -162,13 +76,11 @@ class DepartamentosController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(DepartamentoRequest $request, $id)
     {
-        $data = $request->validate([
-            'nome' => 'required|string|max:100',
-        ]);
+        $validated = $request->validated();
 
-        Departamento::where('id', $id)->update($data);
+        Departamento::where('id', $id)->update($validated);
 
         return to_route('departamentos-index')->with('message', 'Departamento Editado com Sucesso!');
     }
@@ -180,6 +92,7 @@ class DepartamentosController extends Controller
         if(Auth::user()->can('delete', $departamento))
         {
             $departamento->delete();
+
             return to_route('departamentos-index');
         }
         else
@@ -196,11 +109,7 @@ class DepartamentosController extends Controller
 
         $departamento->users()->syncWithoutDetaching($user);
 
-        //return Inertia::dialog('Departamentos/AddUser');
-        //return to_route('departamentos-show', $departamento->id)->with('message', 'Acesso Concedido com Sucesso! ' . $user->name);
-        //return to_route('departamentos-index')->with('message', 'Acesso Concedido com Sucesso! ' . $user->name);
         return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
-        //return to_route('departamentos-index');
     }
 
     public function removeUser(Request $request, $id)
@@ -211,9 +120,6 @@ class DepartamentosController extends Controller
 
         $departamento->users()->detach($user);
 
-        
-        //return to_route('departamentos-show', $departamento->id)->with('message', 'Acesso Removido com Sucesso!');
         return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
-        //return to_route('departamentos-index')->with('message', 'Acesso Removido com Sucesso! ' . $user->name);
     }
 }

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AcompanhamentoRequest;
+use App\Http\Requests\ProtocoloRequest;
 use App\Models\Acompanhamento;
 use App\Models\Contribuinte;
 use App\Models\Departamento;
 use App\Models\Protocolo;
 use Auth;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProtocolosController extends Controller
 {
     public function index()
     {
-        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
+        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
-            //$protocolos = Protocolo::all();
             $protocolos = Protocolo::withCount('acompanhamentos')->get();
 
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
@@ -24,10 +24,10 @@ class ProtocolosController extends Controller
         else
         {
             $user = Auth::user();
+            
             $departamentos = $user->departamentos()->pluck('departamento_id');
 
-            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)
-            ->withCount('acompanhamentos')->get();
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->withCount('acompanhamentos')->get();
             
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
@@ -35,49 +35,6 @@ class ProtocolosController extends Controller
         return Inertia::render('Protocolos/Index', ['protocolos' => $protocolos]);
     }
 
-    // public function index(Request $request)
-    // {
-    //     if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //admin da TI e do Sistema, tem acesso à todos os protocolos
-    //     {
-    //         $pesquisa = $request->get('pesquisa');
-
-    //         $query = Protocolo::query();
-
-    //         if ($pesquisa) {
-    //             $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-    //                 ->orWhere('descricao', 'LIKE', "%{$pesquisa}%");
-    //         }
-
-    //         $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
-    //             ->paginate(15)->withQueryString();
-            
-    //         //$protocolos = Protocolo::with(['contribuinte:id,nome', 'departamento:id,nome'])->paginate(15);
-    //     }
-    //     else
-    //     {
-    //         $user = Auth::user();
-    //         $departamentos = $user->departamentos()->pluck('departamento_id');
-
-    //         $pesquisa = $request->get('pesquisa');
-
-    //         $query = Protocolo::query()->whereIn('departamento_id', $departamentos)
-    //             ->with(['contribuinte:id,nome', 'departamento:id,nome']);
-
-    //         if ($pesquisa) {
-    //             $query->WhereRelation('contribuinte', 'nome', 'like', '%' . $pesquisa . '%')
-    //                 ->orWhere('descricao', 'LIKE', "%{$pesquisa}%")
-    //                 ->whereIn('departamento_id', $departamentos);
-    //     }
-
-    //         $protocolos = $query->with(['contribuinte:id,nome', 'departamento:id,nome'])
-    //             ->paginate(15)->withQueryString();
-    //     }
-
-    //     return Inertia::render('Protocolos/Index', [
-    //         'protocolos' => $protocolos,
-    //         'filters' => $request->only(['pesquisa'])
-    //     ]);
-    // }
 
     public function create()
     {
@@ -85,18 +42,16 @@ class ProtocolosController extends Controller
 
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
-            //$departamentos = Departamento::all();    
             $departamentos = Departamento::orderBy('nome')->get();
         }
         else
         {
             $user = Auth::user();
+            
             $departamentos = $user->departamentos()->orderBy('nome')->get();
         }
 
-        //$contribuintes = Contribuinte::orderBy('nome')->get();
         $contribuintes = Contribuinte::orderBy('nome')->select('id', 'cpf', 'nome')->get();
-        //dd($contribuintes);
 
         return Inertia::render('Protocolos/Create', [
             'departamentos' => $departamentos,
@@ -104,32 +59,26 @@ class ProtocolosController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(ProtocoloRequest $request)
     {
-        $attributes = $request->validate([
-            'contribuinte_id' => 'required|exists:contribuintes,id',
-            'departamento_id' => 'required|exists:departamentos,id',
-            'descricao' => 'required|string|max:255',
-            'prazo' => 'required|integer',
-        ]);
+        $validated = $request->validated();
 
-        Protocolo::create($attributes);
+        Protocolo::create($validated);
 
         return to_route('protocolos-index')->with('message', 'Protocolo Cadastrado com Sucesso!');
     }
 
     public function show($id)
     {
-        //$protocolo = Protocolo::where('id', $id)->with('departamento', 'contribuinte','acompanhamentos')->firstOrFail();
         $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
         
         if(Auth::user()->perfil === 2)
         {
             $user = Auth::user();
+
             $departamentos_id = $user->departamentos()->pluck('departamento_id')->toArray();
 
-            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, 
-            //nao deixa visualizar
+            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, nao deixa visualizar
             if(in_array($protocolo->departamento_id, $departamentos_id) === false)
             {
                 return to_route('home');
@@ -139,10 +88,7 @@ class ProtocolosController extends Controller
         $acompanhamentos = $protocolo->acompanhamentos()->orderBy('id', 'desc')->get();
 
         $acompanhamentos->load(['user:id,name']);
-        //$contribuinte
-
-        //dd($acompanhamentos);
-
+        
         return Inertia::render('Protocolos/Show', [
             'protocolo' => $protocolo,
             'acompanhamentos' => $acompanhamentos
@@ -153,17 +99,17 @@ class ProtocolosController extends Controller
     {
         $protocolo = Protocolo::where('id', $id)->firstOrFail();
 
-        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1) //Se for Admin TI ou Sistema, tem acesso a todos os departamentos
+        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
             $departamentos = Departamento::orderBy('nome')->get();
         }
         else
         {
             $user = Auth::user();
+
             $departamentos_id = $user->departamentos()->pluck('departamento_id')->toArray();
 
-            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, 
-            //nao deixa editar
+            //se o departamento_id do protocolo nao tiver no array de departamentos_id do user, nao deixa editar
             if(in_array($protocolo->departamento_id, $departamentos_id))
             {
                 $departamentos = $user->departamentos()->orderBy('nome')->get();
@@ -183,17 +129,11 @@ class ProtocolosController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ProtocoloRequest $request, $id)
     {
-        $data = $request->validate([
-            'contribuinte_id' => 'required|exists:contribuintes,id',
-            'departamento_id' => 'required|exists:departamentos,id',
-            'descricao' => 'required|string|max:255',
-            'situacao' => 'required|integer|in:0,1',
-            'prazo' => 'required|integer',
-        ]);
+        $validated = $request->validated();
 
-        Protocolo::where('id', $id)->update($data);
+        Protocolo::where('id', $id)->update($validated);
 
         return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
     }
@@ -202,21 +142,14 @@ class ProtocolosController extends Controller
     {
         Protocolo::where('id', $id)->delete();
 
-        //return to_route('protocolos-index');
         return redirect()->back();
     }
 
-    public function addAcompanhamento(Request $request) //usar notificação depois
+    public function addAcompanhamento(AcompanhamentoRequest $request) //usar notificação depois e passar pro AcompanhamentosController
     {
-        $attributes = $request->validate([
-            'observacao' => 'required|string|max:255',
-            'protocolo_id' => 'required|exists:protocolos,id',
-            'user_id' => 'required|exists:users,id',
-        ]);
-        
-       //dd($attributes);
+        $validated = $request->validated();
 
-        Acompanhamento::create($attributes);
+        Acompanhamento::create($validated);
 
         return redirect()->back()->with('success','DEU');
     }
