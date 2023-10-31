@@ -13,7 +13,7 @@
                     </div>
                     <div>
                         <label for="cpf" class="block text-xs">CPF:</label>
-                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" maxlength="11" required>
+                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded"  required>
                         <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>

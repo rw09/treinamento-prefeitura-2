@@ -20,4 +20,6 @@ Adicionei uns dados pra dar seed
   
 -Add notificações  
   
--Troquei as validações para classes Request
+-Troquei as validações para classes Request  
+  
+-Criando layout usando abas para ficar no padrão da Prefeitura
