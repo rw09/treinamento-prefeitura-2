@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContribuinteRequest;
 use App\Models\Contribuinte;
+use App\Models\Protocolo;
 use Inertia\Inertia;
 
 class ContribuintesController extends Controller
@@ -29,6 +30,20 @@ class ContribuintesController extends Controller
         return to_route('contribuintes-index')->with('message', 'Contribuinte Cadastrado com Sucesso!');
     }
     
+    public function show($id)
+    {
+        $contribuinte = Contribuinte::where('id', $id)->firstOrFail();
+
+        $protocolos = Protocolo::whereBelongsTo($contribuinte)->orderBy('id', 'desc')->get();
+
+        $protocolos->load(['departamento:id,nome']);
+
+        return Inertia::render('Contribuintes/Show', [
+            'contribuinte' => $contribuinte,
+            'protocolos' => $protocolos,
+        ]);
+    }
+
     public function edit($id)
     {
         $contribuinte = Contribuinte::where('id', $id)->firstOrFail();

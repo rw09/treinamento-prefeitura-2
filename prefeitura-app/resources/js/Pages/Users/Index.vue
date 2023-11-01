@@ -10,9 +10,9 @@
                 </Link>
             </div>
             <div class="grid grid-cols-3 gap-x-1 py-2">
-                <button @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200">Ver</button>
-                <button @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200">Editar</button>
-                <button @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200">Deletar</button>
+                <button @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200 text-white">Ver</button>
+                <button @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200 text-white">Editar</button>
+                <button @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200 text-white">Deletar</button>
             </div>
         </section>
 

@@ -51,7 +51,7 @@
         
 
             <section class="px-8 py-4" v-if="opcao === 'acompanhamentos'">
-                <details class="mb-4">
+                <details class="mb-8">
                     <summary class="text-white bg-teal-500 hover:bg-teal-400 px-4 py-2 w-fit cursor-pointer">Novo Acompanhamento</summary>
                     <form @submit.prevent="add" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
                         <h1 class="self-center font-semibold mb-4">Registrar Novo Acompanhamento</h1>
