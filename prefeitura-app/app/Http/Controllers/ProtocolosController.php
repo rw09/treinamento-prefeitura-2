@@ -70,7 +70,8 @@ class ProtocolosController extends Controller
 
     public function show($id)
     {
-        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
+        //$protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
+        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte')->firstOrFail();
         
         if(Auth::user()->perfil === 2)
         {

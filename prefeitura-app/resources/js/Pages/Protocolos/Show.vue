@@ -1,16 +1,16 @@
 <template>
     <Head title="Protocolos - Detalhes" />
     <!-- <section class="container mt-8 mx-auto px-40"> -->
-        <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 rounded-md border-2">
+        <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border-2">
             <nav class="flex bg-slate-200">
-                <label for="opcao-protocolo" class="py-2.5 px-4 cursor-pointer" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'protocolo'}">
+                <label for="opcao-protocolo" class="py-2.5 px-4 cursor-pointer" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'protocolo'}">
                     <input type="radio" value="protocolo" id="opcao-protocolo" name="opcao" v-model="opcao" class="hidden">
                         Protocolo
                     </label>
-                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'contribuinte'}">
+                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-white font-semibold' : opcao === 'contribuinte'}">
                     <input type="radio" value="contribuinte" id="opcao-contribuinte" name="opcao" v-model="opcao" class="hidden">Contribuinte
                 </label>
-                <label for="opcao-acompanhamentos" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'acompanhamentos'}">
+                <label for="opcao-acompanhamentos" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-white font-semibold' : opcao === 'acompanhamentos'}">
                     <input type="radio" value="acompanhamentos" id="opcao-acompanhamentos" name="opcao" v-model="opcao" class="hidden">Acompanhamentos
                 </label>
             </nav>
@@ -26,10 +26,42 @@
                 <h2 class="text-md font-semibold mt-4">Departamento:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ protocolo.departamento.nome}}</p>
             </section>
+
+            <section class="px-8 py-4" v-if="opcao === 'contribuinte'">
+                <h1 class="font-semibold text-lg mx-auto w-fit">Contribuinte # {{protocolo.contribuinte.id}}</h1>
+                <h2 class="text-md font-semibold mt-4">Nome:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.nome }}</p>
+                <h2 class="text-md font-semibold mt-4">Data de Nascimento:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ new Date(protocolo.contribuinte.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) }}</p>
+                <h2 class="text-md font-semibold mt-4">CPF:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.cpf }}</p>
+                <h2 class="text-md font-semibold mt-4">Sexo:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.sexo === "M" ? "Masculino" : "Feminino" }}</p>
+                <h2 class="text-md font-semibold mt-4">Rua:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.rua ? protocolo.contribuinte.rua : '---' }}</p>
+                <h2 class="text-md font-semibold mt-4">Número:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.numero ? protocolo.contribuinte.numero : '---' }}</p>
+                <h2 class="text-md font-semibold mt-4">Complemento:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.complemento ? protocolo.contribuinte.complemento : '---' }}</p>
+                <h2 class="text-md font-semibold mt-4">Bairro:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.bairro ? protocolo.contribuinte.bairro : '---' }}</p>
+                <h2 class="text-md font-semibold mt-4">Cidade:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.cidade ? protocolo.contribuinte.cidade : '---' }}</p>
+            </section>
         
 
-        <section class="px-8 py-4" v-if="opcao === 'acompanhamentos'">
-            <button class="bg-green-300 px-3 py-2 mb-2">Novo Acompanhamento</button>
+            <section class="px-8 py-4" v-if="opcao === 'acompanhamentos'">
+                <details class="mb-4">
+                    <summary class="text-white bg-teal-500 hover:bg-teal-400 px-4 py-2 w-fit cursor-pointer">Novo Acompanhamento</summary>
+                    <form @submit.prevent="add" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
+                        <h1 class="self-center font-semibold mb-4">Registrar Novo Acompanhamento</h1>
+                        <label for="observacao" class="text-sm">Observação:</label>
+                        <textarea v-model="form.observacao" cols="70" rows="8" class="p-4">
+                        </textarea>
+                        <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400" :disabled="form.processing">Registrar Acompanhamento</button>
+                    </form>
+                </details>
+
             <div class="bg-yellow-200 p-4 rounded-md flex flex-col mb-2" v-for="acompanhamento, index in acompanhamentos">
               <div class="flex justify-between">
                 <div>
@@ -55,36 +87,7 @@
           </section>
         
         </section>
-        <form @submit.prevent="add" class="mx-20 pt-4 px-10 pb-12 rounded shadow-md bg-gray-100 grid grid-cols-2">
-            <h1 class="font-bold mx-auto col-span-2">Protocolo Número #{{ protocolo.id }}</h1>
-            <p>{{ protocolo.descricao }}</p>
-            <p><strong>Data Cadastro:</strong> {{ new Date(protocolo.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}</p>
-            <p><strong>Departamento:</strong> {{ protocolo.departamento.nome }}</p>
-            <p><strong>Solicitante:</strong> {{ protocolo.contribuinte.nome }}</p>
-            <div class="col-span-2">
-                <label for="observacao">Acompanhamento:</label>
-                <textarea v-model="form.observacao" cols="70" rows="8">
-                </textarea>
-            </div>
-            <button class="py-1 px-2 bg-green-400" type="submit">Registrar Acompanhamento</button>
-        </form>
-        <div>
-            <h2>Acompanhamentos:</h2>
-            <ul>
-                <li class="bg-yellow-500/50 p-4 mb-2" v-for="acompanhamento in acompanhamentos">
-                    <div>
-                        {{ acompanhamento.observacao }}
-                    </div>
-                    <div class="text-sm">
-                        {{ new Date(acompanhamento.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}
-                    </div>
-                    <div>
-                      {{ acompanhamento.user_id }} - {{ acompanhamento.user.name }}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    <!-- </section> -->
+        
 </template>
 
 <script setup>
@@ -109,13 +112,9 @@ import { ref } from 'vue';
 
     let add = () => {
         form.post(route('protocolos-add-acompanhamento'), {
-            preserveState: false,
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => form.reset('observacao'),
         });
     }
-
-    // let add = () => {
-    //     form.post('/protocolos/add-acompanhamento', {
-    //         onSuccess: form.reset(),
-    //     });
-    // }
 </script>
