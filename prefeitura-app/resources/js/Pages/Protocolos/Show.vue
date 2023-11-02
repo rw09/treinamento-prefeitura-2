@@ -3,14 +3,14 @@
     <!-- <section class="container mt-8 mx-auto px-40"> -->
         <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border-2">
             <nav class="flex bg-slate-200">
-                <label for="opcao-protocolo" class="py-2.5 px-4 cursor-pointer" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'protocolo'}">
+                <label for="opcao-protocolo" class="py-2.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'protocolo'}">
                     <input type="radio" value="protocolo" id="opcao-protocolo" name="opcao" v-model="opcao" class="hidden">
                         Protocolo
                     </label>
-                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-white font-semibold' : opcao === 'contribuinte'}">
+                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-white font-semibold' : opcao === 'contribuinte'}">
                     <input type="radio" value="contribuinte" id="opcao-contribuinte" name="opcao" v-model="opcao" class="hidden">Contribuinte
                 </label>
-                <label for="opcao-acompanhamentos" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-white font-semibold' : opcao === 'acompanhamentos'}">
+                <label for="opcao-acompanhamentos" class="py-2.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-white font-semibold' : opcao === 'acompanhamentos'}">
                     <input type="radio" value="acompanhamentos" id="opcao-acompanhamentos" name="opcao" v-model="opcao" class="hidden">Acompanhamentos
                 </label>
             </nav>
@@ -56,7 +56,7 @@
                     <form @submit.prevent="add" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
                         <h1 class="self-center font-semibold mb-4">Registrar Novo Acompanhamento</h1>
                         <label for="observacao" class="text-sm">Observação:</label>
-                        <textarea v-model="form.observacao" cols="70" rows="8" class="p-4">
+                        <textarea v-model="form.observacao" cols="70" rows="5" class="p-4">
                         </textarea>
                         <button type="submit" class="mt-8 px-4 py-2 rounded font-medium bg-teal-500 text-white hover:bg-teal-400" :disabled="form.processing">Registrar Acompanhamento</button>
                     </form>
@@ -94,6 +94,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Swal from 'sweetalert2';
 
     const opcao = ref('protocolo');
 
@@ -114,7 +115,15 @@ import { ref } from 'vue';
         form.post(route('protocolos-add-acompanhamento'), {
             preserveState: true,
             preserveScroll: true,
-            onSuccess: () => form.reset('observacao'),
+            onSuccess: () => {[
+                Swal.fire({
+                    title: 'Sucesso!',
+                    html: page.props.flash.message,
+                    timer: 2500,
+                    icon: 'success',
+                }),  
+                form.reset('observacao'),
+            ]}
         });
     }
 </script>

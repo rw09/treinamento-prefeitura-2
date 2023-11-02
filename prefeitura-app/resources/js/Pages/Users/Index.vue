@@ -3,21 +3,21 @@
 
     <section class="container my-6 mx-auto text-xs">
         <section class="flex justify-between mb-1">
-            <div class="flex items-center">
+            <div class="flex items-center py-2">
                 <!-- <h1 class="font-bold text-3xl pr-6">Usuários</h1> -->
                 <Link v-bind:href="route('users-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Usuário
                 </Link>
             </div>
             <div class="grid grid-cols-3 gap-x-1 py-2">
-                <button @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200 text-white">Ver</button>
-                <button @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200 text-white">Editar</button>
-                <button @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200 text-white">Deletar</button>
+                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Ver</button>
+                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
+                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
             </div>
         </section>
 
         <section class="container py-1 mx-auto text-xs">
-            <DataTable id="datatable" :data="users" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%">
+            <DataTable id="datatable" :data="users" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%" @select="mostrarBotoes" @deselect="esconderBotoes">
                 <thead class="bg-gray-200">
                     <tr>
                         <th>ID</th>
@@ -92,34 +92,39 @@ DataTable.use(DataTablesCore);
     };
 
 
-    const show = () => {
-        dt.rows({ selected: true }).every(function () {
-            let row = this.data();
-            router.get(route('users-show', row.id));
-        });        
+    let linhaSelecionada = ref(false);
+
+    let mostrarBotoes = () => {
+        linhaSelecionada.value = true;
     }
+
+    let esconderBotoes = () => {
+        linhaSelecionada.value = false;
+    }
+
+    const show = () => {
+        if(linhaSelecionada.value === true) {
+            let row = dt.row({ selected: true }).data();
+            router.get(route('users-show', row.id));
+            
+        } else {
+            avisoSemLinhaSelecionada('Visualizar')
+        }
+    };
 
     const edit = () => {
-        dt.rows({ selected: true }).every(function () {
-            let row = this.data();
+        if(linhaSelecionada.value === true) {
+            let row = dt.row({ selected: true }).data();
             router.get(route('users-edit', row.id));
-        });        
-    }
 
-    const remove1 = () => {
-        dt.rows({ selected: true }).every(function () {
-            let row = this.data();
-            if(confirm('Deseja realmente deletar esse Usuário?\n\n' + "ID: " + row.id + "\nNome: " + row.name + "\nE-mail: " + row.email + "\nCPF: " + row.cpf + 
-            "\nPerfil de Acesso: " + (row.perfil === 0 ? "Administrador da TI" : (row.perfil === 1 ? "Administrador do Sistema" : "Operador"))))
-            {
-                router.delete(route('users-destroy', row.id));
-            };
-        });
-    }
+        } else {
+            avisoSemLinhaSelecionada('Editar')
+        }        
+    };
 
     const remove = () => {
-        dt.rows({ selected: true }).every(function () {
-            let row = this.data();
+        if(linhaSelecionada.value === true) {
+            let row = dt.row({ selected: true }).data();
             Swal.fire({
                 title: 'Confirma exclusão desse Usuário?',
                 html: "<b>ID:</b> " + row.id + '<br>' + '<b>Nome:</b> ' + row.name + '<br>' + "<b>E-mail:</b> " + row.email + '<br><b>CPF:</b> ' + row.cpf + "<br><b>Perfil de Acesso:</b> " + (row.perfil === 0 ? "Administrador da TI" : (row.perfil === 1 ? "Administrador do Sistema" : "Operador")),
@@ -140,7 +145,18 @@ DataTable.use(DataTablesCore);
                     })
                 }
             })
-        });
+        } else {
+            avisoSemLinhaSelecionada('Deletar')
+        }  
+    };
+
+    const avisoSemLinhaSelecionada = (msg) => {
+        Swal.fire({
+            timer: 2500,
+            title: 'Nenhum Registro Selecionado!',
+            text: 'Selecione o Usuário que deseja ' + msg,
+            icon: 'warning',
+        })
     }
 
     const props = defineProps({ users: Object });

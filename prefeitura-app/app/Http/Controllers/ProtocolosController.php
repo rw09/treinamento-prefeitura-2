@@ -136,7 +136,8 @@ class ProtocolosController extends Controller
 
         Protocolo::where('id', $id)->update($validated);
 
-        return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
+        //return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
+        return back();
     }
 
     public function destroy($id)
@@ -152,6 +153,6 @@ class ProtocolosController extends Controller
 
         Acompanhamento::create($validated);
 
-        return redirect()->back()->with('success','DEU');
+        return redirect()->back()->with('message', 'Acompanhamento Registrado com Sucesso!');
     }
 }

@@ -3,10 +3,10 @@
     <!-- <section class="container mt-8 mx-auto px-40"> -->
         <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border-2">
             <nav class="flex bg-slate-200">
-                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer bg-slate-200" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'contribuinte'}">
+                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'contribuinte'}">
                     <input type="radio" value="contribuinte" id="opcao-contribuinte" name="opcao" v-model="opcao" class="hidden">Contribuinte
                 </label>
-                <label for="opcao-protocolos" class="py-2.5 px-4 cursor-pointer" v-bind:class="{'bg-white font-semibold' : opcao === 'protocolos'}">
+                <label for="opcao-protocolos" class="py-2.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-white font-semibold' : opcao === 'protocolos'}">
                     <input type="radio" value="protocolos" id="opcao-protocolos" name="opcao" v-model="opcao" class="hidden">
                         Protocolos
                 </label>
@@ -39,7 +39,7 @@
             <div class="bg-gray-200 p-4 rounded-md flex flex-col mb-2" v-for="protocolo in protocolos">
               <div class="flex justify-between">
                 <div>
-                  <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }}</h1>
+                  <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }} - {{ protocolo.departamento.nome }}</h1>
                   <p class="text-xs">{{ new Date(protocolo.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}</p>
                 </div>
                 <div class="flex space-x-2">
@@ -54,8 +54,11 @@
                 </div>
               </div>
               <p class="mt-5">{{ protocolo.descricao }}</p>
-              <div class="flex mt-8">
-                <p><strong class="font-semibold">Departamento:</strong> {{ protocolo.departamento.id }} - {{ protocolo.departamento.nome }}</p>
+              <div class="flex justify-between mt-8">
+                <p>{{ protocolo.departamento.id }} - {{ protocolo.departamento.nome }}</p>
+                <Link v-bind:href="route('protocolos-show', protocolo.id)">Ver</Link>
+                <Link v-bind:href="route('protocolos-edit', protocolo.id)">Editar</Link>
+                <Link @click="edit(protocolo.id)">Ver</Link>
               </div>
             </div>
         </section>
@@ -76,16 +79,12 @@ import { ref } from 'vue';
 
     const page = usePage();
 
+    let form = useForm({});
+
     const props = defineProps({
         contribuinte: Object,
         protocolos: Object
     });
-
-    // let form = useForm({
-    //     protocolo_id: props.protocolo.id,
-    //     user_id: page.props.auth.user.id,
-    //     observacao: null,
-    // });
 
     // let add = () => {
     //     form.post(route('protocolos-add-acompanhamento'), {
@@ -94,4 +93,11 @@ import { ref } from 'vue';
     //         onSuccess: () => form.reset('observacao'),
     //     });
     // }
+
+    let edit = (id) => {
+        form.get(route('protocolos-edit', id)), {
+            preserveState: true,
+            preserveScroll: true,
+        }
+    }
 </script>
