@@ -134,15 +134,14 @@ class ProtocolosController extends Controller
     {
         $validated = $request->validated();
 
-        Protocolo::where('id', $id)->update($validated);
+        Protocolo::find($id)->update($validated);
 
-        //return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
-        return back();
+        return to_route('protocolos-index')->with('message', 'Protocolo Editado com Sucesso!');
     }
 
     public function destroy($id)
     {
-        Protocolo::where('id', $id)->delete();
+        Protocolo::find($id)->delete();
 
         return redirect()->back();
     }

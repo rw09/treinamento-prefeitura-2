@@ -80,14 +80,15 @@ class DepartamentosController extends Controller
     {
         $validated = $request->validated();
 
-        Departamento::where('id', $id)->update($validated);
+        Departamento::find($id)->update($validated);
 
         return to_route('departamentos-index')->with('message', 'Departamento Editado com Sucesso!');
     }
 
     public function destroy($id)
     {
-        $departamento = Departamento::where('id', $id)->firstOrFail();
+        //$departamento = Departamento::where('id', $id)->firstOrFail();
+        $departamento = Departamento::find($id);
 
         if(Auth::user()->can('delete', $departamento))
         {

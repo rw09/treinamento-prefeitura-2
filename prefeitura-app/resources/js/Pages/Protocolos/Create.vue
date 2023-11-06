@@ -6,26 +6,26 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="contribuinte">Contribuinte:</label>
-                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required>
+                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required @change="form.validate('contribuinte_id')">
                             <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
                         </select>
                         <div v-if="form.errors.contribuinte_id" v-text="form.errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="departamento">Departamento:</label>
-                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('departamento_id')">
                             <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
                         <div v-if="form.errors.departamento_id" v-text="form.errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
-                        <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('descricao')">
                         <div v-if="form.errors.descricao" v-text="form.errors.descricao" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="prazo" class="block text-xs">Prazo:</label>
-                        <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('prazo')">
                         <div v-if="form.errors.prazo" v-text="form.errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
                 </div>
@@ -39,21 +39,19 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
     const props = defineProps({
         departamentos: Object,
         contribuintes: Object
     });
 
-    let form = useForm({
+    const form = useForm('post', route('protocolos-store'), {
         contribuinte_id: null,
         departamento_id: null,
         descricao: '',
         prazo: '',
     });
 
-    let submit = () => {
-        form.post(route('protocolos-store'));
-    }
+    const submit = () => form.submit();
 </script>

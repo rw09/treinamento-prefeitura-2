@@ -48,8 +48,8 @@
             </li>
             <li v-if="perfil === 0">
                 <NavLink
-                    v-bind:href="route('auditoria-index')"
-                    v-bind:active="$page.url.startsWith('/auditoria')"
+                    v-bind:href="route('audits-index')"
+                    v-bind:active="$page.url.startsWith('/audits')"
                 >
                     Auditoria
                 </NavLink>

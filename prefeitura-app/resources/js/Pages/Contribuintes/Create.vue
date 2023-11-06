@@ -8,17 +8,17 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="nome" class="block text-xs">Nome:</label>
-                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" maxlength="100" required>
+                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" maxlength="100" required @change="form.validate('nome')">
                         <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="cpf" class="block text-xs">CPF:</label>
-                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded"  required>
+                        <input v-model="form.cpf" v-mask="['###.###.###-##']" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('cpf')">
                         <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="data_nascimento" class="block text-xs">Data de Nascimento:</label>
-                        <input v-model="form.data_nascimento" type="date" name="data_nascimento" id="data_nascimento" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.data_nascimento" type="date" name="data_nascimento" id="data_nascimento" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('data_nascimento')">
                         <div v-if="form.errors.data_nascimento" v-text="form.errors.data_nascimento" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="text-xs">
@@ -70,9 +70,9 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
-    let form = useForm({
+    const form = useForm('post', route('contribuintes-store'), {
         nome: '',
         cpf: '',
         data_nascimento: '',
@@ -84,7 +84,12 @@ import { useForm } from '@inertiajs/vue3';
         complemento: '',
     });
 
-    let submit = () => {
-        form.post(route('contribuintes-store'));
-    };
+    const submit = () => form.submit();
+</script>
+
+<script>
+import {mask} from 'vue-the-mask'
+    export default {
+    directives: {mask}
+    }
 </script>

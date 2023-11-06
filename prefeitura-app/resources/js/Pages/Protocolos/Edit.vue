@@ -1,4 +1,5 @@
 <template>
+        <!-- <h1>a {{  $page.url }}</h1> -->
     <section class="container mt-8 mx-auto px-40">
         <form @submit.prevent="submit" class="mx-20 pt-4 px-10 pb-12 rounded shadow-md bg-gray-100">
             <h1 class="text-center mt-2 mb-8 underline underline-offset-4 decoration-slate-400 text-slate-800">Editar Protocolo</h1>
@@ -14,26 +15,26 @@
                     </div>
                     <div>
                         <label for="contribuinte" class="text-xs">Contribuinte:</label>
-                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('contribuinte_id')">
                             <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.nome }}</option>
                         </select>
                         <div v-if="form.errors.contribuinte_id" v-text="form.errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="departamento" class="text-xs">Departamento:</label>
-                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('departamento_id')">
                             <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
                         <div v-if="form.errors.departamento_id" v-text="form.errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
-                        <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.descricao" type="text" name="descricao" id="descricao" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('descricao')">
                         <div v-if="form.errors.descricao" v-text="form.errors.descricao" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
                         <label for="prazo" class="block text-xs">Prazo:</label>
-                        <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('prazo')">
                         <div v-if="form.errors.prazo" v-text="form.errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="text-xs">
@@ -61,15 +62,16 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
+    
     const props = defineProps({
         protocolo: Object,
         departamentos: Object,
         contribuintes: Object
     });
 
-    let form = useForm({
+    const form = useForm('put', route('protocolos-update', props.protocolo.id), {
         id: props.protocolo.id,
         data_protocolo: new Date(props.protocolo.created_at).toLocaleDateString('pt-BR', { timeZone: 'UTC'}),
         contribuinte_id: props.protocolo.contribuinte_id,
@@ -79,11 +81,5 @@ import { useForm } from '@inertiajs/vue3';
         prazo: props.protocolo.prazo,
     });
 
-    let submit = () => {
-        form.put(route('protocolos-update', form.id));
-    }
-
-    let back = () => {
-        history.back();
-    }
+    const submit = () => form.submit();
 </script>

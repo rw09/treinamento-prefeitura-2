@@ -8,12 +8,12 @@
                 <div class="w-full">
                     <div>
                         <label for="nome" class="block text-xs">Nome:</label>
-                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('nome')">
                         <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
                         <label for="cpf" class="block text-xs">CPF:</label>
-                        <input v-model="form.cpf" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required>
+                        <input v-model="form.cpf" v-mask="['###.###.###-##']" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('cpf')">
                         <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div class="mt-4">
@@ -56,7 +56,7 @@
                         <input v-model="form.bairro" type="text" name="bairro" id="bairro" class="px-3 mt-1 py-1 w-full border rounded">
                     </div>
                     <div class="mt-4">
-                        <label for="Complemento" class="block text-xs">Complemento:</label>
+                        <label for="complemento" class="block text-xs">Complemento:</label>
                         <input v-model="form.complemento" type="text" name="complemento" id="complemento" class="px-3 mt-1 py-1 w-full border rounded">
                     </div>
                 </div>
@@ -70,13 +70,13 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
     const props = defineProps({
         contribuinte: Object
     });
     
-    let form = useForm({
+    const form = useForm('put', route('contribuintes-update', props.contribuinte.id), {
         id: props.contribuinte.id,
         nome: props.contribuinte.nome,
         cpf: props.contribuinte.cpf,
@@ -89,7 +89,12 @@ import { useForm } from '@inertiajs/vue3';
         complemento: props.contribuinte.complemento,
     });
 
-    let submit = () => {
-        form.put(route('contribuintes-update', form.id));
-    };
+    const submit = () => form.submit();
+</script>
+
+<script>
+import {mask} from 'vue-the-mask'
+    export default {
+    directives: {mask}
+    }
 </script>

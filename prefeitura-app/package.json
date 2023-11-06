@@ -20,9 +20,11 @@
         "datatables.net-dt": "^1.13.6",
         "datatables.net-select": "^1.7.0",
         "datatables.net-vue3": "^2.1.3",
+        "laravel-precognition-vue-inertia": "^0.5.2",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
         "sweetalert2": "^11.9.0",
-        "vue": "^3.2.36"
+        "vue": "^3.2.36",
+        "vue-the-mask": "^0.11.1"
     }
 }

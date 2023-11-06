@@ -77,7 +77,7 @@ DataTable.use(DataTablesCore);
         { data: 'id' },
         { data: 'nome' },
         { data: null, render: data => new Date(data.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) },
-        { data: 'cpf' },
+        { data: null, render: data => data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') },
         { data: null, render: data => data.sexo == 'M' ? 'Masculino' : 'Feminino' },
         { data: null, render: data => data.rua ? (data.rua + ", " + (data.numero ? data.numero : "s/nº") + (data.complemento ? " - " + data.complemento : "")) : "" },
         { data: 'bairro' },

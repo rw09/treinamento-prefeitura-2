@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { router, usePage } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 
@@ -120,7 +120,6 @@ DataTable.use(DataTablesCore);
         if(linhaSelecionada.value === true) {
             let row = dt.row({ selected: true }).data();
             router.get(route('protocolos-edit', row.id));
-
         } else {
             avisoSemLinhaSelecionada('Editar')
         }        

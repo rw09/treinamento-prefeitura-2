@@ -19,7 +19,7 @@
                 <h2 class="text-md font-semibold mt-4">Data de Nascimento:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ new Date(contribuinte.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) }}</p>
                 <h2 class="text-md font-semibold mt-4">CPF:</h2>
-                <p class="p-3 bg-gray-200 rounded">{{ contribuinte.cpf }}</p>
+                <p class="p-3 bg-gray-200 rounded">{{ contribuinte.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') }}</p>
                 <h2 class="text-md font-semibold mt-4">Sexo:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ contribuinte.sexo === "M" ? "Masculino" : "Feminino" }}</p>
                 <h2 class="text-md font-semibold mt-4">Rua:</h2>

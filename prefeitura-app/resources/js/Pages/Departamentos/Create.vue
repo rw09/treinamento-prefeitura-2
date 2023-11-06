@@ -6,7 +6,7 @@
             <h1 class="text-center mt-2 mb-8 underline underline-offset-4 decoration-slate-400 text-slate-800">Cadastrar Departamento</h1>
             <div>
                 <label for="nome" class="block text-xs">Nome:</label>
-                <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required>
+                <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('nome')">
                 <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
             </div>
             <div class="flex justify-end gap-4 pt-4">
@@ -18,14 +18,13 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm } from 'laravel-precognition-vue-inertia';
 
 
-    let form = useForm({
+    let form = useForm('post', route('departamentos-store'), {
         nome: '',
     });
 
-    let submit = () => {
-        form.post(route('departamentos-store'));
-    };
+    const submit = () => form.submit();
+
 </script>

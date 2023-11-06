@@ -24,6 +24,8 @@ class ContribuintesController extends Controller
     public function store(ContribuinteRequest $request)
     {
         $validated = $request->validated();
+
+        $validated['cpf'] = str_replace( array( '.', '-' ), '', $request->input('cpf'));
     
         Contribuinte::create($validated);
 
@@ -58,14 +60,18 @@ class ContribuintesController extends Controller
     {
         $validated = $request->validated();
 
-        Contribuinte::where('id', $id)->update($validated);
+        $validated['cpf'] = str_replace( array( '.', '-' ), '', $request->input('cpf'));
+        
+        //Contribuinte::where('id', $id)->update($validated);
+        Contribuinte::find($id)->update($validated);
 
         return to_route('contribuintes-index')->with('message', 'Contribuinte Editado com Sucesso!');
     }
 
     public function destroy($id)
     {
-        Contribuinte::where('id', $id)->delete();
+        //Contribuinte::where('id', $id)->delete();
+        Contribuinte::find($id)->delete();
 
         return to_route('contribuintes-index');
     }

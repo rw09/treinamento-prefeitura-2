@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\AuditoriaController;
+use App\Http\Controllers\AuditsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContribuintesController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\ProtocolosController;
 use App\Http\Controllers\UsersController;
 use App\Models\Departamento;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,20 +40,20 @@ Route::middleware('auth')->group(function () {
     Route::prefix('contribuintes')->group(function () {
         Route::get('/', [ContribuintesController::class, 'index'])->name('contribuintes-index');
         Route::get('/create', [ContribuintesController::class, 'create'])->name('contribuintes-create');
-        Route::post('/', [ContribuintesController::class, 'store'])->name('contribuintes-store');
+        Route::post('/', [ContribuintesController::class, 'store'])->name('contribuintes-store')->middleware([HandlePrecognitiveRequests::class]);
         Route::get('/{id}/show', [ContribuintesController::class, 'show'])->where('id', '[0-9]+')->name('contribuintes-show');
         Route::get('/{id}/edit', [ContribuintesController::class, 'edit'])->where('id', '[0-9]+')->name('contribuintes-edit');
-        Route::put('/{id}', [ContribuintesController::class, 'update'])->where('id', '[0-9]+')->name('contribuintes-update');
+        Route::put('/{id}', [ContribuintesController::class, 'update'])->where('id', '[0-9]+')->name('contribuintes-update')->middleware([HandlePrecognitiveRequests::class]);
         Route::delete('/{id}', [ContribuintesController::class, 'destroy'])->where('id', '[0-9]+')->name('contribuintes-destroy');
     });
 
     Route::prefix('protocolos')->group(function () {
         Route::get('/', [ProtocolosController::class, 'index'])->name('protocolos-index');
         Route::get('/create', [ProtocolosController::class, 'create'])->name('protocolos-create');
-        Route::post('/', [ProtocolosController::class, 'store'])->name('protocolos-store');
+        Route::post('/', [ProtocolosController::class, 'store'])->name('protocolos-store')->middleware([HandlePrecognitiveRequests::class]);
         Route::get('/{id}/show', [ProtocolosController::class, 'show'])->where('id', '[0-9]+')->name('protocolos-show');
         Route::get('/{id}/edit', [ProtocolosController::class, 'edit'])->where('id', '[0-9]+')->name('protocolos-edit');
-        Route::put('/{id}', [ProtocolosController::class, 'update'])->where('id', '[0-9]+')->name('protocolos-update');
+        Route::put('/{id}', [ProtocolosController::class, 'update'])->where('id', '[0-9]+')->name('protocolos-update')->middleware([HandlePrecognitiveRequests::class]);
         Route::delete('/{id}', [ProtocolosController::class, 'destroy'])->where('id', '[0-9]+')->name('protocolos-destroy');
         Route::post('/add-acompanhamento', [ProtocolosController::class,'addAcompanhamento'])->name('protocolos-add-acompanhamento');
     });
@@ -61,10 +62,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [UsersController::class, 'index'])->name('users-index')->can('viewAny', 'App\Models\User');
         Route::get('/create', [UsersController::class, 'create'])->name('users-create')->can('create', 'App\Models\User');
-        Route::post('/', [UsersController::class, 'store'])->name('users-store');
+        Route::post('/', [UsersController::class, 'store'])->name('users-store')->middleware([HandlePrecognitiveRequests::class]);
         Route::get('/{id}/show', [UsersController::class, 'show'])->where('id', '[0-9]+')->name('users-show');
         Route::get('/{id}/edit', [UsersController::class, 'edit'])->where('id', '[0-9]+')->name('users-edit');
-        Route::put('/{id}', [UsersController::class, 'update'])->where('id', '[0-9]+')->name('users-update');
+        Route::put('/{id}', [UsersController::class, 'update'])->where('id', '[0-9]+')->name('users-update')->middleware([HandlePrecognitiveRequests::class]);
         Route::delete('/{user}', [UsersController::class, 'destroy'])->where('id', '[0-9]+')->name('users-destroy');
         Route::post('/add-departamento', [UsersController::class, 'addDepartamento'])->name('users-add-departamento');
         Route::delete('/remove-departamento/{id}', [UsersController::class, 'removeDepartamento'])->where('id', '[0-9]+')->name('users-remove-departamento');
@@ -74,17 +75,18 @@ Route::middleware('auth')->group(function () {
     Route::prefix('departamentos')->group(function () {
         Route::get('/', [DepartamentosController::class, 'index'])->name('departamentos-index')->can('viewAny', 'App\Models\Departamento');
         Route::get('/create', [DepartamentosController::class, 'create'])->name('departamentos-create')->can('create', 'App\Models\Departamento');
-        Route::post('/', [DepartamentosController::class, 'store'])->name('departamentos-store');
+        Route::post('/', [DepartamentosController::class, 'store'])->name('departamentos-store')->middleware([HandlePrecognitiveRequests::class])->middleware([HandlePrecognitiveRequests::class]);
         Route::get('/{id}/show', [DepartamentosController::class, 'show'])->where('id', '[0-9]+')->name('departamentos-show');
         Route::get('/{id}/edit', [DepartamentosController:: class, 'edit'])->where('id', '[0-9]+')->name('departamentos-edit');
-        Route::put('/{id}', [DepartamentosController::class, 'update'])->where('id', '[0-9]+')->name('departamentos-update');
+        Route::put('/{id}', [DepartamentosController::class, 'update'])->where('id', '[0-9]+')->name('departamentos-update')->middleware([HandlePrecognitiveRequests::class]);
         Route::delete('/{id}', [DepartamentosController::class, 'destroy'])->where('id', '[0-9]+')->name('departamentos-destroy');
         Route::post('/add-user', [DepartamentosController::class, 'addUser'])->name('departamentos-add-user');
         Route::delete('/remove-user/{id}', [DepartamentosController::class, 'removeUser'])->where('id', '[0-9]+')->name('departamentos-remove-user');
     });
 
-    Route::prefix('auditoria')->group(function () {
-        Route::get('/', [AuditoriaController::class, 'index'])->name('auditoria-index')->can('viewAny', 'App\Models\Auditoria');
+    Route::prefix('audits')->group(function () {
+        Route::get('/', [AuditsController::class, 'index'])->name('audits-index')->can('viewAny', 'App\Models\Audit');
+        Route::get('/{id}/show', [AuditsController::class, 'show'])->where('id', '[0-9]+')->name('audits-show')->can('viewAny', 'App\Models\Audit');
     });
 
 });

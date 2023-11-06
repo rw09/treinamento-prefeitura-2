@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\Departamento;
 use App\Models\User;
 use Auth;
@@ -24,7 +25,7 @@ class UsersController extends Controller
         return Inertia::render('Users/Create');
     }
 
-    public function store(UserRequest $request)
+    public function store(UserStoreRequest $request)
     {
         $validated = $request->validated();
 
@@ -69,18 +70,18 @@ class UsersController extends Controller
         }
     }
 
-    public function update(UserRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
         $validated = $request->validated();
 
-        User::where('id', $id)->update($validated);
+        User::find($id)->update($validated);
 
         return to_route('users-index')->with('message', 'Usuário Editado com Sucesso!');
     }
 
     public function destroy($id)
     {
-        $user = User::where('id', $id)->firstOrFail();
+        $user = User::find($id);
 
         if(Auth::user()->can('delete', $user))
         {
