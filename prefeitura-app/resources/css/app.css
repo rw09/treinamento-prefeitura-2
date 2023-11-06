@@ -53,7 +53,7 @@
     //margin-left: 10px; 
   }
 
-  #datatable tfoot {
+  #audit-datatable tfoot {
     position: absolute;
     display: grid;
     grid-template-cols: 1fr 1fr 1fr 1fr;
@@ -64,28 +64,28 @@
     
   }
 
-  #datatable tfoot th {
+  #audit-datatable tfoot th {
     text-align: center;
     width: 10%;
     padding: 0px;
   }
 
-  #datatable tfoot input {
+  #audit-datatable tfoot input {
     padding: 5px 10px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 2px;
   }
 
-  #datatable tfoot input::placeholder {
+  #audit-datatable tfoot input::placeholder {
     color: rgba(0, 0, 0, 0.3);
     font-size: 0.7rem;
   }
 
-  #datatable > tfoot > tr > th, table.dataTable > tfoot > tr > td {
+  #audit-datatable > tfoot > tr > th, table.dataTable > tfoot > tr > td {
     border-top: 0px;
   }
 
-  #datatable > tbody tr:last-child td {
+  #audit-datatable > tbody tr:last-child td {
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   }
 }

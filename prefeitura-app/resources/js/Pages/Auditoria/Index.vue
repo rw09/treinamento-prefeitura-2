@@ -7,14 +7,14 @@
 
             </div>
             <div class="grid grid-cols-1 py-2 items-center z-10">
-                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Visualizar Detalhes</button>
+                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-2 rounded-sm  text-white">Visualizar Detalhes</button>
                 <!-- <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
                 <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button> -->
             </div>
         </section>
 
         <section class="container py-1 mx-auto text-xs">
-            <DataTable id="datatable" :buttons="buttons" :data="audits" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%" @select="mostrarBotoes" @deselect="esconderBotoes">
+            <DataTable id="audit-datatable" :buttons="buttons" :data="audits" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%" @select="mostrarBotoes" @deselect="esconderBotoes">
                 <thead class="bg-gray-200">
                     <tr>
                         <th>ID</th>
@@ -122,7 +122,9 @@ DataTable.use(DataTablesCore);
     let linhaSelecionada = ref(false);
 
     let mostrarBotoes = () => {
-        linhaSelecionada.value = true;
+        if(dt.row({ selected: true }).data() !== undefined) {
+            linhaSelecionada.value = true;
+        }
     }
 
     let esconderBotoes = () => {
