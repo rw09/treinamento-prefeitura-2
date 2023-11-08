@@ -37,4 +37,9 @@ class Protocolo extends Model implements Auditable
         return $this->hasMany(Acompanhamento::class);
     }
 
+    public function anexos(): HasMany
+    {
+        return $this->hasMany(Anexo::class);
+    }
+
 }

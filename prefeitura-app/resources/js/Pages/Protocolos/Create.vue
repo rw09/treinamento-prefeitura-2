@@ -28,6 +28,11 @@
                         <input v-model="form.prazo" type="number" name="prazo" id="prazo" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('prazo')">
                         <div v-if="form.errors.prazo" v-text="form.errors.prazo" class="text-red-400 text-xs mt-1"></div>
                     </div>
+                    <div>
+                        <label for="anexos">Anexar Documentos:</label>
+                        <p class="text-xs pb-1">Máximo 5 arquivos (.jpg, .jpeg, .png ou .pdf) com até 3MB cada</p>
+                        <input type="file" multiple accept=".jpg, .jpeg, .png, .pdf" @change="anexar">
+                    </div>
                 </div>
             </div>
             <div class="flex justify-end gap-4 pt-4">
@@ -40,6 +45,7 @@
 
 <script setup>
 import { useForm } from 'laravel-precognition-vue-inertia';
+import Swal from 'sweetalert2';
 
     const props = defineProps({
         departamentos: Object,
@@ -51,7 +57,50 @@ import { useForm } from 'laravel-precognition-vue-inertia';
         departamento_id: null,
         descricao: '',
         prazo: '',
+        anexos: '',
     });
+
+    const anexar = (e) => {
+        if(e.target.files) 
+        {
+            const tamanhoMaximoArquivo = 3 * 1024 * 1024;
+            const extensoesSuportadas = ["application/pdf", "image/jpg", "image/jpeg", "image/png"];
+
+            if(e.target.files.length > 5)
+            {
+                avisoErroAnexo('Erro!<br> Quantidade de anexos', 'A quantidade de arquivos permitidos é <b>5</b>');
+                e.target.value = null
+                return;
+            }
+            for(let i = 0; i < e.target.files.length ; i++)
+            {
+                if (e.target.files[i].size > tamanhoMaximoArquivo) 
+                {
+                    //depois melhorar
+                    //avisoErroAnexo('1 ou mais arquivos com tamanho inválido<br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
+                    avisoErroAnexo('Erro!<br> Tamanho Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
+                    e.target.value = null
+                    return;
+                }
+                if(!extensoesSuportadas.includes(e.target.files[i].type))
+                {
+                    avisoErroAnexo('Erro!<br> Formato Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Formatos Permitidos: <b><br>.jpg  .jpeg .png  .pdf</b>');
+                    e.target.value = null
+                    return;
+                }
+            }
+            form.anexos = e.target.files;
+        }
+    }
+
+    const avisoErroAnexo = (errorTitle, msg) => {
+        Swal.fire({
+            timer: 3500,
+            title: errorTitle,
+            html: msg,
+            icon: 'warning',
+        })
+    };
 
     const submit = () => form.submit();
 </script>

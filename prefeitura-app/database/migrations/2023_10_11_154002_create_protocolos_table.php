@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('protocolos', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
+            $table->text('descricao');
             $table->smallInteger('prazo');
             $table->tinyInteger('situacao')->default(0);
             $table->unsignedBigInteger('contribuinte_id');

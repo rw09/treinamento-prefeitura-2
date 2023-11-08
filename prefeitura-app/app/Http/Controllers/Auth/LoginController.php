@@ -22,6 +22,8 @@ class LoginController extends Controller
             'password' => ['required'],
         ]);
 
+        $credentials['cpf'] = str_replace( array( '.', '-' ), '', $request->input('cpf'));
+
         if(Auth::attempt($credentials)) {
             $request->session()->regenerate();
 

@@ -63,6 +63,10 @@
     cursor: default;
     
   }
+  
+  #audit-datatable tbody {
+    cursor: pointer;
+  }
 
   #audit-datatable tfoot th {
     text-align: center;

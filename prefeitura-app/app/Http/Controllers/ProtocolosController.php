@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcompanhamentoRequest;
 use App\Http\Requests\ProtocoloRequest;
 use App\Models\Acompanhamento;
+use App\Models\Anexo;
 use App\Models\Contribuinte;
 use App\Models\Departamento;
 use App\Models\Protocolo;
 use Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProtocolosController extends Controller
@@ -61,9 +63,27 @@ class ProtocolosController extends Controller
 
     public function store(ProtocoloRequest $request)
     {
+        //dd($request->all());
         $validated = $request->validated();
 
-        Protocolo::create($validated);
+        $protocolo = Protocolo::create($validated);
+
+        if($request->hasFile('anexos')) 
+        {
+            foreach ($request->file('anexos') as $file)
+            {
+                $path = $file->storeAs(
+                    'Anexos/Protocolo-'. $protocolo->id, $file->getClientOriginalName()
+                );
+
+                Anexo::create([
+                    'name' => $file->getClientOriginalName(),
+                    'extensao' => $file->getClientOriginalExtension(),
+                    'caminho' => $path,
+                    'protocolo_id' => $protocolo->id,
+                ]);
+            }
+        }
 
         return to_route('protocolos-index')->with('message', 'Protocolo Cadastrado com Sucesso!');
     }
