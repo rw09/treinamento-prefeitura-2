@@ -66,7 +66,7 @@ DataTable.use(DataTablesCore);
 const columns = [
         { data: 'id' },
         { data: 'nome' },
-        { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'})},
+        { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR')},
         { data: 'users_count' },
         { data: 'protocolos_count' },
     ];

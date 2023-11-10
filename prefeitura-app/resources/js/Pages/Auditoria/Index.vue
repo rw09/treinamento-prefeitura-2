@@ -77,7 +77,7 @@ DataTable.use(DataTablesCore);
         // { data: 'user_id' },
         { data: null, render: data => data.user_id + ' - ' + data.user.name },
         { data: 'event' },
-        { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) },
+        { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR') },
         { data: 'auditable_type' },
         { data: 'auditable_id' },
     ];

@@ -40,7 +40,7 @@
               <div class="flex justify-between">
                 <div>
                   <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }} - {{ protocolo.departamento.nome }}</h1>
-                  <p class="text-xs">{{ new Date(protocolo.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}</p>
+                  <p class="text-xs">{{ new Date(protocolo.created_at).toLocaleString('pt-BR') }}</p>
                 </div>
                 <div class="flex space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-700">

@@ -22,8 +22,8 @@
                 <h1 class="font-semibold text-lg mx-auto w-fit">Protocolo # {{protocolo.id}}</h1>
                 <h2 class="text-md font-semibold mt-4">Descrição:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ protocolo.descricao }}</p>
-                <h2 class="text-md font-semibold mt-4">Data:</h2>
-                <p class="p-3 bg-gray-200 rounded">{{ new Date(protocolo.created_at).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) }}</p>
+                <h2 class="text-md font-semibold mt-4">Data Cadastro:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ new Date(protocolo.created_at).toLocaleString('pt-BR') }}</p>
                 <h2 class="text-md font-semibold mt-4">Prazo:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ protocolo.prazo }} dias</p>
                 <h2 class="text-md font-semibold mt-4">Departamento:</h2>
@@ -69,7 +69,7 @@
                 <div class="flex justify-between">
                     <div>
                     <h1 class="font-semibold text-lg">Acompanhamento # {{ acompanhamentos.length - index }}</h1>
-                    <p class="text-xs">{{ new Date(acompanhamento.created_at).toLocaleString('pt-BR', { timeZone: 'UTC'}) }}</p>
+                    <p class="text-xs">{{ new Date(acompanhamento.created_at).toLocaleString('pt-BR') }}</p>
                     </div>
                     <div class="flex space-x-2">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-700">
@@ -104,6 +104,7 @@
                     <h1>{{ anexo.id }}</h1>
                     <h1>{{ anexo.name }}</h1>
                     <h1>{{ anexo.caminho }}</h1>
+                    <h1>{{ new Date(anexo.created_at).toLocaleString('pt-BR') }} </h1>
                     <!-- <img src="{{ url('storage/Protocolo-4/'.$anexo.name) }}"> -->
                     <a :href="'/protocolos/download/' + anexo.id">Baixar</a>
                     <button @click="removeAnexo(anexo)" type="submit" class="ml-2 px-2 bg-red-400" v-bind="anexo.id"> Remover </button> 
@@ -112,14 +113,13 @@
              </section>
         
         </section>
-        <h1>{{ anexosSelecionados }} </h1>
-        <h1>{{ qtdeArquivosPossivel }}</h1>
+        
 </template>
 
 <script setup>
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import Swal from 'sweetalert2';
 
     const opcao = ref('protocolo');
@@ -134,7 +134,7 @@ import Swal from 'sweetalert2';
 
     const anexosSelecionados = ref(false);
 
-    //const qtdeArquivosPossivel = ref(5 - props.protocolo.anexos.length);
+
     const qtdeArquivosPossivel = computed(() => {
         return 5 - props.protocolo.anexos.length;
     })
@@ -174,7 +174,6 @@ import Swal from 'sweetalert2';
             //if(e.target.files.length > (5 - props.protocolo.anexos.length))
             if(e.target.files.length > qtdeArquivosPossivel.value)
             {
-                console.log(qtdeArquivosPossivel)
                 avisoErroAnexo('Erro!<br> Quantidade de anexos', `A quantidade de arquivos permitidos é <b>${qtdeArquivosPossivel.value}</b>`);
                 e.target.value = null
                 return;
@@ -198,9 +197,6 @@ import Swal from 'sweetalert2';
             }
             form.anexos = e.target.files;
             anexosSelecionados.value = true;
-            console.log("FORM: " + form.anexos[0].name)
-            console.log("TARGET: " + e.target.files[0].name)
-            
         }
     }
 
@@ -231,7 +227,7 @@ import Swal from 'sweetalert2';
 
     let limparSelecao = () => {
         anexosSelecionados.value = false;
-        console.log('LIMPOU')
+
         if(props.protocolo.anexos.length < 5) {
             let inputAnexos = document.getElementById('inputAnexos')
             inputAnexos.value = ""

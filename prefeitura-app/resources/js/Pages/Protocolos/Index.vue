@@ -135,7 +135,7 @@ DataTable.use(DataTablesCore);
                 title: 'Confirma exclusão desse Protocolo?',
                 html: "<b>ID:</b> " + row.id + '<br>' + "<b>Descrição:</b> " + row.descricao + "<br><b>Solicitante:</b> " + row.contribuinte_id + " - " + row.contribuinte.nome 
             + "<br><b>Departamento:</b> " + row.departamento_id + " - " + row.departamento.nome
-            + "<br><b>Data:</b> " + new Date(row.created_at).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) + "<br><b>Prazo:</b> " + row.prazo + " dias"
+            + "<br><b>Data:</b> " + new Date(row.created_at).toLocaleString('pt-BR') + "<br><b>Prazo:</b> " + row.prazo + " dias"
             + "<br><b>Situação:</b> " + (row.situacao == 1 ? 'Concluído' : 'Pendente' ),
                 icon: 'warning',
                 showCancelButton: true,
