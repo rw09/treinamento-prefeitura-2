@@ -28,6 +28,7 @@
                         <th>Prazo</th>
                         <th>Situação</th>
                         <th>Acompanhamentos</th>
+                        <th>Anexos</th>
                     </tr>
                 </thead>
             </DataTable>
@@ -68,7 +69,8 @@ DataTable.use(DataTablesCore);
 
     const columns = [
         { data: 'id' },
-        { data: 'descricao' },
+        // { data: 'descricao' },
+        { data: null, render: data => data.descricao.length > 50 ? data.descricao.substring(0, 50 -3) + '...' : data.descricao },
         { data: null, render: data => data.contribuinte_id + ' - ' + data.contribuinte.nome }, //usar assim?
         { data: null, render: data => data.departamento_id + ' - ' + data.departamento.nome },
         { data: null, render: data => new Date(data.created_at).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) },
@@ -76,6 +78,7 @@ DataTable.use(DataTablesCore);
         { data: 'prazo' },
         { data: null, render: data => data.situacao == 1 ? 'Concluído' : 'Pendente' },
         { data: 'acompanhamentos_count' },
+        { data: 'anexos_count' },
     ];
 
 

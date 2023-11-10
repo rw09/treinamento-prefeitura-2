@@ -54,7 +54,7 @@
         
 
             <section class="px-8 py-4" v-if="opcao === 'acompanhamentos'">
-                <details class="mb-8">
+                <details id="detailsAcompanhamento" class="mb-8">
                     <summary class="text-white bg-teal-500 hover:bg-teal-400 px-4 py-2 w-fit cursor-pointer">Novo Acompanhamento</summary>
                     <form @submit.prevent="add" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
                         <h1 class="self-center font-semibold mb-4">Registrar Novo Acompanhamento</h1>
@@ -90,17 +90,36 @@
             </section>
 
             <section class="px-8 py-4" v-if="opcao === 'anexos'">
-                
-            </section>
+                <details id="detailsAnexo" class="mb-8" v-if="protocolo.anexos.length < 5">
+                    <summary class="text-white bg-teal-500 hover:bg-teal-400 px-4 py-2 w-fit cursor-pointer">Anexar Arquivo</summary>
+                    <form @submit.prevent="addAnexo" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
+                        <label for="anexos">Anexar Documentos:</label>
+                        <p class="text-xs pb-1">Máximo {{ qtdeArquivosPossivel }} arquivo{{qtdeArquivosPossivel != 1 ? 's' :'' }} (.jpg, .jpeg, .png ou .pdf) com até 3MB cada</p>
+                        <input id="inputAnexos" type="file" multiple accept=".jpg, .jpeg, .png, .pdf" @change="anexar">
+                        <button type="submit" v-bind:class="anexosSelecionados ? 'text-white bg-teal-500 hover:bg-teal-400' : 'bg-gray-300 text-gray-400'" class="mt-8 px-4 py-2 rounded font-medium" :disabled="anexosSelecionados == false">Fazer Upload</button>
+                    </form>
+                </details>
+
+                <div v-for="anexo in protocolo.anexos">
+                    <h1>{{ anexo.id }}</h1>
+                    <h1>{{ anexo.name }}</h1>
+                    <h1>{{ anexo.caminho }}</h1>
+                    <!-- <img src="{{ url('storage/Protocolo-4/'.$anexo.name) }}"> -->
+                    <a :href="'/protocolos/download/' + anexo.id">Baixar</a>
+                    <button @click="removeAnexo(anexo)" type="submit" class="ml-2 px-2 bg-red-400" v-bind="anexo.id"> Remover </button> 
+                    <hr>
+                </div>
+             </section>
         
         </section>
-        
+        <h1>{{ anexosSelecionados }} </h1>
+        <h1>{{ qtdeArquivosPossivel }}</h1>
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 
     const opcao = ref('protocolo');
@@ -109,13 +128,23 @@ import Swal from 'sweetalert2';
 
     const props = defineProps({
         protocolo: Object,
-        acompanhamentos: Object
+        acompanhamentos: Object,
+        url: String
     });
+
+    const anexosSelecionados = ref(false);
+
+    //const qtdeArquivosPossivel = ref(5 - props.protocolo.anexos.length);
+    const qtdeArquivosPossivel = computed(() => {
+        return 5 - props.protocolo.anexos.length;
+    })
+
 
     let form = useForm({
         protocolo_id: props.protocolo.id,
         user_id: page.props.auth.user.id,
         observacao: null,
+        anexos: '',
     });
 
     let add = () => {
@@ -130,7 +159,122 @@ import Swal from 'sweetalert2';
                     icon: 'success',
                 }),  
                 form.reset('observacao'),
+                fecharDetail()
             ]}
         });
     }
+
+    const anexar = (e) => {
+        if(e.target.files) 
+        {
+            const tamanhoMaximoArquivo = 3 * 1024 * 1024;
+            const extensoesSuportadas = ["application/pdf", "image/jpg", "image/jpeg", "image/png"];
+            // const qtdeArquivosPossivel = 5 - props.protocolo.anexos.length
+
+            //if(e.target.files.length > (5 - props.protocolo.anexos.length))
+            if(e.target.files.length > qtdeArquivosPossivel.value)
+            {
+                console.log(qtdeArquivosPossivel)
+                avisoErroAnexo('Erro!<br> Quantidade de anexos', `A quantidade de arquivos permitidos é <b>${qtdeArquivosPossivel.value}</b>`);
+                e.target.value = null
+                return;
+            }
+            for(let i = 0; i < e.target.files.length ; i++)
+            {
+                if (e.target.files[i].size > tamanhoMaximoArquivo) 
+                {
+                    //depois melhorar
+                    //avisoErroAnexo('1 ou mais arquivos com tamanho inválido<br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
+                    avisoErroAnexo('Erro!<br> Tamanho Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
+                    e.target.value = null
+                    return;
+                }
+                if(!extensoesSuportadas.includes(e.target.files[i].type))
+                {
+                    avisoErroAnexo('Erro!<br> Formato Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Formatos Permitidos: <b><br>.jpg  .jpeg .png  .pdf</b>');
+                    e.target.value = null
+                    return;
+                }
+            }
+            form.anexos = e.target.files;
+            anexosSelecionados.value = true;
+            console.log("FORM: " + form.anexos[0].name)
+            console.log("TARGET: " + e.target.files[0].name)
+            
+        }
+    }
+
+    const avisoErroAnexo = (errorTitle, msg) => {
+        Swal.fire({
+            timer: 3500,
+            title: errorTitle,
+            html: msg,
+            icon: 'warning',
+        })
+    };
+
+    let addAnexo = () => {
+        form.post(route('protocolos-add-anexo'), {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {[
+                Swal.fire({
+                    title: 'Sucesso!',
+                    html: page.props.flash.message,
+                    timer: 2500,
+                    icon: 'success',
+                }),  
+                limparSelecao(),
+            ]}
+        });
+    }
+
+    let limparSelecao = () => {
+        anexosSelecionados.value = false;
+        console.log('LIMPOU')
+        if(props.protocolo.anexos.length < 5) {
+            let inputAnexos = document.getElementById('inputAnexos')
+            inputAnexos.value = ""
+
+            let detailsAnexo = document.getElementById('detailsAnexo')
+            detailsAnexo.removeAttribute('open')
+        }
+
+        
+    }
+
+    let fecharDetail = () => {
+        let detailsAcompanhamento = document.getElementById('detailsAcompanhamento')
+        detailsAcompanhamento.removeAttribute('open')
+    }
+
+    let formAnexos = useForm({
+        protocolo_id: props.protocolo.id,
+
+    });
+
+    let removeAnexo = (anexo) => {
+        Swal.fire({
+            title: 'Confirma exclusão desse Anexo?',
+            html: "<b>ID:</b> " + anexo.id + '<br>' + '<b>Nome:</b> ' + anexo.name + '<br>' + "<b>Caminho:</b> " + anexo.caminho,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, deletar!',
+            cancelButtonText: 'Cancelar!',
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    formAnexos.delete(route('protocolos-remove-anexo', anexo.id));
+                    Swal.fire({
+                        timer: 2500,
+                        title: 'Deletado!',
+                        text: 'Anexo removido com sucesso.',
+                        icon: 'success',
+                    }),
+                    limparSelecao()
+                }
+        })
+    };
 </script>

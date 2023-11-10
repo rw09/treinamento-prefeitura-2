@@ -55,7 +55,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [ProtocolosController::class, 'edit'])->where('id', '[0-9]+')->name('protocolos-edit');
         Route::put('/{id}', [ProtocolosController::class, 'update'])->where('id', '[0-9]+')->name('protocolos-update')->middleware([HandlePrecognitiveRequests::class]);
         Route::delete('/{id}', [ProtocolosController::class, 'destroy'])->where('id', '[0-9]+')->name('protocolos-destroy');
-        Route::post('/add-acompanhamento', [ProtocolosController::class,'addAcompanhamento'])->name('protocolos-add-acompanhamento');
+        Route::post('/add-acompanhamento', [ProtocolosController::class, 'addAcompanhamento'])->name('protocolos-add-acompanhamento');
+        Route::get('/download/{id}', [ProtocolosController::class, 'download'])->name('download-anexo');
+        Route::post('/add-anexo', [ProtocolosController::class, 'addAnexo'])->name('protocolos-add-anexo');
+        Route::delete('/remove-anexo/{id}', [ProtocolosController::class, 'removeAnexo'])->name('protocolos-remove-anexo');
     });
     
     

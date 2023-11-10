@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AcompanhamentoRequest;
+use App\Http\Requests\AnexoRequest;
 use App\Http\Requests\ProtocoloRequest;
 use App\Models\Acompanhamento;
 use App\Models\Anexo;
@@ -12,6 +13,7 @@ use App\Models\Protocolo;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Request;
 
 class ProtocolosController extends Controller
 {
@@ -19,7 +21,8 @@ class ProtocolosController extends Controller
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
-            $protocolos = Protocolo::withCount('acompanhamentos')->get();
+            //$protocolos = Protocolo::withCount('acompanhamentos')->get();
+            $protocolos = Protocolo::withCount('acompanhamentos')->withCount('anexos')->get();
 
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
@@ -91,8 +94,8 @@ class ProtocolosController extends Controller
     public function show($id)
     {
         //$protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
-        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte')->firstOrFail();
-        
+        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte', 'anexos')->firstOrFail();
+        $url = Storage::url('Anexos/Protocolo-3/raio-x.jpg');
         if(Auth::user()->perfil === 2)
         {
             $user = Auth::user();
@@ -112,8 +115,16 @@ class ProtocolosController extends Controller
         
         return Inertia::render('Protocolos/Show', [
             'protocolo' => $protocolo,
-            'acompanhamentos' => $acompanhamentos
+            'acompanhamentos' => $acompanhamentos,
+            'url' => $url,
         ]);
+    }
+
+    public function download($id)
+    {
+        $anexo = Anexo::find($id);
+
+        return Storage::download($anexo->caminho);
     }
 
     public function edit($id)
@@ -173,5 +184,60 @@ class ProtocolosController extends Controller
         Acompanhamento::create($validated);
 
         return redirect()->back()->with('message', 'Acompanhamento Registrado com Sucesso!');
+    }
+
+    public function addAnexo(AnexoRequest $request)
+    {
+        //dd($request);
+        if($request->hasFile('anexos')) 
+        {
+            foreach ($request->file('anexos') as $file)
+            {
+                $name = $file->getClientOriginalName();
+
+                if(Storage::exists('Anexos/Protocolo-'. $request->protocolo_id .'/'. $name))
+                {
+                    $path = 'Anexos/Protocolo-'. $request->protocolo_id .'/'. $file->getClientOriginalName();
+                    
+                    while(Storage::exists($path))
+                    {
+                        $name = $file->hashName();
+                        $path = 'Anexos/Protocolo-'. $request->protocolo_id .'/'. $name;
+                    }
+
+                    //return redirect()->back()->with('message', $name);
+                }
+
+                $path = $file->storeAs('Anexos/Protocolo-'. $request->protocolo_id, $name);
+                
+                Anexo::create([
+                    'name' => $name,
+                    'extensao' => $file->getClientOriginalExtension(),
+                    'caminho' => $path,
+                    'protocolo_id' => $request->protocolo_id,
+                ]);
+            }
+            return redirect()->back()->with('message', 'Arquivo Anexado com Sucesso!');
+        } else {
+            return redirect()->back()->with('message','NAO FOI POSSIVEL ANEXAR');
+        }
+    }
+
+    public function removeAnexo(AnexoRequest $request, $id)
+    {
+        //dd($id);
+        //dd($request);
+        $protocolo = Protocolo::where('id', $request->protocolo_id)->firstOrFail();
+
+        $anexo = Anexo::where('id', $id)->firstOrFail();
+        Storage::delete($anexo->caminho);
+
+        $anexo->delete();
+        
+        
+        
+        //$protocolo->anexos()->detach($anexo);
+        
+        return redirect()->back()->with('message', 'Anexo Removido com Sucesso!');
     }
 }
