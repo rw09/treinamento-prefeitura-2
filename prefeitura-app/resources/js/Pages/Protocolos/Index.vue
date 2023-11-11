@@ -8,7 +8,8 @@
                 <Link v-bind:href="route('protocolos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Protocolo
                 </Link>
-            </div>
+                 <button @click="gerarPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400">Gerar Relatório</button>
+             </div>
             <div class="grid grid-cols-3 gap-x-1 py-2">
                 <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Ver</button>
                 <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
@@ -40,6 +41,7 @@
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
@@ -169,4 +171,37 @@ DataTable.use(DataTablesCore);
     }
 
     const props = defineProps({ protocolos: Object });
+
+    const gerarPDF = () => {
+
+        try {
+
+        let protocolo_ids = [];
+        let dados = dt.rows({ search:'applied' }).data().toArray();
+        
+        console.log(dados)
+        
+        dados.forEach(prot => {
+            protocolo_ids.push(prot.id);
+        });
+
+        console.log(protocolo_ids)
+
+        axios.post('/protocolos/pdf', { protocolo_ids }, 
+            { responseType: 'blob' })
+            .then(res => {
+                let blob = new Blob([res.data], { type: res.headers['content-type'] });
+                let link = document.createElement('a');
+
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Relatório.pdf";
+                link.click()
+            }).catch(err => {
+                console.log('Erro na resposta: ' + err)
+            });
+      } catch (error) {
+        console.log('Erro ao gerar PDF: ', error);
+      }
+    }
 </script>
+

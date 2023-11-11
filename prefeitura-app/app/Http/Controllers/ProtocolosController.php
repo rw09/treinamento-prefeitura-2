@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Http\Requests\AcompanhamentoRequest;
 use App\Http\Requests\AnexoRequest;
 use App\Http\Requests\ProtocoloRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use App\Models\Acompanhamento;
 use App\Models\Anexo;
 use App\Models\Contribuinte;
@@ -13,7 +16,6 @@ use App\Models\Protocolo;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use Request;
 
 class ProtocolosController extends Controller
 {
@@ -239,5 +241,29 @@ class ProtocolosController extends Controller
         //$protocolo->anexos()->detach($anexo);
         
         return redirect()->back()->with('message', 'Anexo Removido com Sucesso!');
+    }
+
+    public function pdf(Request $request)
+    {
+
+        $protocolos_ids = $request->protocolo_ids;
+        
+        //para pegar pela ordem dos ids do db
+        //$protocolos = Protocolo::whereIn('id', $protocolos_ids)->get();
+
+        //para pegar pela ordem do datatable
+        $protocolos = collect();
+
+        foreach($protocolos_ids as $protocolo_id) 
+        {
+            $protocolo = Protocolo::find($protocolo_id);
+            $protocolos->push($protocolo);
+        }
+
+        
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf', ['protocolos'=> $protocolos]);
+        return $pdf->stream();
     }
 }

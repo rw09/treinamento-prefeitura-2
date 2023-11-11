@@ -28,4 +28,6 @@ Adicionei uns dados pra dar seed
   
 -Add auditoria  
   
--Add anexos
+-Add anexos  
+  
+-Add exportar pdf

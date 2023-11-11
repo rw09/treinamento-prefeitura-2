@@ -1,19 +1,19 @@
 <template>
     <Head title="Contribuinte - Detalhes" />
     <!-- <section class="container mt-8 mx-auto px-40"> -->
-        <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border-2">
-            <nav class="flex bg-slate-200">
-                <label for="opcao-contribuinte" class="py-2.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-white rounded-tl font-semibold' : opcao === 'contribuinte'}">
+        <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border">
+            <nav class="flex bg-slate-200 mb-6">
+                <label for="opcao-contribuinte" class="py-3 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'contribuinte'}">
                     <input type="radio" value="contribuinte" id="opcao-contribuinte" name="opcao" v-model="opcao" class="hidden">Contribuinte
                 </label>
-                <label for="opcao-protocolos" class="py-2.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-white font-semibold' : opcao === 'protocolos'}">
+                <label for="opcao-protocolos" class="py-3 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'protocolos'}">
                     <input type="radio" value="protocolos" id="opcao-protocolos" name="opcao" v-model="opcao" class="hidden">
                         Protocolos
                 </label>
             </nav>
 
             <section class="px-8 py-4" v-if="opcao === 'contribuinte'">
-                <h1 class="font-semibold text-lg mx-auto w-fit">Contribuinte # {{ contribuinte.id }}</h1>
+                <h1 class="font-semibold text-lg mx-auto w-fit mb-4">Contribuinte # {{ contribuinte.id }}</h1>
                 <h2 class="text-md font-semibold mt-4">Nome:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ contribuinte.nome }}</p>
                 <h2 class="text-md font-semibold mt-4">Data de Nascimento:</h2>

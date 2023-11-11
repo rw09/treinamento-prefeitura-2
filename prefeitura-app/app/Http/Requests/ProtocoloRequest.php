@@ -25,7 +25,7 @@ class ProtocoloRequest extends FormRequest
             'contribuinte_id' => 'required|exists:contribuintes,id',
             'departamento_id' => 'required|exists:departamentos,id',
             'descricao' => 'required|string|max:255',
-            'prazo' => 'required|integer',
+            'prazo' => 'required|integer|min:1',
         ];
     }
 
@@ -33,6 +33,7 @@ class ProtocoloRequest extends FormRequest
     {
         return [
             'required' => 'Campo obrigatório',
+            'prazo.min' => 'Prazo inválido'
         ];
     }
 }
