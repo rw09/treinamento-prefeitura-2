@@ -8,9 +8,10 @@
                 <Link v-bind:href="route('protocolos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Protocolo
                 </Link>
-                 <button @click="gerarPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400">Gerar Relatório</button>
+                 <button @click="gerarRelatorioPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400 hover:bg-orange-300">Gerar Relatório</button>
              </div>
-            <div class="grid grid-cols-3 gap-x-1 py-2">
+            <div class="grid grid-cols-4 gap-x-1 py-2">
+                <button @click="pdf" v-bind:class="linhaSelecionada ? 'bg-orange-400 hover:bg-orange-300' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">PDF</button>
                 <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Ver</button>
                 <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
                 <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
@@ -38,7 +39,7 @@
 </template>
 
 <script setup>
-import { router, useForm, usePage } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -83,6 +84,9 @@ DataTable.use(DataTablesCore);
         { data: 'anexos_count' },
     ];
 
+    let alerta = () => {
+        alert('deu')
+    }
 
     const options = {
         responsive: true,
@@ -172,7 +176,7 @@ DataTable.use(DataTablesCore);
 
     const props = defineProps({ protocolos: Object });
 
-    const gerarPDF = () => {
+    const gerarRelatorioPDF = () => {
 
         try {
 
@@ -187,7 +191,7 @@ DataTable.use(DataTablesCore);
 
         console.log(protocolo_ids)
 
-        axios.post('/protocolos/pdf', { protocolo_ids }, 
+        axios.post('/protocolos/relatorio', { protocolo_ids }, 
             { responseType: 'blob' })
             .then(res => {
                 let blob = new Blob([res.data], { type: res.headers['content-type'] });
@@ -202,6 +206,38 @@ DataTable.use(DataTablesCore);
       } catch (error) {
         console.log('Erro ao gerar PDF: ', error);
       }
+    }
+
+    const pdf = () => {
+
+        if(linhaSelecionada.value === true) {
+            
+            try {
+
+                let protocolo = dt.row({ selected: true }).data().id;
+                
+                console.log(protocolo)
+
+                axios.post('/protocolos/pdf', { protocolo }, 
+                    { responseType: 'blob' })
+                    .then(res => {
+                        let blob = new Blob([res.data], { type: res.headers['content-type'] });
+                        let link = document.createElement('a');
+
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = "Relatório.pdf";
+                        link.click()
+                    }).catch(err => {
+                        console.log('Erro na resposta: ' + err)
+                    });
+            } catch (error) {
+                console.log('Erro ao gerar PDF: ', error);
+            }
+        } else {
+            avisoSemLinhaSelecionada('Gerar o PDF')
+        }        
+
+        
     }
 </script>
 

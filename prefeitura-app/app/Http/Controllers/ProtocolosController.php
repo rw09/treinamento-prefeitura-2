@@ -243,7 +243,7 @@ class ProtocolosController extends Controller
         return redirect()->back()->with('message', 'Anexo Removido com Sucesso!');
     }
 
-    public function pdf(Request $request)
+    public function relatorio(Request $request)
     {
 
         $protocolos_ids = $request->protocolo_ids;
@@ -263,7 +263,18 @@ class ProtocolosController extends Controller
         
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('pdf', ['protocolos'=> $protocolos]);
+        $pdf->loadView('relatorio', ['protocolos'=> $protocolos]);
         return $pdf->stream();
+    }
+
+    public function pdf(Request $request)
+    {
+        $protocolo = Protocolo::find($request->protocolo);
+        
+        //dd($protocolo);
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf', ['protocolo'=> $protocolo]);
+        return $pdf->download();
     }
 }

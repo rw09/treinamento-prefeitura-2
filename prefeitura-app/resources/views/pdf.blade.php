@@ -5,23 +5,9 @@
     <title>Document</title>
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <td>ID</id>
-                <td>Descrição</id>
-                <td>Data</id>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($protocolos as $protocolo)
-            <tr>
-                <td>{{ $protocolo->id }}
-                <td>{{ $protocolo->descricao }}
-                <td>{{ $protocolo->created_at }}
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <h1>{{ $protocolo->id }}</h1>
+    <h1>{{ $protocolo->descricao }}</h1>
+    <h1>{{ $protocolo->created_at }}</h1>
+    
 </body>
 </html>

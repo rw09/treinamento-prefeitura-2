@@ -59,7 +59,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/download/{id}', [ProtocolosController::class, 'download'])->name('download-anexo');
         Route::post('/add-anexo', [ProtocolosController::class, 'addAnexo'])->name('protocolos-add-anexo');
         Route::delete('/remove-anexo/{id}', [ProtocolosController::class, 'removeAnexo'])->name('protocolos-remove-anexo');
-        Route::post('/pdf/', [ProtocolosController::class,'pdf'])->name('protocolos-pdf');
+        Route::post('/relatorio', [ProtocolosController::class,'relatorio'])->name('protocolos-relatorio');
+        Route::post('/pdf', [ProtocolosController::class,'pdf'])->name('protocolos-pdf');
     });
     
     
