@@ -30,6 +30,7 @@ class DepartamentoRequest extends FormRequest
     {
         return [
             'required' => 'Campo obrigatório',
+            'max' => 'Máximo 100 caracteres',
         ];
     }
 }

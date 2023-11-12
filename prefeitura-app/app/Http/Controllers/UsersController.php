@@ -76,6 +76,8 @@ class UsersController extends Controller
     {
         $validated = $request->validated();
 
+        $validated['cpf'] = str_replace( array( '.', '-' ), '', $request->input('cpf'));
+        
         User::find($id)->update($validated);
 
         return to_route('users-index')->with('message', 'Usuário Editado com Sucesso!');

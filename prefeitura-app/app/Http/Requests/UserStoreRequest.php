@@ -37,6 +37,7 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'required' => 'Campo obrigatório',
+            'name.max' => 'Máximo 255 caracteres',
             'cpf.unique' => 'CPF já cadastrado',
             'cpf.cpf' => 'CPF inválido',
             'password.min' => 'A senha deve ter pelo menos 6 caracteres',

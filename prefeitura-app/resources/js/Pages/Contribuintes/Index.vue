@@ -16,9 +16,9 @@
                 <!-- <button :disabled="!linhaSelecionada" @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200 text-white">Ver</button>
                 <button :disabled="!linhaSelecionada" @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200 text-white">Editar</button>
                 <button :disabled="!linhaSelecionada" @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200 text-white">Deletar</button> -->
-                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Detalhes</button>
-                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
-                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
+                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Detalhes</button>
+                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
+                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
             </div>
         </section>
 
@@ -34,6 +34,7 @@
                         <th>Endereço</th>
                         <th>Bairro</th>
                         <th>Cidade</th>
+                        <th>Protocolos</th>
                     </tr>
                 </thead>
             </DataTable>
@@ -76,12 +77,14 @@ DataTable.use(DataTablesCore);
     const columns = [
         { data: 'id' },
         { data: 'nome' },
+        // { data: null, render: data => data.nome.length > 50 ? data.nome.substring(0, 50 -3) + '...' : data.nome }, // o search nao pega a parte que foi cortada
         { data: null, render: data => new Date(data.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) },
         { data: null, render: data => data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') },
         { data: null, render: data => data.sexo == 'M' ? 'Masculino' : 'Feminino' },
         { data: null, render: data => data.rua ? (data.rua + ", " + (data.numero ? data.numero : "s/nº") + (data.complemento ? " - " + data.complemento : "")) : "" },
         { data: 'bairro' },
         { data: 'cidade' },
+        { data: 'protocolos_count'}
     ];
 
 

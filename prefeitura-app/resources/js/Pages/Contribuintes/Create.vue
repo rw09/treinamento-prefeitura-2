@@ -8,7 +8,7 @@
                 <div class="grid grid-cols-2 gap-4 w-full">
                     <div>
                         <label for="nome" class="block text-xs">Nome:</label>
-                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" maxlength="100" required @change="form.validate('nome')">
+                        <input v-model="form.nome" type="text" name="nome" id="nome" class="px-3 mt-1 py-1 w-full border rounded" maxlength="101" required @change="form.validate('nome')">
                         <div v-if="form.errors.nome" v-text="form.errors.nome" class="text-red-400 text-xs mt-1"></div>
                     </div>
                     <div>
@@ -39,7 +39,8 @@
                 <div class="grid grid-cols-2 mt-10 gap-4 w-full">
                     <div>
                         <label for="rua" class="block text-xs">Rua:</label>
-                        <input v-model="form.rua" type="text" name="rua" id="rua" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.rua" type="text" name="rua" id="rua" class="px-3 mt-1 py-1 w-full border rounded"  maxlength="101" @change="form.validate('rua')">
+                        <div v-if="form.errors.rua" v-text="form.errors.rua" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                     <div class="flex justify-between gap-2">
                         <div class="w-1/3">
@@ -48,16 +49,19 @@
                         </div>
                         <div class="w-10/12">
                             <label for="Complemento" class="block text-xs">Complemento:</label>
-                            <input v-model="form.complemento" type="text" name="complemento" id="complemento" class="px-3 mt-1 py-1 w-full border rounded">
+                            <input v-model="form.complemento" type="text" name="complemento" id="complemento" class="px-3 mt-1 py-1 w-full border rounded"  maxlength="101" @change="form.validate('complemento')">
+                            <div v-if="form.errors.complemento" v-text="form.errors.complemento" class="text-red-400 text-xs mt-1.5"></div>
                         </div>
                     </div>
                     <div>
                         <label for="bairro" class="block text-xs">Bairro:</label>
-                        <input v-model="form.bairro" type="text" name="bairro" id="bairro" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.bairro" type="text" name="bairro" id="bairro" class="px-3 mt-1 py-1 w-full border rounded" maxlength="101" @change="form.validate('bairro')">
+                        <div v-if="form.errors.bairro" v-text="form.errors.bairro" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                     <div>
                         <label for="cidade" class="block text-xs">Cidade:</label>
-                        <input v-model="form.cidade" type="text" name="cidade" id="cidade" class="px-3 mt-1 py-1 w-full border rounded">
+                        <input v-model="form.cidade" type="text" name="cidade" id="cidade" class="px-3 mt-1 py-1 w-full border rounded" maxlength="101" @change="form.validate('cidade')">
+                        <div v-if="form.errors.cidade" v-text="form.errors.cidade" class="text-red-400 text-xs mt-1.5"></div>
                     </div>
                 </div>
             </div>

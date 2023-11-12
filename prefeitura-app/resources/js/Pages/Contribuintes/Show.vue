@@ -34,18 +34,18 @@
                 <p class="p-3 bg-gray-200 rounded">{{ contribuinte.cidade ? contribuinte.cidade : '---' }}</p>
                 <h2 class="text-md font-semibold mt-4">Quantidade Total de Protocolos:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ total_prot }}</p>
-                <h2 class="text-md font-semibold mt-4">Quantidade de Protocolos com Permissão para Visualizar:</h2>
-                <p class="p-3 bg-gray-200 rounded">{{ protocolos.length }}</p>
+                <h2 v-if="page.props.auth.user.perfil_acesso === 2" class="text-md font-semibold mt-4">Quantidade de Protocolos com Permissão para Visualizar:</h2>
+                <p v-if="page.props.auth.user.perfil_acesso === 2" class="p-3 bg-gray-200 rounded">{{ protocolos.length }}</p>
             </section>
 
             <section class="px-8 py-4" v-if="opcao === 'protocolos'">
             <h1 class="font-semibold text-lg mx-auto w-fit mb-8">{{ protocolos.length ? 'Lista de Protocolos' : 'Sem Protocolos'}}</h1>
-            <input type="text" v-model="filtro" placeholder="Filtrar por Descrição ou Departamento" v-if="protocolos.length">
+            <input type="text" v-model="filtro" placeholder="Filtrar por Descrição ou Departamento" v-if="protocolos.length" class="px-3 mt-1 mb-5 py-2 w-2/3 border rounded text-sm">
             
-            <div class="bg-gray-200 p-4 rounded-md flex flex-col mb-2" v-for="protocolo in filtros">
+            <div class="bg-gray-200 p-4 rounded-md flex flex-col mb-3" v-for="protocolo in filtros">
               <div class="flex justify-between">
                 <div>
-                  <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }} - {{ protocolo.departamento.nome }}</h1>
+                  <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }} - Departamento: {{ protocolo.departamento.nome }}</h1>
                   <p class="text-xs">{{ new Date(protocolo.created_at).toLocaleString('pt-BR') }}</p>
                 </div>
                 <div class="flex space-x-2">

@@ -26,6 +26,7 @@ class ProtocoloRequest extends FormRequest
             'departamento_id' => 'required|exists:departamentos,id',
             'descricao' => 'required|string',
             'prazo' => 'required|integer|min:1',
+            'situacao' => 'required|in:0,1',
         ];
     }
 

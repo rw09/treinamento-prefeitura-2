@@ -57,6 +57,7 @@ import Swal from 'sweetalert2';
         departamento_id: null,
         descricao: '',
         prazo: '',
+        situacao: 0,
         anexos: '',
     });
 

@@ -27,7 +27,7 @@ class ContribuinteRequest extends FormRequest
             'data_nascimento' => 'required|date',
             'cpf' => ['required', 'cpf', Rule::unique('contribuintes')->ignore(request()->id)],
             'sexo' => 'required|in:F,M',
-            'cidade' => 'nullable|string|max:100',
+            'cidade' => ['nullable', 'string', 'max:100'],
             'bairro' => 'nullable|string|max:100',
             'rua' => 'nullable|string|max:100',
             'numero' => 'nullable|integer',
@@ -39,6 +39,7 @@ class ContribuinteRequest extends FormRequest
     {
         return [
             'required' => 'Campo obrigatório',
+            'max' => 'Máximo 100 caracteres',
             'cpf.unique' => 'CPF já cadastrado',
             'cpf.cpf' => 'CPF inválido',
         ];

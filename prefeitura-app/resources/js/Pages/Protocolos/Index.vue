@@ -11,10 +11,10 @@
                  <button @click="gerarRelatorioPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400 hover:bg-orange-300 z-10">Gerar Relatório</button>
              </div>
             <div class="grid grid-cols-4 gap-x-1 py-2">
-                <button @click="pdf" v-bind:class="linhaSelecionada ? 'bg-orange-400 hover:bg-orange-300' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">PDF</button>
-                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Detalhes</button>
-                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Editar</button>
-                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Deletar</button>
+                <button @click="pdf" v-bind:class="linhaSelecionada ? 'bg-orange-400 hover:bg-orange-300' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white z-10">PDF</button>
+                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white z-10">Detalhes</button>
+                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white z-10">Editar</button>
+                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white z-10">Deletar</button>
             </div>
         </section>
 
@@ -24,7 +24,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Descrição</th>
-                        <th>Solicitante</th>
+                        <th>Contribuinte</th>
                         <th>Departamento</th>
                         <th>Data</th>
                         <th>Prazo</th>
@@ -37,7 +37,7 @@
                     <tr>
                         <th></th>
                         <th>Filtrar por Descrição</th>
-                        <th>Filtrar por Solicitante</th>
+                        <th>Filtrar por Contribuinte</th>
                         <th>Filtrar por Departamento</th>
                         <th></th>
                         <th></th>
@@ -100,6 +100,7 @@ DataTable.use(DataTablesCore);
     const options = {
         responsive: true,
         select: 'single',
+        fixedHeader: true,
         language: {
             search: 'Pesquisar:',
             emptyTable: "Sem dados disponíveis",
