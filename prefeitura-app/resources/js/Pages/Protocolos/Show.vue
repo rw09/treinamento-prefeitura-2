@@ -2,18 +2,18 @@
     <Head title="Protocolos - Detalhes" />
     <!-- <section class="container mt-8 mx-auto px-40"> -->
         <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border">
-            <nav class="flex bg-slate-200 mb-6">
-                <label for="opcao-protocolo" class="py-3 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'protocolo'}">
+            <nav class="flex bg-gray-200 mb-6">
+                <label for="opcao-protocolo" class="py-3.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'protocolo'}">
                     <input type="radio" value="protocolo" id="opcao-protocolo" name="opcao" v-model="opcao" class="hidden">
                         Protocolo
                     </label>
-                <label for="opcao-contribuinte" class="py-3 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'contribuinte'}">
+                <label for="opcao-contribuinte" class="py-3.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'contribuinte'}">
                     <input type="radio" value="contribuinte" id="opcao-contribuinte" name="opcao" v-model="opcao" class="hidden">Contribuinte
                 </label>
-                <label for="opcao-acompanhamentos" class="py-3 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'acompanhamentos'}">
+                <label for="opcao-acompanhamentos" class="py-3.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'acompanhamentos'}">
                     <input type="radio" value="acompanhamentos" id="opcao-acompanhamentos" name="opcao" v-model="opcao" class="hidden">Acompanhamentos
                 </label>
-                <label for="opcao-anexos" class="py-3 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'anexos'}">
+                <label for="opcao-anexos" class="py-3.5 px-4 cursor-pointer hover:bg-white" v-bind:class="{'bg-gray-50 font-semibold' : opcao === 'anexos'}">
                     <input type="radio" value="anexos" id="opcao-anexos" name="opcao" v-model="opcao" class="hidden">Anexos
                 </label>
             </nav>
@@ -31,7 +31,9 @@
             </section>
 
             <section class="px-8 py-4" v-if="opcao === 'contribuinte'">
-                <h1 class="font-semibold text-lg mx-auto w-fit mb-4">Contribuinte # {{protocolo.contribuinte.id}}</h1>
+                <Link :href="route('contribuintes-show', protocolo.contribuinte.id)">
+                    <h1 class="font-semibold text-lg mx-auto w-fit mb-4">Contribuinte # {{protocolo.contribuinte.id}}</h1>
+                </Link>
                 <h2 class="text-md font-semibold mt-4">Nome:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ protocolo.contribuinte.nome }}</p>
                 <h2 class="text-md font-semibold mt-4">Data de Nascimento:</h2>
@@ -67,32 +69,38 @@
 
                 <div v-if="acompanhamentos.length === 0" class="text-center mt-10 text-sm">Protocolo não possui acompanhamentos</div>
 
-                <div class="bg-yellow-200 p-4 rounded-md flex flex-col mb-2" v-for="acompanhamento, index in acompanhamentos">
-                <div class="flex justify-between">
+
+                <div class="border-gray-200 border bg-gray-100 p-4 rounded-md flex flex-col mb-3" v-for="acompanhamento, index in acompanhamentos">
+                    <div class="flex justify-between">
                     <div>
-                    <h1 class="font-semibold text-lg">Acompanhamento # {{ acompanhamentos.length - index }}</h1>
+                    <h1 class="font-semibold text-lg">Acompanhamento # {{ acompanhamentos.length - index }} </h1>
                     <p class="text-xs">{{ new Date(acompanhamento.created_at).toLocaleString('pt-BR') }}</p>
                     </div>
-                    <div class="flex space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-700">
-                            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
-                            <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-700">
-                            <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd" />
-                        </svg>
-
+                    <div class="flex space-x-1 items-start">
+                        <Link class="p-1 text-white rounded bg-sky-600/90 hover:bg-blue-300" v-bind:href="route('protocolos-edit', acompanhamento.id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
+                                <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
+                            </svg>
+                        </Link>
+                        <button class="p-1 text-white rounded bg-rose-600/80 hover:bg-red-300" @click="removeAcompanhamento(acompanhamento, index)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                                <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <p class="mt-5">{{ acompanhamento.observacao }}</p>
-                <div class="flex justify-end mt-8">
-                    <p>{{ acompanhamento.user_id }} - {{ acompanhamento.user.name }}</p>
-                </div>
-                </div>
+              <p class="mt-5">{{ acompanhamento.observacao }}</p>
+              <div class="mt-8">
+                <p><span class="font-semibold">Usuário:</span> {{ acompanhamento.user_id }} - {{ acompanhamento.user.name }}</p>
+              </div>
+            </div>
             </section>
 
+
+
             <section class="px-8 py-4" v-if="opcao === 'anexos'">
-                <details id="detailsAnexo" class="mb-8" v-if="protocolo.anexos.length < 5">
+                <details id="detailsAnexo" class="mb-8" v-if="anexos.length < 5">
                     <summary class="text-white bg-teal-500 hover:bg-teal-400 px-4 py-2 w-fit cursor-pointer">Anexar Arquivo</summary>
                     <form @submit.prevent="addAnexo" class="pb-12 mt-4 p-4 rounded shadow-md bg-gray-100 flex flex-col">
                         <label for="anexos">Anexar Documentos:</label>
@@ -102,15 +110,19 @@
                     </form>
                 </details>
 
-                <div v-if="protocolo.anexos.length === 0" class="text-center mt-10 text-sm">Protocolo não possui anexos</div>
+                <div v-if="anexos.length === 0" class="text-center mt-10 text-sm">Protocolo não possui anexos</div>
 
-                <div v-for="anexo in protocolo.anexos">
+                <div v-for="anexo in anexos">
                     <h1>{{ anexo.id }}</h1>
                     <h1>{{ anexo.name }}</h1>
                     <h1>{{ anexo.caminho }}</h1>
                     <h1>{{ new Date(anexo.created_at).toLocaleString('pt-BR') }} </h1>
-                    <!-- <img src="{{ url('storage/Protocolo-4/'.$anexo.name) }}"> -->
-                    <a :href="'/protocolos/download/' + anexo.id">Baixar</a>
+                    <a :href="'/protocolos/download/' + anexo.id">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z" clip-rule="evenodd" />
+                            <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z" />
+                        </svg>
+                    </a>
                     <button @click="removeAnexo(anexo)" type="submit" class="ml-2 px-2 bg-red-400" v-bind="anexo.id"> Remover </button> 
                     <hr>
                 </div>
@@ -122,7 +134,7 @@
 
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import Swal from 'sweetalert2';
 
@@ -133,13 +145,14 @@ import Swal from 'sweetalert2';
     const props = defineProps({
         protocolo: Object,
         acompanhamentos: Object,
+        anexos: Object,
     });
 
     const anexosSelecionados = ref(false);
 
 
     const qtdeArquivosPossivel = computed(() => {
-        return 5 - props.protocolo.anexos.length;
+        return 5 - props.anexos.length;
     })
 
 
@@ -231,7 +244,7 @@ import Swal from 'sweetalert2';
     let limparSelecao = () => {
         anexosSelecionados.value = false;
 
-        if(props.protocolo.anexos.length < 5) {
+        if(props.anexos.length < 5) {
             let inputAnexos = document.getElementById('inputAnexos')
             inputAnexos.value = ""
 
@@ -276,4 +289,32 @@ import Swal from 'sweetalert2';
                 }
         })
     };
+
+    const removeAcompanhamento = (acompanhamento, index) => {
+        
+        Swal.fire({
+            title: 'Confirma exclusão desse Acompanhamento?',
+                html: "<b>Acompanhamento #" + (props.acompanhamentos.length - index) + "</b>"
+            + "<br><b>Observação:</b> " + acompanhamento.observacao
+            + "<br><b>Data:</b> " + new Date(acompanhamento.created_at).toLocaleString('pt-BR')
+            + "<br><b>Usuário:</b> " + acompanhamento.user_id + " - " + acompanhamento.user.name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, deletar!',
+                cancelButtonText: 'Cancelar!',
+                })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    router.delete(route('protocolos-remove-acompanhamento', acompanhamento.id));
+                    Swal.fire({
+                    timer: 2500,
+                    title: 'Deletado!',
+                    text: 'Acompanhamento excluído com sucesso.',
+                    icon: 'success',
+                })
+            }
+        })
+    }
 </script>

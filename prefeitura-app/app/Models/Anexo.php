@@ -21,6 +21,6 @@ class Anexo extends Model implements Auditable
 
     public function protocolo() :BelongsTo
     {
-        return $this->belongsTo(Protocolo::class);
+        return $this->belongsTo(Protocolo::class, 'protocolo_id');
     }
 }

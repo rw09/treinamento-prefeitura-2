@@ -96,7 +96,7 @@ class ProtocolosController extends Controller
     public function show($id)
     {
         //$protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
-        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte', 'anexos')->firstOrFail();
+        $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte')->firstOrFail();
 
         if(Auth::user()->perfil === 2)
         {
@@ -112,12 +112,16 @@ class ProtocolosController extends Controller
         }
 
         $acompanhamentos = $protocolo->acompanhamentos()->orderBy('id', 'desc')->get();
-
         $acompanhamentos->load(['user:id,name']);
+
+        $anexos = $protocolo->anexos()->orderBy('id', 'desc')->get();
+        //dd($anexos);
+        
         
         return Inertia::render('Protocolos/Show', [
             'protocolo' => $protocolo,
-            'acompanhamentos' => $acompanhamentos
+            'acompanhamentos' => $acompanhamentos,
+            'anexos' => $anexos,
         ]);
     }
 
@@ -185,6 +189,15 @@ class ProtocolosController extends Controller
         Acompanhamento::create($validated);
 
         return redirect()->back()->with('message', 'Acompanhamento Registrado com Sucesso!');
+    }
+
+    public function removeAcompanhamento( $id)
+    {
+        $acompanhamento = Acompanhamento::where('id', $id)->firstOrFail();
+
+        $acompanhamento->delete();
+        
+        return redirect()->back()->with('message', 'Acompanhamento Removido com Sucesso!');
     }
 
     public function addAnexo(AnexoRequest $request)

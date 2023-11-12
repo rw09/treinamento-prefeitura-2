@@ -52,9 +52,10 @@ class ContribuintesController extends Controller
         }
         
         $protocolos->load(['departamento:id,nome']);
+        $protocolos->loadCount('acompanhamentos')->loadCount('anexos');
 
         //$protocolos->load(['acompanhamentos']);
-        $protocolos->load(['acompanhamentos:id,observacao,created_at,protocolo_id']);
+        //$protocolos->load(['acompanhamentos:id,observacao,created_at,protocolo_id']);
 
         return Inertia::render('Contribuintes/Show', [
             'contribuinte' => $contribuinte,

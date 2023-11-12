@@ -29,7 +29,7 @@ class Protocolo extends Model implements Auditable
 
     public function departamento(): BelongsTo
     {
-        return $this->belongsTo(Departamento::class);
+        return $this->belongsTo(Departamento::class, 'departamento_id');
     }
 
     public function acompanhamentos(): HasMany
