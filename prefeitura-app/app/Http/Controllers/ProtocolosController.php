@@ -34,7 +34,7 @@ class ProtocolosController extends Controller
             
             $departamentos = $user->departamentos()->pluck('departamento_id');
 
-            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->withCount('acompanhamentos')->get();
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->withCount('acompanhamentos')->withCount('anexos')->get();
             
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
         }
@@ -257,10 +257,22 @@ class ProtocolosController extends Controller
         foreach($protocolos_ids as $protocolo_id) 
         {
             $protocolo = Protocolo::find($protocolo_id);
+            $protocolo->load('contribuinte');
             $protocolos->push($protocolo);
         }
 
-        
+        //############ Permitir ver imagenes si falla ################################
+        $contxt = stream_context_create([
+            'ssl' => [
+                'verify_peer' => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed' => TRUE,
+            ]
+        ]);
+
+        $pdf = PDF::setOptions(['isHTML5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+        $pdf->getDomPDF()->setHttpContext($contxt);
+        //#################################################################################
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('relatorio', ['protocolos'=> $protocolos]);

@@ -65,6 +65,8 @@
                     </form>
                 </details>
 
+                <div v-if="acompanhamentos.length === 0" class="text-center mt-10 text-sm">Protocolo não possui acompanhamentos</div>
+
                 <div class="bg-yellow-200 p-4 rounded-md flex flex-col mb-2" v-for="acompanhamento, index in acompanhamentos">
                 <div class="flex justify-between">
                     <div>
@@ -99,6 +101,8 @@
                         <button type="submit" v-bind:class="anexosSelecionados ? 'text-white bg-teal-500 hover:bg-teal-400' : 'bg-gray-300 text-gray-400'" class="mt-8 px-4 py-2 rounded font-medium" :disabled="anexosSelecionados == false">Fazer Upload</button>
                     </form>
                 </details>
+
+                <div v-if="protocolo.anexos.length === 0" class="text-center mt-10 text-sm">Protocolo não possui anexos</div>
 
                 <div v-for="anexo in protocolo.anexos">
                     <h1>{{ anexo.id }}</h1>

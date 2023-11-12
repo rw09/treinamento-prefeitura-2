@@ -5,21 +5,21 @@
         <section class="flex justify-between mb-1">
             <div class="flex items-center py-2">
                 <!-- <h1 class="font-bold text-3xl pr-6">Usuários</h1> -->
-                <Link v-bind:href="route('protocolos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400 z-10">
+                <Link v-bind:href="route('protocolos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Protocolo
                 </Link>
-                 <button @click="gerarRelatorioPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400 hover:bg-orange-300 z-10">Gerar Relatório</button>
+                 <button @click="gerarRelatorioPDF" class="ml-4 py-1.5 px-3 rounded-sm text-sm text-white bg-orange-400 hover:bg-orange-300">Gerar Relatório</button>
              </div>
             <div class="grid grid-cols-4 gap-x-1 py-2">
-                <button @click="pdf" v-bind:class="linhaSelecionada ? 'bg-orange-400 hover:bg-orange-300' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">PDF</button>
-                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Detalhes</button>
-                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Editar</button>
-                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white z-10">Deletar</button>
+                <button @click="pdf" v-bind:class="linhaSelecionada ? 'bg-orange-400 hover:bg-orange-300' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">PDF</button>
+                <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Detalhes</button>
+                <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
+                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
             </div>
         </section>
 
         <section class="container py-1 mx-auto text-xs">
-            <DataTable id="audit-datatable" :buttons="buttons" :data="protocolos" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%" @select="mostrarBotoes" @deselect="esconderBotoes">
+            <DataTable id="datatable" :data="protocolos" :columns="columns" :options="options" ref="table" class="display nowrap" width="100%" @select="mostrarBotoes" @deselect="esconderBotoes">
                 <thead class="bg-gray-200">
                     <tr>
                         <th>ID</th>
@@ -33,19 +33,6 @@
                         <th>Anexos</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Filtrar por Descrição</th>
-                        <th>Filtrar por Solicitante</th>
-                        <th>Filtrar por Departamento</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </tfoot>
             </DataTable>
         </section>
     </section>
@@ -110,26 +97,6 @@ DataTable.use(DataTablesCore);
             lengthMenu: "Registros por página: _MENU_  &nbsp",
             infoFiltered: "(filtrados de um total de _MAX_ registros)",
             select: { rows: { }}
-        },
-        initComplete: function () {
-        this.api()
-            .columns([1,2,3])
-            .every(function () {
-                let column = this;
-                let title = column.footer().textContent;
- 
-                // Create input element
-                let input = document.createElement('input');
-                input.placeholder = title;
-                column.footer().replaceChildren(input);
- 
-                // Event listener for user input
-                input.addEventListener('keyup', () => {
-                    if (column.search() !== this.value) {
-                        column.search(input.value).draw();
-                    }
-                });
-            });
         }
     };
 
@@ -137,9 +104,7 @@ DataTable.use(DataTablesCore);
     let linhaSelecionada = ref(false);
 
     let mostrarBotoes = () => {
-        if(dt.row({ selected: true }).data() !== undefined) {
-            linhaSelecionada.value = true;
-        }
+        linhaSelecionada.value = true;
     }
 
     let esconderBotoes = () => {

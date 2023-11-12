@@ -27,7 +27,7 @@
                 </thead>
                 <tfoot>
             <tr>
-                <th>Filtrar por ID</th>
+                <th></th>
                 <th>Filtrar por Usuário</th>
                 <th>Filtrar por Evento</th>
                 <th>Filtrar por Data</th>
@@ -99,7 +99,7 @@ DataTable.use(DataTablesCore);
         },
         initComplete: function () {
         this.api()
-            .columns([0,1,2,3,4])
+            .columns([1,2,3,4])
             .every(function () {
                 let column = this;
                 let title = column.footer().textContent;
@@ -116,7 +116,7 @@ DataTable.use(DataTablesCore);
                     }
                 });
             });
-    }
+        }
     };
 
     let linhaSelecionada = ref(false);
