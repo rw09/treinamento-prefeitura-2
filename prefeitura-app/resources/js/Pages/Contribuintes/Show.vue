@@ -32,11 +32,17 @@
                 <p class="p-3 bg-gray-200 rounded">{{ contribuinte.bairro ? contribuinte.bairro : '---' }}</p>
                 <h2 class="text-md font-semibold mt-4">Cidade:</h2>
                 <p class="p-3 bg-gray-200 rounded">{{ contribuinte.cidade ? contribuinte.cidade : '---' }}</p>
+                <h2 class="text-md font-semibold mt-4">Quantidade Total de Protocolos:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ total_prot }}</p>
+                <h2 class="text-md font-semibold mt-4">Quantidade de Protocolos com Permissão para Visualizar:</h2>
+                <p class="p-3 bg-gray-200 rounded">{{ protocolos.length }}</p>
             </section>
 
             <section class="px-8 py-4" v-if="opcao === 'protocolos'">
-            <h1 class="font-semibold text-lg mx-auto w-fit mb-8">{{ protocolos.length ? 'Lista de Protocolos' : 'Sem Protocolos Cadastrados'}}</h1>
-            <div class="bg-gray-200 p-4 rounded-md flex flex-col mb-2" v-for="protocolo in protocolos">
+            <h1 class="font-semibold text-lg mx-auto w-fit mb-8">{{ protocolos.length ? 'Lista de Protocolos' : 'Sem Protocolos'}}</h1>
+            <input type="text" v-model="filtro" placeholder="Filtrar por Descrição ou Departamento" v-if="protocolos.length">
+            
+            <div class="bg-gray-200 p-4 rounded-md flex flex-col mb-2" v-for="protocolo in filtros">
               <div class="flex justify-between">
                 <div>
                   <h1 class="font-semibold text-lg">Protocolo # {{ protocolo.id }} - {{ protocolo.departamento.nome }}</h1>
@@ -63,9 +69,6 @@
             </div>
         </section>
 
-          
-        
-        
         </section>
         
 </template>
@@ -73,7 +76,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
     const opcao = ref('contribuinte');
 
@@ -81,9 +84,21 @@ import { ref } from 'vue';
 
     let form = useForm({});
 
+    const filtro = ref('')
+
+    const filtros = computed(() => {
+        if(filtro.value === '') {
+            return props.protocolos;    
+        } else {
+            return props.protocolos.filter(protocolo => (protocolo.departamento.nome.toLowerCase().includes(filtro.value.toLowerCase()) || (protocolo.descricao.toLowerCase().includes(filtro.value.toLowerCase()))));
+        }
+    });
+    
+
     const props = defineProps({
         contribuinte: Object,
-        protocolos: Object
+        protocolos: Object,
+        total_prot: String,
     });
 
     // let add = () => {

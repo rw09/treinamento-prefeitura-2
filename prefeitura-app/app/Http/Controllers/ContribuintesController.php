@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContribuinteRequest;
 use App\Models\Contribuinte;
 use App\Models\Protocolo;
+use Auth;
 use Inertia\Inertia;
 
 class ContribuintesController extends Controller
 {
     public function index()
     {
-        $contribuintes = Contribuinte::all();
+        //$contribuintes = Contribuinte::all();
+        $contribuintes = Contribuinte::withCount('protocolos')->get();
 
         return Inertia::render("Contribuintes/Index", ['contribuintes' => $contribuintes,]);
     }
@@ -38,6 +40,17 @@ class ContribuintesController extends Controller
 
         $protocolos = Protocolo::whereBelongsTo($contribuinte)->orderBy('id', 'desc')->get();
 
+        $total_prot = count($protocolos);
+
+        $user = Auth::user();
+
+        if(Auth::user()->perfil === 2) 
+        {
+            $departamentos = $user->departamentos()->pluck('departamento_id');
+
+            $protocolos = Protocolo::whereIn('departamento_id', $departamentos)->whereBelongsTo($contribuinte)->orderBy('id', 'desc')->get();
+        }
+        
         $protocolos->load(['departamento:id,nome']);
 
         //$protocolos->load(['acompanhamentos']);
@@ -46,6 +59,7 @@ class ContribuintesController extends Controller
         return Inertia::render('Contribuintes/Show', [
             'contribuinte' => $contribuinte,
             'protocolos' => $protocolos,
+            'total_prot' => $total_prot,
         ]);
     }
 

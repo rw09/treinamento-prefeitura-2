@@ -26,6 +26,6 @@ class Contribuinte extends Model implements Auditable
 
     public function protocolos(): HasMany
     {
-        return $this->hasMany(Contribuinte::class);
+        return $this->hasMany(Protocolo::class);
     }
 }

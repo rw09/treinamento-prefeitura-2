@@ -24,7 +24,7 @@ class Protocolo extends Model implements Auditable
 
     public function contribuinte(): BelongsTo
     {
-        return $this->belongsTo(Contribuinte::class);
+        return $this->belongsTo(Contribuinte::class, 'contribuinte_id');
     }
 
     public function departamento(): BelongsTo

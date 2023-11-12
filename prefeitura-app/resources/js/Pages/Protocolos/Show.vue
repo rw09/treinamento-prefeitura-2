@@ -133,7 +133,6 @@ import Swal from 'sweetalert2';
     const props = defineProps({
         protocolo: Object,
         acompanhamentos: Object,
-        url: String
     });
 
     const anexosSelecionados = ref(false);

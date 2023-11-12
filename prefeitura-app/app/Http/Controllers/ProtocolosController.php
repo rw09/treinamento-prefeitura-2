@@ -97,7 +97,7 @@ class ProtocolosController extends Controller
     {
         //$protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
         $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte', 'anexos')->firstOrFail();
-        $url = Storage::url('Anexos/Protocolo-3/raio-x.jpg');
+
         if(Auth::user()->perfil === 2)
         {
             $user = Auth::user();
@@ -117,8 +117,7 @@ class ProtocolosController extends Controller
         
         return Inertia::render('Protocolos/Show', [
             'protocolo' => $protocolo,
-            'acompanhamentos' => $acompanhamentos,
-            'url' => $url,
+            'acompanhamentos' => $acompanhamentos
         ]);
     }
 
@@ -261,19 +260,6 @@ class ProtocolosController extends Controller
             $protocolos->push($protocolo);
         }
 
-        //############ Permitir ver imagenes si falla ################################
-        $contxt = stream_context_create([
-            'ssl' => [
-                'verify_peer' => FALSE,
-                'verify_peer_name' => FALSE,
-                'allow_self_signed' => TRUE,
-            ]
-        ]);
-
-        $pdf = PDF::setOptions(['isHTML5ParserEnabled' => true, 'isRemoteEnabled' => true]);
-        $pdf->getDomPDF()->setHttpContext($contxt);
-        //#################################################################################
-
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('relatorio', ['protocolos'=> $protocolos]);
         return $pdf->stream();
@@ -283,10 +269,13 @@ class ProtocolosController extends Controller
     {
         $protocolo = Protocolo::find($request->protocolo);
         
-        //dd($protocolo);
+        //$protocolo->load(['acompanhamentos']);
+        $acompanhamentos = $protocolo->acompanhamentos()->get();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('pdf', ['protocolo'=> $protocolo]);
-        return $pdf->download();
+        //$pdf->loadView('pdf', ['protocolo'=> $protocolo]);
+        $pdf->loadView('pdf', compact('protocolo', 'acompanhamentos'));
+        //$pdf->loadView('pdf', ['acompanhamentos' => $acompanhamentos]);
+        return $pdf->stream();
     }
 }

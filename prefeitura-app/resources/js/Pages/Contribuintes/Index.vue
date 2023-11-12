@@ -88,6 +88,7 @@ DataTable.use(DataTablesCore);
     const options = {
         responsive: true,
         select: 'single',
+        stateSave: true,
         language: {
             search: 'Pesquisar:',
             emptyTable: "Sem dados disponíveis",

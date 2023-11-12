@@ -9,5 +9,13 @@
     <h1>{{ $protocolo->descricao }}</h1>
     <h1>{{ $protocolo->created_at }}</h1>
     
+    <h2>Acompanhamentos:</h2>
+    <ul>
+        @if($acompanhamentos)
+            @foreach($acompanhamentos as $acompanhamento)
+            <li>{{ $acompanhamento->observacao }}</li>
+            @endforeach
+        @endif
+    </ul>
 </body>
 </html>

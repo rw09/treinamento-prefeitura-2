@@ -124,10 +124,13 @@ DataTable.use(DataTablesCore);
                 column.footer().replaceChildren(input);
  
                 // Event listener for user input
-                input.addEventListener('keyup', () => {
-                    if (column.search() !== this.value) {
-                        column.search(input.value).draw();
-                    }
+                input.addEventListener('keyup', (e) => {
+                    //if (e.key === 'Enter' || e.keyCode === 13) {
+                        if (column.search() !== this.value) {
+                            column.search(input.value).draw();
+                        }
+                    //}
+                    
                 });
             });
         }
@@ -256,7 +259,7 @@ DataTable.use(DataTablesCore);
                         let link = document.createElement('a');
 
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = "Relatório.pdf";
+                        link.download = `Protocolo-${protocolo}.pdf`;
                         link.click()
                     }).catch(err => {
                         console.log('Erro na resposta: ' + err)
