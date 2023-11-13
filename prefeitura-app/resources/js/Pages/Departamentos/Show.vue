@@ -68,7 +68,6 @@
                     </div>
                     <div class="mt-5 flex space-x-5">
                         <p><span>CPF: </span> {{ user.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') }} </p>
-                        <!-- <p><span class="font-semibold">Usuários: </span> {{ departamento.users_count }}</p> -->
                     </div>
                     <div class="mt-5 flex justify-between">
                         <p><span>E-mail: </span> {{ user.email }}</p>

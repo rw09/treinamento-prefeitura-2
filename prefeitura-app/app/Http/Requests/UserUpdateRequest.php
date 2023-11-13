@@ -26,7 +26,6 @@ class UserUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'cpf' => ['required', 'cpf', Rule::unique('users')->ignore(request()->id)],
             'email' => ['required', 'email', Rule::unique('users')->ignore(request()->id)],
-            // 'password' => 'required|min:6|max:15',
             'perfil' => 'required|in:0,1,2',
         ];
     }
@@ -38,8 +37,6 @@ class UserUpdateRequest extends FormRequest
             'name.max' => 'Máximo 255 caracteres',
             'cpf.unique' => 'CPF já cadastrado',
             'cpf.cpf' => 'CPF inválido',
-            // 'password.min' => 'A senha deve ter pelo menos 6 caracteres',
-            // 'password.max' => 'A senha deve ter no máximo 15 caracteres',
             'email.unique' => 'Email já cadastrado',
             'email.email' => 'Email inválido',
         ];

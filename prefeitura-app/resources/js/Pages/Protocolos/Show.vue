@@ -1,6 +1,6 @@
 <template>
     <Head title="Protocolos - Detalhes" />
-    <!-- <section class="container mt-8 mx-auto px-40"> -->
+
         <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border">
             <nav class="flex bg-gray-200 mb-6">
                 <label for="opcao-protocolo" class="py-3.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'protocolo'}">
@@ -219,9 +219,7 @@ import Swal from 'sweetalert2';
         {
             const tamanhoMaximoArquivo = 3 * 1024 * 1024;
             const extensoesSuportadas = ["application/pdf", "image/jpg", "image/jpeg", "image/png"];
-            // const qtdeArquivosPossivel = 5 - props.protocolo.anexos.length
 
-            //if(e.target.files.length > (5 - props.protocolo.anexos.length))
             if(e.target.files.length > qtdeArquivosPossivel.value)
             {
                 avisoErroAnexo('Erro!<br> Quantidade de anexos', `A quantidade de arquivos permitidos é <b>${qtdeArquivosPossivel.value}</b>`);
@@ -233,7 +231,6 @@ import Swal from 'sweetalert2';
                 if (e.target.files[i].size > tamanhoMaximoArquivo) 
                 {
                     //depois melhorar
-                    //avisoErroAnexo('1 ou mais arquivos com tamanho inválido<br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
                     avisoErroAnexo('Erro!<br> Tamanho Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
                     e.target.value = null
                     return;

@@ -27,7 +27,7 @@ class AnexoRequest extends FormRequest
         ];
     }
 
-    public function messages(): array //usar?
+    public function messages(): array
     {
         return [
             'anexos.max' => 'Máximo 5 arquivos',

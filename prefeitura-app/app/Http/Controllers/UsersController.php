@@ -45,12 +45,13 @@ class UsersController extends Controller
         if(Auth::user()->can('view', $user)) 
         {
             $departamentos_usuario = $user->departamentos()->get();
+
             $departamentos_usuario->loadCount('users')->loadCount('protocolos');
             
             $user->load(['departamentos']); //trocar por $departamentos = $user->departamentos()->get() ?
 
-            // $departamentos = Departamento::get(['id', 'nome'])->diff($user['departamentos']);
             $departamentos = Departamento::get()->diff($user['departamentos']);
+
             $departamentos->loadCount('users')->loadCount('protocolos');
 
             return Inertia::render('Users/Show', [
@@ -115,11 +116,10 @@ class UsersController extends Controller
 
         $user->departamentos()->syncWithoutDetaching($departamento);
 
-        //fazer a notificação
         return redirect()->back()->with('message', '<b>Acesso Concedido</b><br><b>Departamento: </b>' . $request->departamento_id . ' - ' . $departamento->nome . '<br><b>Usuário:</b> ' . $user->id . ' - ' . $user->name);
     }
 
-    public function removeDepartamento(Request $request, $id) //fazer a notificaçao de remover
+    public function removeDepartamento(Request $request, $id)
     {
         $user = User::where('id', $request->user_id)->firstOrFail();
 

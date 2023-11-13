@@ -1,6 +1,6 @@
 <template>
     <Head title="Contribuinte - Detalhes" />
-    <!-- <section class="container mt-8 mx-auto px-40"> -->
+
         <section class="sm:mx-10 lg:mx-80 space-y-4 shadow-md pb-8 mb-6 rounded-md border">
             <nav class="flex bg-gray-200 mb-6">
                 <label for="opcao-contribuinte" class="py-3.5 px-4 cursor-pointer hover:bg-white hover:rounded-tl" v-bind:class="{'bg-gray-50 rounded-tl font-semibold' : opcao === 'contribuinte'}">

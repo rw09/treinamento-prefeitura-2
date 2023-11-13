@@ -19,10 +19,6 @@
                 <input v-model="form.cpf" v-mask="['###.###.###-##']" type="text" name="cpf" id="cpf" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('cpf')">
                 <div v-if="form.errors.cpf" v-text="form.errors.cpf" class="text-red-400 text-xs mt-1"></div>
             </div>
-            <!-- <div class="mt-4">
-                <label for="password" class="block text-xs">Senha:</label>
-                <input v-model="form.password" type="password" name="password" id="password" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('password')">
-            </div> -->
             <div class="mt-4 text-xs" v-if="perfil_acesso === 0">
                 <p>Perfil de Acesso:</p>
                 <div class="flex justify-between mt-2">

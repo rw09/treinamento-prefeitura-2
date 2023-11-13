@@ -1,5 +1,4 @@
 <template>
-        <!-- <h1>a {{  $page.url }}</h1> -->
     <section class="container mt-8 mx-auto px-40">
         <form @submit.prevent="submit" class="mx-20 pt-4 px-10 pb-12 rounded shadow-md bg-gray-100">
             <h1 class="text-center mt-2 mb-8 underline underline-offset-4 decoration-slate-400 text-slate-800">Editar Protocolo</h1>

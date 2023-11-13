@@ -12,7 +12,6 @@ class ContribuintesController extends Controller
 {
     public function index()
     {
-        //$contribuintes = Contribuinte::all();
         $contribuintes = Contribuinte::withCount('protocolos')->get();
 
         return Inertia::render("Contribuintes/Index", ['contribuintes' => $contribuintes,]);
@@ -52,10 +51,8 @@ class ContribuintesController extends Controller
         }
         
         $protocolos->load(['departamento:id,nome']);
-        $protocolos->loadCount('acompanhamentos')->loadCount('anexos');
 
-        //$protocolos->load(['acompanhamentos']);
-        //$protocolos->load(['acompanhamentos:id,observacao,created_at,protocolo_id']);
+        $protocolos->loadCount('acompanhamentos')->loadCount('anexos');
 
         return Inertia::render('Contribuintes/Show', [
             'contribuinte' => $contribuinte,
@@ -77,7 +74,6 @@ class ContribuintesController extends Controller
 
         $validated['cpf'] = str_replace( array( '.', '-' ), '', $request->input('cpf'));
         
-        //Contribuinte::where('id', $id)->update($validated);
         Contribuinte::find($id)->update($validated);
 
         return to_route('contribuintes-index')->with('message', 'Contribuinte Editado com Sucesso!');
@@ -85,7 +81,6 @@ class ContribuintesController extends Controller
 
     public function destroy($id)
     {
-        //Contribuinte::where('id', $id)->delete();
         Contribuinte::find($id)->delete();
 
         return to_route('contribuintes-index');

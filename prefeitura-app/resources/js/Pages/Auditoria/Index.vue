@@ -2,14 +2,10 @@
     <Head title="Auditoria - Listagem" />
     
     <section class="container my-6 mx-auto text-xs">
-        <section class="flex justify-between mb-1">
-            <div class="flex items-center py-2">
+        <section class="flex justify-end mb-1">
 
-            </div>
             <div class="grid grid-cols-1 py-2 items-center z-10">
                 <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300'" class="px-2 py-2 rounded-sm  text-white">Visualizar Detalhes</button>
-                <!-- <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
-                <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300'" class="px-2 py-1 rounded-sm  text-white">Deletar</button> -->
             </div>
         </section>
 
@@ -26,15 +22,15 @@
                     </tr>
                 </thead>
                 <tfoot>
-            <tr>
-                <th></th>
-                <th>Filtrar por Usuário</th>
-                <th>Filtrar por Evento</th>
-                <th>Filtrar por Data</th>
-                <th>Filtrar por Tabela</th>
-                <th></th>
-            </tr>
-        </tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Filtrar por Usuário</th>
+                        <th>Filtrar por Evento</th>
+                        <th>Filtrar por Data</th>
+                        <th>Filtrar por Tabela</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </DataTable>
         </section>
     </section>
@@ -74,7 +70,6 @@ DataTable.use(DataTablesCore);
 
     const columns = [
         { data: 'id' },
-        // { data: 'user_id' },
         { data: null, render: data => data.user_id + ' - ' + data.user.name },
         { data: 'event' },
         { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR') },

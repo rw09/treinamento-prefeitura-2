@@ -4,7 +4,7 @@
     <section class="container my-6 mx-auto text-xs">
         <section class="flex justify-between mb-1">
             <div class="flex items-center py-2">
-                <!-- <h1 class="font-bold text-3xl pr-6">Usuários</h1> -->
+                
                 <Link v-bind:href="route('departamentos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Departamento
                 </Link>

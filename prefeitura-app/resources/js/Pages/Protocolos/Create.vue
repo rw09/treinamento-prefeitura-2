@@ -82,7 +82,6 @@ import Swal from 'sweetalert2';
                 if (e.target.files[i].size > tamanhoMaximoArquivo) 
                 {
                     //depois melhorar
-                    //avisoErroAnexo('1 ou mais arquivos com tamanho inválido<br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
                     avisoErroAnexo('Erro!<br> Tamanho Inválido', 'Arquivo <b>' + e.target.files[i].name + '</b> <br><br>Tamanho máximo de cada arquivo permitido é <b>3MB</b>');
                     e.target.value = null
                     return;

@@ -4,18 +4,11 @@
     <section class="container my-6 mx-auto text-xs">
         <section class="flex justify-between mb-1">
             <div class="flex items-center py-2">
-                <!-- <h1 class="font-bold text-3xl pr-6">Usuários</h1> -->
                 <Link v-bind:href="route('contribuintes-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400">
                     Cadastrar Contribuinte
                 </Link>
             </div>
             <div class="grid grid-cols-3 gap-x-1 py-2">
-                <!-- <button :disabled="!linhaSelecionada" @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200 text-white">Ver</button> -->
-                <!-- <button :disabled="!linhaSelecionada" @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200 text-white">Editar</button>
-                <button v-if="linhaSelecionada" @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200 text-white">Deletar</button> -->
-                <!-- <button :disabled="!linhaSelecionada" @click="show" class="bg-yellow-500/90 px-2 py-1 rounded-sm hover:bg-yellow-200 text-white">Ver</button>
-                <button :disabled="!linhaSelecionada" @click="edit" class="bg-sky-600/90 px-2 py-1 rounded-sm hover:bg-blue-200 text-white">Editar</button>
-                <button :disabled="!linhaSelecionada" @click="remove" class="bg-rose-600/80 px-2 py-1 rounded-sm hover:bg-red-200 text-white">Deletar</button> -->
                 <button @click="show" v-bind:class="linhaSelecionada ? 'bg-yellow-500 hover:bg-yellow-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Detalhes</button>
                 <button @click="edit" v-bind:class="linhaSelecionada ? 'bg-sky-600/90 hover:bg-blue-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Editar</button>
                 <button @click="remove" v-bind:class="linhaSelecionada ? 'bg-rose-600/80 hover:bg-red-400' : 'bg-gray-300 cursor-default'" class="px-2 py-1 rounded-sm  text-white">Deletar</button>
@@ -77,7 +70,6 @@ DataTable.use(DataTablesCore);
     const columns = [
         { data: 'id' },
         { data: 'nome' },
-        // { data: null, render: data => data.nome.length > 50 ? data.nome.substring(0, 50 -3) + '...' : data.nome }, // o search nao pega a parte que foi cortada
         { data: null, render: data => new Date(data.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) },
         { data: null, render: data => data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') },
         { data: null, render: data => data.sexo == 'M' ? 'Masculino' : 'Feminino' },
@@ -86,7 +78,6 @@ DataTable.use(DataTablesCore);
         { data: 'cidade' },
         { data: 'protocolos_count'}
     ];
-
 
     const options = {
         responsive: true,
@@ -135,17 +126,6 @@ DataTable.use(DataTablesCore);
         }        
     };
 
-    // const remove = () => {
-    //     dt.rows({ selected: true }).every(function () {
-    //         let row = this.data();
-    //         if(confirm('Deseja realmente deletar esse Contribuinte?\n\n' + "ID: " + row.id + "\nNome: " + row.nome + "\nData de Nascimento: " + new Date(row.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC'}) + "\nCPF: " + row.cpf
-    //         + "\nEndereço: " + (row.rua ? (row.rua + ", " + (row.numero ? row.numero : "s/nº") + (row.complemento ? " - " + row.complemento : "")) : "") 
-    //         + "\nBairro: " + row.bairro + "\nCidade: " + row.cidade))
-    //         {
-    //             router.delete(route('contribuintes-destroy', row.id));
-    //         };
-    //     });
-    // }
 
     const remove = () => {
         if(linhaSelecionada.value === true) {

@@ -23,7 +23,6 @@ class ProtocolosController extends Controller
     {
         if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
         {
-            //$protocolos = Protocolo::withCount('acompanhamentos')->get();
             $protocolos = Protocolo::withCount('acompanhamentos')->withCount('anexos')->get();
 
             $protocolos->load(['contribuinte:id,nome', 'departamento:id,nome']);
@@ -68,7 +67,6 @@ class ProtocolosController extends Controller
 
     public function store(ProtocoloRequest $request)
     {
-        //dd($request->all());
         $validated = $request->validated();
 
         $protocolo = Protocolo::create($validated);
@@ -95,7 +93,6 @@ class ProtocolosController extends Controller
 
     public function show($id)
     {
-        //$protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte:id,nome')->firstOrFail();
         $protocolo = Protocolo::where('id', $id)->with('departamento:id,nome','contribuinte')->firstOrFail();
 
         if(Auth::user()->perfil === 2)
@@ -112,11 +109,10 @@ class ProtocolosController extends Controller
         }
 
         $acompanhamentos = $protocolo->acompanhamentos()->orderBy('id', 'desc')->get();
+
         $acompanhamentos->load(['user:id,name']);
 
         $anexos = $protocolo->anexos()->orderBy('id', 'desc')->get();
-        //dd($anexos);
-        
         
         return Inertia::render('Protocolos/Show', [
             'protocolo' => $protocolo,
@@ -202,7 +198,6 @@ class ProtocolosController extends Controller
 
     public function addAnexo(AnexoRequest $request)
     {
-        //dd($request);
         if($request->hasFile('anexos')) 
         {
             foreach ($request->file('anexos') as $file)
@@ -216,10 +211,9 @@ class ProtocolosController extends Controller
                     while(Storage::exists($path))
                     {
                         $name = $file->hashName();
+
                         $path = 'Anexos/Protocolo-'. $request->protocolo_id .'/'. $name;
                     }
-
-                    //return redirect()->back()->with('message', $name);
                 }
 
                 $path = $file->storeAs('Anexos/Protocolo-'. $request->protocolo_id, $name);
@@ -231,33 +225,28 @@ class ProtocolosController extends Controller
                     'protocolo_id' => $request->protocolo_id,
                 ]);
             }
+
             return redirect()->back()->with('message', 'Arquivo Anexado com Sucesso!');
-        } else {
+        } 
+        else 
+        {
             return redirect()->back()->with('message','NAO FOI POSSIVEL ANEXAR');
         }
     }
 
     public function removeAnexo(AnexoRequest $request, $id)
     {
-        //dd($id);
-        //dd($request);
-        $protocolo = Protocolo::where('id', $request->protocolo_id)->firstOrFail();
-
         $anexo = Anexo::where('id', $id)->firstOrFail();
+
         Storage::delete($anexo->caminho);
 
         $anexo->delete();
-        
-        
-        
-        //$protocolo->anexos()->detach($anexo);
-        
+
         return redirect()->back()->with('message', 'Anexo Removido com Sucesso!');
     }
 
     public function relatorio(Request $request)
     {
-
         $protocolos_ids = $request->protocolo_ids;
         
         //para pegar pela ordem dos ids do db
@@ -269,12 +258,16 @@ class ProtocolosController extends Controller
         foreach($protocolos_ids as $protocolo_id) 
         {
             $protocolo = Protocolo::find($protocolo_id);
+
             $protocolo->load('contribuinte');
+
             $protocolos->push($protocolo);
         }
 
         $pdf = App::make('dompdf.wrapper');
+
         $pdf->loadView('relatorio', ['protocolos'=> $protocolos]);
+
         return $pdf->stream();
     }
 
@@ -283,15 +276,19 @@ class ProtocolosController extends Controller
         $protocolo = Protocolo::find($request->protocolo);
         
         $protocolo->load('contribuinte');
+
         $protocolo->load('departamento');
+
         $contribuinte = $protocolo->contribuinte()->get();
+
         $acompanhamentos = $protocolo->acompanhamentos()->get();
+
         $acompanhamentos->load('user');
         
         $pdf = App::make('dompdf.wrapper');
-        //$pdf->loadView('pdf', ['protocolo'=> $protocolo]);
+        
         $pdf->loadView('pdf', compact('protocolo', 'contribuinte', 'acompanhamentos'));
-        //$pdf->loadView('pdf', ['acompanhamentos' => $acompanhamentos]);
+        
         return $pdf->stream();
     }
 
@@ -321,22 +318,18 @@ class ProtocolosController extends Controller
 
     public function createByDepartamento($id)
     {
+        //para não deixar acessar outros departamentos pelo navegador e poder cadastrar protocolos de outros departamentos
+        if(Auth::user()->perfil === 2)
+        {
+            if(!Auth::user()->departamentos()->where('departamento_id', $id)->exists())
+            {
+                return redirect('/');
+            }
+        }
+        
         $departamentos = Departamento::where('id', $id)->get();
+
         $contribuintes = Contribuinte::All();
-
-        //verificar se preciso proteger
-        // if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
-        // {
-        //     $departamentos = Departamento::orderBy('nome')->get();
-        // }
-        // else
-        // {
-        //     $user = Auth::user();
-            
-        //     $departamentos = $user->departamentos()->orderBy('nome')->get();
-        // }
-
-        // $contribuintes = Contribuinte::where('id', $id)->get();
 
         return Inertia::render('Protocolos/Create', [
             'departamentos' => $departamentos,

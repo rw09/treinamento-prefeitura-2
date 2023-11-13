@@ -4,7 +4,6 @@
     <section class="container my-6 mx-auto text-xs">
         <section class="flex justify-between mb-1">
             <div class="flex items-center py-2">
-                <!-- <h1 class="font-bold text-3xl pr-6">Usuários</h1> -->
                 <Link v-bind:href="route('protocolos-create')" class="py-1.5 px-3 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400 z-10">
                     Cadastrar Protocolo
                 </Link>
@@ -215,34 +214,30 @@ DataTable.use(DataTablesCore);
     const gerarRelatorioPDF = () => {
 
         try {
-
-        let protocolo_ids = [];
-        let dados = dt.rows({ search:'applied' }).data().toArray();
-        
-        //console.log(dados)
-        
-        dados.forEach(prot => {
-            protocolo_ids.push(prot.id);
-        });
-
-        //console.log(protocolo_ids)
-        
-
-        axios.post('/protocolos/relatorio', { protocolo_ids }, 
-            { responseType: 'blob' })
-            .then(res => {
-                let blob = new Blob([res.data], { type: res.headers['content-type'] });
-                let link = document.createElement('a');
-
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "Relatório.pdf";
-                link.click()
-            }).catch(err => {
-                console.log('Erro na resposta: ' + err)
+            let protocolo_ids = [];
+            let dados = dt.rows({ search:'applied' }).data().toArray();
+           
+            
+            dados.forEach(prot => {
+                protocolo_ids.push(prot.id);
             });
-      } catch (error) {
-        console.log('Erro ao gerar PDF: ', error);
-      }
+
+
+            axios.post('/protocolos/relatorio', { protocolo_ids }, 
+                { responseType: 'blob' })
+                .then(res => {
+                    let blob = new Blob([res.data], { type: res.headers['content-type'] });
+                    let link = document.createElement('a');
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "Relatório.pdf";
+                    link.click()
+                }).catch(err => {
+                    console.log('Erro na resposta: ' + err)
+                });
+        } catch (error) {
+            console.log('Erro ao gerar PDF: ', error);
+        }
     }
 
     const pdf = () => {
@@ -250,7 +245,6 @@ DataTable.use(DataTablesCore);
         if(linhaSelecionada.value === true) {
             
             try {
-
                 let protocolo = dt.row({ selected: true }).data().id;
                 
                 console.log(protocolo)

@@ -72,7 +72,7 @@
                 </div>
                 <div class="mt-5 flex space-x-5">
                     <p><span class="font-semibold">Total de Protocolos: </span> {{ departamento.protocolos_count }} </p>
-                    <!-- <p><span class="font-semibold">Usuários: </span> {{ departamento.users_count }}</p> -->
+                    
                 </div>
               <div class="mt-5 flex justify-between">
                 <p><span class="font-semibold">Total de Usuários: </span> {{ departamento.users_count }}</p>

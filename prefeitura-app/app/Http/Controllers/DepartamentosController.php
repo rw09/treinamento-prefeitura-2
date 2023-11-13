@@ -28,7 +28,6 @@ class DepartamentosController extends Controller
 
     public function show($id)
     {
-        //$departamento = Departamento::where('id', $id)->with('users:id,name,email,cpf')->firstOrFail();
         $departamento = Departamento::where('id', $id)->with('users')->firstOrFail();
 
         if(Auth::user()->can('view', $departamento)) 
@@ -37,7 +36,6 @@ class DepartamentosController extends Controller
 
             $protocolos->loadCount('acompanhamentos')->loadCount('anexos');
             
-            //$users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
             $users = User::where('perfil', 2)->get()->diff($departamento['users']);
 
             $departamento->loadCount('protocolos')->loadCount('users')->get();
@@ -89,19 +87,16 @@ class DepartamentosController extends Controller
         Departamento::find($id)->update($validated);
 
         return to_route('departamentos-index')->with('message', 'Departamento Editado com Sucesso!');
-        //return redirect()->back();
     }
 
     public function destroy($id)
     {
-        //$departamento = Departamento::where('id', $id)->firstOrFail();
         $departamento = Departamento::find($id);
 
         if(Auth::user()->can('delete', $departamento))
         {
             $departamento->delete();
 
-            //return to_route('departamentos-index');
             return redirect()->back();
         }
         else
