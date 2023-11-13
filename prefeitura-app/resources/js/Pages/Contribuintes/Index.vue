@@ -169,6 +169,7 @@ DataTable.use(DataTablesCore);
                         icon: 'success',
                     })
                 }
+                linhaSelecionada.value = false;
             })
         } else {
             avisoSemLinhaSelecionada('Deletar')

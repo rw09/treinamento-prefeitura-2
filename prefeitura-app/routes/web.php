@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcompanhamentosController;
 use App\Http\Controllers\AuditsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContribuintesController;
@@ -78,6 +79,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{user}', [UsersController::class, 'destroy'])->where('id', '[0-9]+')->name('users-destroy');
         Route::post('/add-departamento', [UsersController::class, 'addDepartamento'])->name('users-add-departamento');
         Route::delete('/remove-departamento/{id}', [UsersController::class, 'removeDepartamento'])->where('id', '[0-9]+')->name('users-remove-departamento');
+
+        Route::get('/change-password', [UsersController::class, 'changePassword'])->name('user-change-password');
+        Route::post('/change-password', [UsersController::class, 'updatePassword'])->name('user-update-password')->middleware([HandlePrecognitiveRequests::class]);
     });
 
 
@@ -98,6 +102,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/show', [AuditsController::class, 'show'])->where('id', '[0-9]+')->name('audits-show')->can('viewAny', 'App\Models\Audit');
     });
 
+    Route::prefix('acompanhamentos')->group(function () {
+        Route::get('/{id}/edit/', [AcompanhamentosController:: class, 'edit'])->where('id', '[0-9]+')->name('acompanhamentos-edit');
+        Route::put('/{id}', [AcompanhamentosController::class, 'update'])->where('id', '[0-9]+')->name('acompanhamentos-update')->middleware([HandlePrecognitiveRequests::class]);
+    });
 });
 
 

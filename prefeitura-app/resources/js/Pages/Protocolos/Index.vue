@@ -194,6 +194,7 @@ DataTable.use(DataTablesCore);
                         icon: 'success',
                     })
                 }
+                linhaSelecionada.value = false;
             })
         } else {
             avisoSemLinhaSelecionada('Deletar')
@@ -218,13 +219,14 @@ DataTable.use(DataTablesCore);
         let protocolo_ids = [];
         let dados = dt.rows({ search:'applied' }).data().toArray();
         
-        console.log(dados)
+        //console.log(dados)
         
         dados.forEach(prot => {
             protocolo_ids.push(prot.id);
         });
 
-        console.log(protocolo_ids)
+        //console.log(protocolo_ids)
+        
 
         axios.post('/protocolos/relatorio', { protocolo_ids }, 
             { responseType: 'blob' })

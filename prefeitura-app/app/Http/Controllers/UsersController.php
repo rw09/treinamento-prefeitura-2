@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\UserPasswordUpdateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\Departamento;
 use App\Models\User;
 use Auth;
+use Hash;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -126,5 +128,27 @@ class UsersController extends Controller
         $user->departamentos()->detach($departamento);
         
         return redirect()->back()->with('message', '<b>Acesso Removido</b><br><b>Departamento: </b>' . $request->departamento_id . ' - ' . $departamento->nome . '<br><b>Usuário:</b> ' . $user->id . ' - ' . $user->name);
+    }
+
+    public function changePassword()
+    {
+        return Inertia::render('Users/ChangePassword');
+    }
+
+    public function updatePassword(UserPasswordUpdateRequest $request)
+    {
+        $validated = $request->validated();
+        
+        if(!Hash::check($validated['senha_velha'], auth()->user()->password))
+        {
+            return back()->with("message", "A senha atual está errada");
+        } 
+
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($validated['nova_senha'])
+        ]);
+
+        return redirect('/')->with('message', "Senha Alterada com Sucesso");
     }
 }

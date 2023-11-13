@@ -282,12 +282,15 @@ class ProtocolosController extends Controller
     {
         $protocolo = Protocolo::find($request->protocolo);
         
-        //$protocolo->load(['acompanhamentos']);
+        $protocolo->load('contribuinte');
+        $protocolo->load('departamento');
+        $contribuinte = $protocolo->contribuinte()->get();
         $acompanhamentos = $protocolo->acompanhamentos()->get();
-
+        $acompanhamentos->load('user');
+        
         $pdf = App::make('dompdf.wrapper');
         //$pdf->loadView('pdf', ['protocolo'=> $protocolo]);
-        $pdf->loadView('pdf', compact('protocolo', 'acompanhamentos'));
+        $pdf->loadView('pdf', compact('protocolo', 'contribuinte', 'acompanhamentos'));
         //$pdf->loadView('pdf', ['acompanhamentos' => $acompanhamentos]);
         return $pdf->stream();
     }

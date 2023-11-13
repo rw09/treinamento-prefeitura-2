@@ -30,4 +30,6 @@ Adicionei uns dados pra dar seed
   
 -Add anexos  
   
--Add exportar pdf
+-Add exportar pdf  
+  
+-Add alteração de senha

@@ -140,6 +140,7 @@ const columns = [
                         icon: 'success',
                     })
                 }
+                linhaSelecionada.value = false;
             })
         }
         else {
