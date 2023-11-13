@@ -33,13 +33,13 @@
             <div class="flex items-center mt-1 mb-5" v-if="props.departamentos.length && user.perfil == 2">
                 <form @submit.prevent="add" class="flex w-full justify-between items-center">
                     <div class="w-3/4">
-                        <label v-if="opcaoEscolhida === null" for="user" class="text-sm absolute px-3.5 py-1.5">Adicionar Acesso à Departamento:</label>
-                        <select name="user" id="user" v-model="opcaoEscolhida" class="px-4 py-1 border rounded" @change="selecionar(opcaoEscolhida)">
+                        <select name="user" id="user" v-model="form.departamento_id" class="px-4 py-1 border rounded">
+                            <option value="null" disabled selected hidden>Adicionar Acesso à Departamento:</option>
                             <option v-for="departamento in props.departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
                         </select>
                     </div>
                     <div class="self-end">
-                        <button type="submit" class="px-4 py-2 ml-5 rounded-sm text-sm text-white text-center" :disabled="opcaoEscolhida == null" v-bind:class="opcaoEscolhida != null ? 'bg-teal-500 hover:bg-teal-400' : 'bg-gray-300'">Conceder Acesso</button>
+                        <button type="submit" class="px-4 py-2 ml-5 rounded-sm text-sm text-white text-center" :disabled="form.departamento_id == null" v-bind:class="form.departamento_id != null ? 'bg-teal-500 hover:bg-teal-400' : 'bg-gray-300'">Conceder Acesso</button>
                     </div>
                 </form>
             </div>
@@ -71,11 +71,12 @@
                     </div>
                 </div>
                 <div class="mt-5 flex space-x-5">
-                    <p><span class="font-semibold">Protocolos: </span> {{ departamento.protocolos_count }} </p>
-                    <p><span class="font-semibold">Usuários: </span> {{ departamento.users_count }}</p>
+                    <p><span class="font-semibold">Total de Protocolos: </span> {{ departamento.protocolos_count }} </p>
+                    <!-- <p><span class="font-semibold">Usuários: </span> {{ departamento.users_count }}</p> -->
                 </div>
-              <div class="mt-5">
-                <button v-if="user.perfil == 2" class="px-3 py-1.5 justify-self-end text-white rounded bg-rose-600/80 hover:bg-red-300" @click="remove(departamento)">
+              <div class="mt-5 flex justify-between">
+                <p><span class="font-semibold">Total de Usuários: </span> {{ departamento.users_count }}</p>
+                <button v-if="user.perfil == 2" class="px-3 py-1.5 text-white rounded bg-rose-600/80 hover:bg-red-300" @click="remove(departamento)">
                     Remover Acesso
                 </button>
               </div>
@@ -95,8 +96,6 @@ import Swal from 'sweetalert2';
 
     const page = usePage();
 
-    const opcaoEscolhida = ref(null);
-
     const props = defineProps({
         user: Object,
         departamentos: Object,
@@ -107,10 +106,6 @@ import Swal from 'sweetalert2';
         user_id: props.user.id,
         departamento_id: null,
     });
-
-    let selecionar = (id) => {
-        form.departamento_id = id;
-    }
 
     let add = () => {
         form.post(route('users-add-departamento'), {
@@ -125,12 +120,21 @@ import Swal from 'sweetalert2';
                 }),  
             ]},
         }),
-        opcaoEscolhida.value = null
+        form.departamento_id = null
     }
 
     let remove = (id) => {
         form.departamento_id = null,
-        form.delete(route('users-remove-departamento', id));
+        form.delete(route('users-remove-departamento', id), {
+            onSuccess: () => {[
+                Swal.fire({
+                        title: 'Sucesso!',
+                        html: page.props.flash.message,
+                        timer: 2500,
+                        icon: 'success',
+                    }),  
+                ]},
+        });
     }
 
     let excluir = (departamento) => {

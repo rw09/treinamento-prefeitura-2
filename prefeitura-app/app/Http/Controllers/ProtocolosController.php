@@ -315,4 +315,29 @@ class ProtocolosController extends Controller
             'contribuintes' => $contribuintes,
         ]);
     }
+
+    public function createByDepartamento($id)
+    {
+        $departamentos = Departamento::where('id', $id)->get();
+        $contribuintes = Contribuinte::All();
+
+        //verificar se preciso proteger
+        // if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
+        // {
+        //     $departamentos = Departamento::orderBy('nome')->get();
+        // }
+        // else
+        // {
+        //     $user = Auth::user();
+            
+        //     $departamentos = $user->departamentos()->orderBy('nome')->get();
+        // }
+
+        // $contribuintes = Contribuinte::where('id', $id)->get();
+
+        return Inertia::render('Protocolos/Create', [
+            'departamentos' => $departamentos,
+            'contribuintes' => $contribuintes,
+        ]);
+    }
 }

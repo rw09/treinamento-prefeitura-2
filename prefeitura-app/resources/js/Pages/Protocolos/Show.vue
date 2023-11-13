@@ -21,7 +21,7 @@
             <section class="px-8 py-4" v-if="opcao === 'protocolo'">
                 <h1 class="font-semibold text-lg mx-auto w-fit mb-4">Protocolo # {{protocolo.id}}</h1>
                 <h2 class="text-md font-semibold mt-4">Descrição:</h2>
-                <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.descricao }}</p>
+                <p class="border-gray-200 border bg-gray-100 p-2.5 rounded break-words">{{ protocolo.descricao }}</p>
                 <h2 class="text-md font-semibold mt-4">Data Cadastro:</h2>
                 <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ new Date(protocolo.created_at).toLocaleString('pt-BR') }}</p>
                 <h2 class="text-md font-semibold mt-4">Prazo:</h2>

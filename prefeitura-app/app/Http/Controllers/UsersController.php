@@ -114,7 +114,7 @@ class UsersController extends Controller
         $user->departamentos()->syncWithoutDetaching($departamento);
 
         //fazer a notificação
-        return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
+        return redirect()->back()->with('message', '<b>Acesso Concedido</b><br><b>Departamento: </b>' . $request->departamento_id . ' - ' . $departamento->nome . '<br><b>Usuário:</b> ' . $user->id . ' - ' . $user->name);
     }
 
     public function removeDepartamento(Request $request, $id) //fazer a notificaçao de remover
@@ -125,6 +125,6 @@ class UsersController extends Controller
         
         $user->departamentos()->detach($departamento);
         
-        return redirect()->back();
+        return redirect()->back()->with('message', '<b>Acesso Removido</b><br><b>Departamento: </b>' . $request->departamento_id . ' - ' . $departamento->nome . '<br><b>Usuário:</b> ' . $user->id . ' - ' . $user->name);
     }
 }

@@ -63,7 +63,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/relatorio', [ProtocolosController::class,'relatorio'])->name('protocolos-relatorio');
         Route::post('/pdf', [ProtocolosController::class,'pdf'])->name('protocolos-pdf');
 
-        Route::get('/create/{id}', [ProtocolosController::class, 'createByContribuinte'])->name('protocolos-create-by-contribuinte');
+        Route::get('/create-contrib/{id}', [ProtocolosController::class, 'createByContribuinte'])->name('protocolos-create-by-contribuinte');
+        Route::get('/create-depart/{id}/departamento', [ProtocolosController::class, 'createByDepartamento'])->name('protocolos-create-by-departamento');
     });
     
     

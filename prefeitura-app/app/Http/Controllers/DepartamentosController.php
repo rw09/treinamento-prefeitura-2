@@ -28,13 +28,19 @@ class DepartamentosController extends Controller
 
     public function show($id)
     {
-        $departamento = Departamento::where('id', $id)->with('users:id,name,email,cpf')->firstOrFail();
+        //$departamento = Departamento::where('id', $id)->with('users:id,name,email,cpf')->firstOrFail();
+        $departamento = Departamento::where('id', $id)->with('users')->firstOrFail();
 
         if(Auth::user()->can('view', $departamento)) 
         {
             $protocolos = $departamento->protocolos()->with('contribuinte:id,nome')->get();
+
+            $protocolos->loadCount('acompanhamentos')->loadCount('anexos');
             
-            $users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
+            //$users = User::where('perfil', 2)->get(['id', 'name'])->diff($departamento['users']);
+            $users = User::where('perfil', 2)->get()->diff($departamento['users']);
+
+            $departamento->loadCount('protocolos')->loadCount('users')->get();
 
             return Inertia::render('Departamentos/Show', [
                 'departamento' => $departamento,
