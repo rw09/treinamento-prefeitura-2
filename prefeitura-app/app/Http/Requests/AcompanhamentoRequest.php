@@ -22,7 +22,7 @@ class AcompanhamentoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'observacao' => 'required|string|max:255',
+            'observacao' => 'required|string',
             'protocolo_id' => 'required|exists:protocolos,id',
             'user_id' => 'required|exists:users,id',
         ];

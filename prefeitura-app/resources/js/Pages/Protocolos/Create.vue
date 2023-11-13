@@ -7,7 +7,8 @@
                     <div>
                         <label for="contribuinte">Contribuinte:</label>
                         <select name="contribuinte" id="contribuinte" v-model="form.contribuinte_id" class="px-3 mt-1 py-1 w-full border rounded text-sm" required @change="form.validate('contribuinte_id')">
-                            <option v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
+                            <option v-if="props.contribuintes.length === 1" v-bind:value="props.contribuintes[0].id" :selected="props.contribuintes.length === 1">{{ props.contribuintes[0].cpf }} - {{ props.contribuintes[0].nome }}</option>
+                            <option v-else v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id" :selected="props.contribuintes.length === 1">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
                         </select>
                         <div v-if="form.errors.contribuinte_id" v-text="form.errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
                     </div>
@@ -53,7 +54,7 @@ import Swal from 'sweetalert2';
     });
 
     const form = useForm('post', route('protocolos-store'), {
-        contribuinte_id: null,
+        contribuinte_id: props.contribuintes.length === 1 ? props.contribuintes[0].id : null,
         departamento_id: null,
         descricao: '',
         prazo: '',

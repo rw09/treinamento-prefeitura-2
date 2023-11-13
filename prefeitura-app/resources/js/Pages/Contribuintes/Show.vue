@@ -40,7 +40,10 @@
 
             <section class="px-8 py-4" v-if="opcao === 'protocolos'">
             <h1 class="font-semibold text-lg mx-auto w-fit mb-8">{{ protocolos.length ? 'Lista de Protocolos' : 'Sem Protocolos'}}</h1>
-            <input type="text" v-model="filtro" placeholder="Filtrar por Descrição ou Departamento" v-if="protocolos.length" class="px-3 mt-1 mb-5 py-2 w-2/3 border rounded text-sm">
+            <div class="flex items-center mt-1 mb-5">
+                <Link v-bind:href="route('protocolos-create-by-contribuinte', contribuinte.id)" class="px-4 py-2 w-1/4 mr-5 rounded-sm text-sm text-white bg-teal-500 hover:bg-teal-400 text-center">Cadastrar Protocolo</Link>
+                <input type="search" id="filtragem" v-model="filtro" placeholder="Filtrar por Descrição ou Departamento" v-if="protocolos.length" class="px-4 py-1.5 w-2/3 border rounded text-sm">
+            </div>
             
             <div class="border-gray-200 border bg-gray-100 p-4 rounded-md flex flex-col mb-3" v-for="protocolo in filtros">
                 <div class="flex justify-between">

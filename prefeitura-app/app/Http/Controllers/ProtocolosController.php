@@ -291,4 +291,28 @@ class ProtocolosController extends Controller
         //$pdf->loadView('pdf', ['acompanhamentos' => $acompanhamentos]);
         return $pdf->stream();
     }
+
+
+    public function createByContribuinte($id)
+    {
+        $departamentos = null;
+
+        if(Auth::user()->perfil === 0 || Auth::user()->perfil === 1)
+        {
+            $departamentos = Departamento::orderBy('nome')->get();
+        }
+        else
+        {
+            $user = Auth::user();
+            
+            $departamentos = $user->departamentos()->orderBy('nome')->get();
+        }
+
+        $contribuintes = Contribuinte::where('id', $id)->get();
+
+        return Inertia::render('Protocolos/Create', [
+            'departamentos' => $departamentos,
+            'contribuintes' => $contribuintes,
+        ]);
+    }
 }

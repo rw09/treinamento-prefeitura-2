@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('acompanhamentos', function (Blueprint $table) {
             $table->id();
-            $table->string('observacao');
+            $table->text('observacao');
             $table->unsignedBigInteger('protocolo_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
