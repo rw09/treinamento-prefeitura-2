@@ -30,6 +30,13 @@
                     <h2 class="text-md font-semibold mt-4">Departamento:</h2>
                     <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.departamento.nome}}</p>
                 </Link>
+                <button class="mt-5 flex bg-orange-400 hover:bg-orange-300 px-3 py-2 rounded text-white" @click="pdf">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zm5.845 17.03a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V12a.75.75 0 00-1.5 0v4.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3z" clip-rule="evenodd" />
+                        <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z" />
+                        </svg>
+                        Download PDF
+                </button>
             </section>
 
             <section class="px-8 py-4" v-if="opcao === 'contribuinte'">
@@ -343,4 +350,30 @@ import Swal from 'sweetalert2';
             }
         })
     }
+    import axios from 'axios';
+    const pdf = () => {
+        try {
+            let protocolo = form.protocolo_id;
+            
+            console.log(protocolo)
+
+            axios.post('/protocolos/pdf', { protocolo }, 
+                { responseType: 'blob' })
+                .then(res => {
+                    let blob = new Blob([res.data], { type: res.headers['content-type'] });
+                    let link = document.createElement('a');
+
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `Protocolo-${protocolo}.pdf`;
+                    link.click()
+                }).catch(err => {
+                    console.log('Erro na resposta: ' + err)
+                });
+        } catch (error) {
+            console.log('Erro ao gerar PDF: ', error);
+        }
+    }        
+
+
+
 </script>
