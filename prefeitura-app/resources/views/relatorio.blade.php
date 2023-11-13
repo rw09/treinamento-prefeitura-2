@@ -79,6 +79,7 @@
                     <p><b>Número: </b>{{ $protocolo->id }}</p>
                     <p><b>Data:</b> {{ date( 'd/m/Y H:i:s' , strtotime($protocolo->created_at)) }}</p>    
                     <p><b>Contribuinte: </b>{{ $protocolo->contribuinte->nome }}</p>
+                    <p><b>Departamento: </b>{{ $protocolo->departamento->nome }}</p>
                     <p>{{ $protocolo->descricao }}</p>
                     
                 </div>

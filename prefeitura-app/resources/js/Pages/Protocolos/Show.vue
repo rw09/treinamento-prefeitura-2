@@ -26,6 +26,10 @@
                 <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ new Date(protocolo.created_at).toLocaleString('pt-BR') }}</p>
                 <h2 class="text-md font-semibold mt-4">Prazo:</h2>
                 <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.prazo }} dias</p>
+                <h2 class="text-md font-semibold mt-4">Quantidade de Acompanhamentos:</h2>
+                <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.acompanhamentos_count }}</p>
+                <h2 class="text-md font-semibold mt-4">Quantidade de Anexos:</h2>
+                <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.anexos_count }}</p>
                 <Link :href="route('departamentos-show', protocolo.departamento.id)">
                     <h2 class="text-md font-semibold mt-4">Departamento:</h2>
                     <p class="border-gray-200 border bg-gray-100 p-2.5 rounded">{{ protocolo.departamento.nome}}</p>

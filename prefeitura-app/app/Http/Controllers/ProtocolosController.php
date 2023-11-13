@@ -108,6 +108,8 @@ class ProtocolosController extends Controller
             }
         }
 
+        $protocolo->loadCount('acompanhamentos')->loadCount('anexos');
+
         $acompanhamentos = $protocolo->acompanhamentos()->orderBy('id', 'desc')->get();
 
         $acompanhamentos->load(['user:id,name']);
@@ -260,6 +262,7 @@ class ProtocolosController extends Controller
             $protocolo = Protocolo::find($protocolo_id);
 
             $protocolo->load('contribuinte');
+            $protocolo->load('departamento');
 
             $protocolos->push($protocolo);
         }

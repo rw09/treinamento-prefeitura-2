@@ -52,11 +52,11 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        DB::table('departamentos')->insert(['nome' => 'TI']);
-        DB::table('departamentos')->insert(['nome' => 'Educação']);
-        DB::table('departamentos')->insert(['nome' => 'Saúde']);
-        DB::table('departamentos')->insert(['nome' => 'Obras']);
-        DB::table('departamentos')->insert(['nome' => 'Segurança Pública']);
+        DB::table('departamentos')->insert(['nome' => 'TI', 'created_at' => now(),]);
+        DB::table('departamentos')->insert(['nome' => 'Educação', 'created_at' => now(),]);
+        DB::table('departamentos')->insert(['nome' => 'Saúde', 'created_at' => now(),]);
+        DB::table('departamentos')->insert(['nome' => 'Obras', 'created_at' => now(),]);
+        DB::table('departamentos')->insert(['nome' => 'Segurança Pública', 'created_at' => now(),]);
 
         DB::table('contribuintes')->insert([
             'nome' => 'João da Silva',
