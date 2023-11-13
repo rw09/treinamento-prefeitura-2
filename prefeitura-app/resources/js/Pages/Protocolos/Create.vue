@@ -11,13 +11,16 @@
                             <option v-else v-for="contribuinte in contribuintes" v-bind:value="contribuinte.id" :selected="props.contribuintes.length === 1">{{ contribuinte.cpf }} - {{ contribuinte.nome }}</option>
                         </select>
                         <div v-if="form.errors.contribuinte_id" v-text="form.errors.contribuinte_id" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="contribuintes.length === 0" class="text-red-400 text-xs mt-1">Nenhum contribuinte encontrado</div>
                     </div>
                     <div>
                         <label for="departamento">Departamento:</label>
                         <select name="departamento" id="departamento" v-model="form.departamento_id" class="px-3 mt-1 py-1 w-full border rounded" required @change="form.validate('departamento_id')">
-                            <option v-for="departamento in departamentos" v-bind:value="departamento.id">{{ departamento.nome }}</option>
+                            <option v-if="props.departamentos.length === 1" v-bind:value="props.departamentos[0].id" :selected="props.departamentos.length === 1">{{ props.departamentos[0].nome }}</option>
+                            <option v-else v-for="departamento in departamentos" v-bind:value="departamento.id" :selected="props.departamentos.length === 1">{{ departamento.nome }}</option>
                         </select>
                         <div v-if="form.errors.departamento_id" v-text="form.errors.departamento_id" class="text-red-400 text-xs mt-1"></div>
+                        <div v-if="departamentos.length === 0" class="text-red-400 text-xs mt-1">Nenhum departamento encontrado</div>
                     </div>
                     <div>
                         <label for="descricao" class="block text-xs">Descricao:</label>
@@ -55,7 +58,7 @@ import Swal from 'sweetalert2';
 
     const form = useForm('post', route('protocolos-store'), {
         contribuinte_id: props.contribuintes.length === 1 ? props.contribuintes[0].id : null,
-        departamento_id: null,
+        departamento_id: props.departamentos.length === 1 ? props.departamentos[0].id : null,
         descricao: '',
         prazo: '',
         situacao: 0,
