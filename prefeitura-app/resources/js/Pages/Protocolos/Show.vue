@@ -316,7 +316,6 @@ import Swal from 'sweetalert2';
     };
 
     const removeAcompanhamento = (acompanhamento, index) => {
-        
         Swal.fire({
             title: 'Confirma exclusão desse Acompanhamento?',
                 html: "<b>Acompanhamento #" + (props.acompanhamentos.length - index) + "</b>"

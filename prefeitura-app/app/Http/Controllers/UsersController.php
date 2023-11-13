@@ -42,13 +42,19 @@ class UsersController extends Controller
 
         if(Auth::user()->can('view', $user)) 
         {
-            $user->load(['departamentos']);
+            $departamentos_usuario = $user->departamentos()->get();
+            $departamentos_usuario->loadCount('users')->loadCount('protocolos');
+            
+            $user->load(['departamentos']); //trocar por $departamentos = $user->departamentos()->get() ?
 
-            $departamentos = Departamento::get(['id', 'nome'])->diff($user['departamentos']);
+            // $departamentos = Departamento::get(['id', 'nome'])->diff($user['departamentos']);
+            $departamentos = Departamento::get()->diff($user['departamentos']);
+            $departamentos->loadCount('users')->loadCount('protocolos');
 
             return Inertia::render('Users/Show', [
                 'user' => $user,
-                'departamentos'=> $departamentos
+                'departamentos'=> $departamentos,
+                'departamentos_usuario' => $departamentos_usuario,
             ]); 
         }
         else
@@ -108,7 +114,7 @@ class UsersController extends Controller
         $user->departamentos()->syncWithoutDetaching($departamento);
 
         //fazer a notificação
-        //return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
+        return redirect()->back()->with('message', '<b>ID:</b> ' . $user->id . '<br><b>Usuário:</b> ' . $user->name. '<br><b>E-mail:</b> ' . $user->email . '<br><b>CPF:</b> ' . $user->cpf);
     }
 
     public function removeDepartamento(Request $request, $id) //fazer a notificaçao de remover

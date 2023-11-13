@@ -72,7 +72,7 @@ DataTable.use(DataTablesCore);
         { data: null, render: data => data.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') },
         { data: null, render: data => new Date(data.created_at).toLocaleString('pt-BR')},
         { data: null, render: data => data.perfil === 0 ? data.perfil + ' - ' + "Administrador da TI" : (data.perfil === 1 ? data.perfil + ' - ' + "Administrador do Sistema" : data.perfil + ' - ' + "Operador") },
-        { data: null, render: data => data.perfil === 2 ? data.departamentos_count : 'Acesso à todos' },
+        { data: null, render: data => data.perfil === 2 ? data.departamentos_count : 'Acesso Total' },
     ];
 
     const options = {

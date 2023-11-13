@@ -83,6 +83,7 @@ class DepartamentosController extends Controller
         Departamento::find($id)->update($validated);
 
         return to_route('departamentos-index')->with('message', 'Departamento Editado com Sucesso!');
+        //return redirect()->back();
     }
 
     public function destroy($id)
@@ -94,7 +95,8 @@ class DepartamentosController extends Controller
         {
             $departamento->delete();
 
-            return to_route('departamentos-index');
+            //return to_route('departamentos-index');
+            return redirect()->back();
         }
         else
         {
